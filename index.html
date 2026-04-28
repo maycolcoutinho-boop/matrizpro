@@ -1589,8 +1589,10 @@ table.curriculum-table {
     </div>
   </div>
   <div class="header-actions">
-    <button class="btn-header btn-header-outline" onclick="resetApp()">↺ Novo Projeto</button>
-    <button class="btn-header btn-header-outline" onclick="saveProgress()">💾 Salvar</button>
+    <button class="btn-header btn-header-outline" onclick="resetApp()">↺ Novo</button>
+    <button class="btn-header btn-header-outline" onclick="document.getElementById('load-progress-input').click()" title="Carregar projeto salvo (.matrizpro)">📂 Carregar</button>
+    <input type="file" id="load-progress-input" accept=".matrizpro,.json" style="display:none" onchange="loadProgressFile(this.files[0]); this.value='';">
+    <button class="btn-header btn-header-outline" onclick="saveProgress()" title="Baixar arquivo de progresso (Ctrl+S)">💾 Salvar</button>
     <button class="btn-header btn-header-primary" id="btn-quick-export" onclick="goToStep(6)">⬇ Exportar</button>
   </div>
 </header>
@@ -1715,6 +1717,19 @@ table.curriculum-table {
           <div class="alert-title">Formatos suportados</div>
           Arquivos HTML exportados de sistemas acadêmicos (SIGAA, SIE, Q-Acadêmico), planilhas Excel (.xlsx/.xls), arquivos CSV e documentos web com estrutura tabular de disciplinas.
         </div>
+      </div>
+
+      <!-- RETOMAR PROGRESSO SALVO -->
+      <div style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--gold-100);border:1.5px solid var(--gold-300);border-radius:var(--radius-lg);margin-bottom:20px;">
+        <div style="font-size:26px;flex-shrink:0">📂</div>
+        <div style="flex:1;">
+          <div style="font-family:var(--font-display);font-size:.95rem;font-weight:600;color:var(--gold-700);margin-bottom:3px;">Retomar um projeto salvo?</div>
+          <div style="font-size:.83rem;color:var(--gold-700);line-height:1.5;">Carregue um arquivo <code style="background:rgba(0,0,0,.08);padding:1px 5px;border-radius:3px;font-family:monospace">.matrizpro</code> gerado pelo botão <strong>💾 Salvar</strong> para continuar de onde parou — todos os dados, disciplinas e etapas serão restaurados.</div>
+        </div>
+        <button class="btn btn-sm" style="background:var(--gold-600);color:white;white-space:nowrap;font-weight:700;flex-shrink:0;"
+          onclick="document.getElementById('load-progress-input').click()">
+          📂 Carregar projeto
+        </button>
       </div>
 
       <!-- ZONA DE UPLOAD -->
@@ -4098,19 +4113,112 @@ function buildResumoFinal() {
 
 // ─── EXPORTAÇÃO ───
 function exportPDF() {
-  if (AppState.disciplines.length === 0 && !AppState.inst.nome) {
-    showToast('Gere o documento antes de exportar.', 'warn');
+  // Garantir que o documento foi gerado
+  if (!document.querySelector('#preview-area .doc-page')) {
+    if (AppState.disciplines.length === 0 && !AppState.inst.nome) {
+      showToast('Complete ao menos a etapa 3 antes de exportar o PDF.', 'warn');
+      return;
+    }
+    showLoading('Gerando documento...');
+    collectInstitutionalData();
+    collectPedagogicalData();
+    // Gerar na etapa 5 de forma silenciosa
+    AppState.currentStep = 5;
+    AppState.maxUnlockedStep = Math.max(AppState.maxUnlockedStep, 5);
+    updateStepUI();
+    generateDocument();
+    setTimeout(() => { hideLoading(); _printDocumentWindow(); }, 1200);
     return;
   }
   showLoading('Preparando PDF...');
-  setTimeout(() => {
-    hideLoading();
-    // Ir para step 5 para mostrar preview e imprimir
-    AppState.currentStep = 5;
-    updateStepUI();
-    if (!document.querySelector('#preview-area .doc-page')) generateDocument();
-    setTimeout(() => window.print(), 600);
-  }, 600);
+  setTimeout(() => { hideLoading(); _printDocumentWindow(); }, 400);
+}
+
+function _printDocumentWindow() {
+  // Coletar páginas do preview
+  const pages = document.querySelectorAll('#preview-area .doc-page');
+  if (!pages.length) { showToast('Nenhuma página gerada ainda.', 'warn'); return; }
+
+  // Coletar fontes já carregadas na página
+  const fontsHref = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+    .map(l => `<link rel="stylesheet" href="${l.href}">`)
+    .join('\n');
+
+  // Coletar todos os estilos da página atual
+  const styles = Array.from(document.styleSheets)
+    .map(ss => {
+      try { return Array.from(ss.cssRules).map(r => r.cssText).join('\n'); }
+      catch { return ''; }
+    }).join('\n');
+
+  // Montar HTML limpo somente com as páginas do documento
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>${AppState.curso.nome || 'Matriz Curricular'} — ${AppState.inst.nome || 'Documento'}</title>
+${fontsHref}
+<style>
+/* Reset para impressão limpa */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: white; font-family: 'Crimson Pro', Georgia, serif; }
+
+${styles}
+
+/* Sobrescrever para impressão */
+body { background: white !important; padding: 0 !important; margin: 0 !important; }
+
+.doc-page {
+  width: 210mm !important;
+  min-height: 297mm !important;
+  background: white !important;
+  box-shadow: none !important;
+  margin: 0 auto !important;
+  padding: 18mm 22mm 22mm !important;
+  page-break-after: always !important;
+  break-after: page !important;
+  position: relative !important;
+}
+
+.doc-page:last-child {
+  page-break-after: avoid !important;
+  break-after: avoid !important;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@media print {
+  html, body { background: white !important; }
+  .doc-page { box-shadow: none !important; }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
+</style>
+</head>
+<body>
+${Array.from(pages).map(p => p.outerHTML).join('\n')}
+<script>
+  // Abrir diálogo de impressão/salvar PDF automaticamente
+  window.onload = function() {
+    setTimeout(function() { window.print(); }, 500);
+  };
+  // Fechar janela após imprimir (opcional)
+  window.onafterprint = function() { window.close(); };
+<\/script>
+</body>
+</html>`;
+
+  const win = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
+  if (!win) {
+    showToast('Pop-up bloqueado pelo navegador. Permita pop-ups para este site e tente novamente.', 'error');
+    return;
+  }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  showToast('Janela de impressão aberta. Use "Salvar como PDF" no diálogo.', 'info');
 }
 
 function exportHTML() {
@@ -4357,20 +4465,131 @@ function resetApp() {
   location.reload();
 }
 
+// ─── SALVAR PROGRESSO COMO ARQUIVO ───
 function saveProgress() {
   collectInstitutionalData();
   collectPedagogicalData();
-  const data = JSON.stringify({
+
+  const cursoSlug = (AppState.curso.nome || 'projeto')
+    .toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 40);
+  const ts = new Date().toISOString().slice(0, 10);
+  const filename = `matrizpro_${cursoSlug}_${ts}.matrizpro`;
+
+  const saveData = {
+    _app: 'MatrizPro',
+    _version: '1.0',
+    _savedAt: new Date().toISOString(),
+    currentStep: AppState.currentStep,
+    maxUnlockedStep: AppState.maxUnlockedStep,
     disciplines: AppState.disciplines,
     inst: AppState.inst,
     curso: AppState.curso,
     resp: AppState.resp,
     design: AppState.design,
     ped: AppState.ped,
-    version: '1.0'
+    logoDataUrl: AppState.logoDataUrl || null,
+    // Campos dos formulários que não estão em AppState ainda
+    _formSnapshot: snapshotFormFields(),
+  };
+
+  downloadFile(JSON.stringify(saveData, null, 2), filename, 'application/json');
+  showToast(`Arquivo "${filename}" baixado com sucesso!`, 'success');
+}
+
+// Captura todos os campos preenchidos nos formulários
+function snapshotFormFields() {
+  const snap = {};
+  const ids = [
+    'inst-nome','inst-sigla','inst-categoria','inst-org','inst-cidade','inst-campus','inst-depto','inst-cnpj',
+    'curso-nome','curso-grau','curso-modalidade','curso-turno','curso-ch','curso-vagas',
+    'curso-prazo-min','curso-prazo-max','curso-codigo','curso-vigencia','curso-ato','curso-area',
+    'resp-coord','resp-coord-titulo','resp-diretor','resp-proreitor',
+    'cor-primaria','cor-primaria-hex','cor-acento','cor-acento-hex',
+    'doc-rodape','doc-cabecalho','doc-versao','doc-paginacao',
+    'ext-estagio','ext-tcc','ext-extensao','ext-comp','ext-obs',
+    'ped-perfil','ped-atuacao','ped-competencias-gerais','ped-competencias-espec','ped-habilidades',
+    'ped-regime','ped-metodologias-desc','ped-avaliacao','ped-infra',
+    'ped-extensao-ch','ped-extensao-desc','ped-estagio-ch','ped-estagio-periodo','ped-estagio-reg',
+    'legal-dcn-curso','legal-outros',
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    snap[id] = el.type === 'checkbox' ? el.checked : el.value;
   });
-  localStorage.setItem('matrizpro_save', data);
-  showToast('Progresso salvo localmente!', 'success');
+  // Checkboxes legais
+  ['legal-ldb','legal-pne','legal-ext','legal-csa','legal-acessib','legal-ea','legal-er','legal-dm']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if (el) snap[id] = el.checked;
+    });
+  // Transversais
+  TRANSVERSAIS.forEach(t => {
+    const sel = document.getElementById(`trans-${t.id}`);
+    const det = document.getElementById(`trans-${t.id}-detail`);
+    if (sel) snap[`trans-${t.id}`] = sel.value;
+    if (det) snap[`trans-${t.id}-detail`] = det.value;
+  });
+  return snap;
+}
+
+// ─── CARREGAR ARQUIVO DE PROGRESSO ───
+function loadProgressFile(file) {
+  if (!file || !file.name.match(/\.(matrizpro|json)$/i)) {
+    showToast('Selecione um arquivo .matrizpro ou .json gerado pelo MatrizPro.', 'error');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data._app !== 'MatrizPro') {
+        showToast('Arquivo inválido. Use somente arquivos gerados pelo MatrizPro.', 'error');
+        return;
+      }
+      restoreFromSaveData(data);
+      showToast(`Projeto restaurado: ${data.curso?.nome || 'sem nome'} · salvo em ${data._savedAt ? new Date(data._savedAt).toLocaleString('pt-BR') : '—'}`, 'success');
+    } catch(err) {
+      showToast('Erro ao ler arquivo: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function restoreFromSaveData(data) {
+  // Restaurar arrays e objetos no AppState
+  if (data.disciplines)     AppState.disciplines = data.disciplines;
+  if (data.inst)            AppState.inst = data.inst;
+  if (data.curso)           AppState.curso = data.curso;
+  if (data.resp)            AppState.resp = data.resp;
+  if (data.design)          AppState.design = data.design;
+  if (data.ped)             AppState.ped = data.ped;
+  if (data.logoDataUrl) {
+    AppState.logoDataUrl = data.logoDataUrl;
+    const prev = document.getElementById('logo-preview');
+    if (prev) prev.innerHTML = `<img src="${data.logoDataUrl}" style="width:100%;height:100%;object-fit:contain;">`;
+  }
+
+  // Restaurar etapa máxima (pelo menos 3 se tinha dados institucionais)
+  AppState.maxUnlockedStep = data.maxUnlockedStep || (data.inst?.nome ? 3 : 1);
+  AppState.currentStep = Math.min(data.currentStep || 1, AppState.maxUnlockedStep);
+
+  // Restaurar campos do formulário via snapshot
+  if (data._formSnapshot) {
+    const snap = data._formSnapshot;
+    Object.entries(snap).forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === 'checkbox') el.checked = !!value;
+      else el.value = value;
+    });
+  }
+
+  // Atualizar UI
+  renderDisciplinesTable();
+  updateExtractionStats();
+  updateCompliance();
+  updateStepUI();
 }
 
 function importFromClipboard() {
@@ -4386,28 +4605,10 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ─── CARREGAR SAVE LOCAL AO INICIAR ───
-(function loadLocalSave() {
-  try {
-    const saved = localStorage.getItem('matrizpro_save');
-    if (saved) {
-      const data = JSON.parse(saved);
-      if (data.inst?.nome) document.getElementById('inst-nome').value = data.inst.nome;
-      if (data.inst?.sigla) document.getElementById('inst-sigla').value = data.inst.sigla;
-      if (data.inst?.cidade) document.getElementById('inst-cidade').value = data.inst.cidade;
-      if (data.curso?.nome) document.getElementById('curso-nome').value = data.curso.nome;
-      if (data.curso?.ch) document.getElementById('curso-ch').value = data.curso.ch;
-      if (data.disciplines?.length) {
-        AppState.disciplines = data.disciplines;
-        AppState.maxUnlockedStep = 2;
-        renderDisciplinesTable();
-      }
-      if (data.design?.corPrimaria) {
-        document.getElementById('cor-primaria').value = data.design.corPrimaria;
-        document.getElementById('cor-primaria-hex').value = data.design.corPrimaria;
-      }
-    }
-  } catch(e) { /* ignora erros de carregamento */ }
+// ─── INICIALIZAÇÃO LIMPA (sem localStorage) ───
+// O progresso é salvo como arquivo .matrizpro e carregado pelo botão "Carregar" no header.
+(function init() {
+  // Nada a restaurar automaticamente — o usuário usa o botão 📂 Carregar
 })();
 </script>
 </body>

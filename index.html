@@ -1,0 +1,4122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MatrizPro — Sistema de Gestão Curricular Institucional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   MATRIZPRO — SISTEMA DE GESTÃO CURRICULAR INSTITUCIONAL
+   Design System: Academic Premium — Navy & Gold
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Paleta institucional */
+  --navy-900: #0d1b2a;
+  --navy-800: #1a2e44;
+  --navy-700: #1e3a5f;
+  --navy-600: #2952810;
+  --navy-500: #2d6a9f;
+  --navy-400: #4a90c4;
+  --navy-100: #e8f0f8;
+  --navy-50:  #f4f8fd;
+
+  --gold-700: #a07a0a;
+  --gold-600: #b8920f;
+  --gold-500: #c9a227;
+  --gold-400: #d4b544;
+  --gold-300: #e8d080;
+  --gold-100: #faf5e4;
+
+  --slate-900: #1c2333;
+  --slate-700: #374151;
+  --slate-500: #6b7280;
+  --slate-300: #d1d5db;
+  --slate-100: #f3f4f6;
+  --slate-50:  #f9fafb;
+
+  --success: #0d7c4a;
+  --warning: #c27d0e;
+  --danger:  #b91c1c;
+  --info:    #1d6fa4;
+
+  --white: #ffffff;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Crimson Pro', Georgia, serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  14px;
+  --radius-xl:  20px;
+
+  --shadow-sm:  0 1px 3px rgba(13,27,42,.12), 0 1px 2px rgba(13,27,42,.08);
+  --shadow-md:  0 4px 12px rgba(13,27,42,.15), 0 2px 6px rgba(13,27,42,.10);
+  --shadow-lg:  0 10px 30px rgba(13,27,42,.18), 0 4px 12px rgba(13,27,42,.12);
+  --shadow-xl:  0 20px 50px rgba(13,27,42,.22), 0 8px 20px rgba(13,27,42,.14);
+
+  --transition: 0.22s cubic-bezier(.4,0,.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--navy-900);
+  color: var(--slate-700);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--navy-800); }
+::-webkit-scrollbar-thumb { background: var(--navy-500); border-radius: 3px; }
+
+/* ─── SELEÇÃO ─── */
+::selection { background: var(--gold-500); color: var(--navy-900); }
+
+/* ══════════════════════════════════════════
+   TOPO / HEADER GLOBAL
+══════════════════════════════════════════ */
+#app-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--navy-900);
+  border-bottom: 1px solid rgba(201,162,39,.25);
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  backdrop-filter: blur(10px);
+}
+
+.header-brand {
+  display: flex; align-items: center; gap: 14px;
+}
+
+.header-logo {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--gold-500), var(--gold-700));
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: var(--navy-900);
+  font-family: var(--font-display);
+  box-shadow: 0 2px 8px rgba(201,162,39,.4);
+  flex-shrink: 0;
+}
+
+.header-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: -.01em;
+  line-height: 1;
+}
+
+.header-subtitle {
+  font-family: var(--font-body);
+  font-size: .75rem;
+  color: var(--gold-400);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.btn-header {
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  letter-spacing: .02em;
+}
+
+.btn-header-outline {
+  background: transparent;
+  border: 1px solid rgba(201,162,39,.4);
+  color: var(--gold-400);
+}
+
+.btn-header-outline:hover {
+  background: rgba(201,162,39,.1);
+  border-color: var(--gold-400);
+}
+
+.btn-header-primary {
+  background: var(--gold-500);
+  color: var(--navy-900);
+  font-weight: 700;
+}
+
+.btn-header-primary:hover {
+  background: var(--gold-400);
+  box-shadow: 0 4px 14px rgba(201,162,39,.4);
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════════
+   LAYOUT PRINCIPAL
+══════════════════════════════════════════ */
+#app-layout {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 64px;
+}
+
+/* ─── SIDEBAR DE NAVEGAÇÃO ─── */
+#app-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--navy-800);
+  border-right: 1px solid rgba(255,255,255,.06);
+  position: fixed;
+  top: 64px; bottom: 0; left: 0;
+  overflow-y: auto;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-section {
+  padding: 24px 20px 12px;
+}
+
+.sidebar-section-label {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--navy-400);
+  margin-bottom: 10px;
+  padding-left: 12px;
+}
+
+/* Steps de navegação */
+.step-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 3px;
+  position: relative;
+}
+
+.step-nav-item:hover:not(.disabled) {
+  background: rgba(255,255,255,.06);
+}
+
+.step-nav-item.active {
+  background: rgba(201,162,39,.12);
+}
+
+.step-nav-item.completed .step-num {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.step-nav-item.active .step-num {
+  background: var(--gold-500);
+  border-color: var(--gold-500);
+  color: var(--navy-900);
+  font-weight: 700;
+}
+
+.step-nav-item.disabled {
+  opacity: .38;
+  cursor: not-allowed;
+}
+
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  color: rgba(255,255,255,.5);
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.step-nav-info { flex: 1; min-width: 0; }
+
+.step-nav-name {
+  font-family: var(--font-body);
+  font-size: .88rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.step-nav-desc {
+  font-size: .73rem;
+  color: rgba(255,255,255,.4);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.step-nav-item.active .step-nav-name { color: var(--gold-400); }
+
+/* Conector entre steps */
+.step-connector {
+  width: 2px; height: 12px;
+  background: rgba(255,255,255,.1);
+  margin: 0 0 0 25px;
+}
+
+.step-connector.done {
+  background: var(--success);
+}
+
+/* Conformidade no sidebar */
+.compliance-panel {
+  margin: 12px 20px;
+  padding: 14px;
+  background: rgba(13,27,42,.5);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius-md);
+}
+
+.compliance-title {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--navy-400);
+  margin-bottom: 10px;
+}
+
+.compliance-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: .78rem;
+  color: rgba(255,255,255,.6);
+  margin-bottom: 6px;
+  padding: 4px 0;
+}
+
+.compliance-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.compliance-dot.ok    { background: var(--success); }
+.compliance-dot.warn  { background: var(--warning); }
+.compliance-dot.error { background: var(--danger); }
+.compliance-dot.idle  { background: rgba(255,255,255,.2); }
+
+/* ─── ÁREA PRINCIPAL ─── */
+#app-main {
+  flex: 1;
+  margin-left: 280px;
+  min-height: calc(100vh - 64px);
+  background: var(--slate-50);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── BARRA DE PROGRESSO ─── */
+#progress-bar-container {
+  height: 4px;
+  background: var(--slate-200, #e5e7eb);
+  position: sticky; top: 0; z-index: 50;
+}
+
+#progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--navy-700), var(--gold-500));
+  width: 0%;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+
+/* ─── CONTEÚDO DAS ETAPAS ─── */
+.step-panel {
+  display: none;
+  padding: 36px 40px;
+  flex: 1;
+  animation: fadeInUp .35s ease;
+}
+
+.step-panel.active {
+  display: block;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+/* Cabeçalho de etapa */
+.step-header {
+  margin-bottom: 32px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--slate-300);
+}
+
+.step-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--navy-100);
+  border: 1px solid var(--navy-500);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--navy-700);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.step-title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  letter-spacing: -.02em;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.step-desc {
+  font-size: 1rem;
+  color: var(--slate-500);
+  line-height: 1.6;
+  max-width: 680px;
+}
+
+/* ══════════════════════════════════════════
+   COMPONENTES DE FORMULÁRIO
+══════════════════════════════════════════ */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.form-grid-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.form-grid-full { grid-column: 1 / -1; }
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-family: var(--font-body);
+  font-size: .83rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  letter-spacing: .01em;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.form-label .required {
+  color: var(--danger);
+  font-size: .75rem;
+}
+
+.form-label .hint {
+  font-weight: 400;
+  color: var(--slate-500);
+  font-size: .76rem;
+  margin-left: auto;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  padding: 10px 14px;
+  border: 1.5px solid var(--slate-300);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: .92rem;
+  color: var(--slate-900);
+  background: var(--white);
+  transition: var(--transition);
+  outline: none;
+  width: 100%;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--navy-500);
+  box-shadow: 0 0 0 3px rgba(45,106,159,.14);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--slate-300);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.form-input.error { border-color: var(--danger); }
+.form-error-msg {
+  font-size: .76rem;
+  color: var(--danger);
+  display: none;
+}
+.form-input.error + .form-error-msg { display: block; }
+
+.form-help {
+  font-size: .76rem;
+  color: var(--slate-500);
+  line-height: 1.5;
+}
+
+/* ─── SEÇÕES DE FORMULÁRIO ─── */
+.form-section {
+  background: var(--white);
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-lg);
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-section-header {
+  padding: 16px 22px;
+  background: var(--navy-900);
+  display: flex; align-items: center; gap: 12px;
+}
+
+.form-section-icon {
+  width: 32px; height: 32px;
+  background: rgba(201,162,39,.15);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.form-section-title {
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: -.01em;
+}
+
+.form-section-body {
+  padding: 22px;
+}
+
+/* ══════════════════════════════════════════
+   UPLOAD ZONE
+══════════════════════════════════════════ */
+.upload-zone {
+  border: 2.5px dashed var(--slate-300);
+  border-radius: var(--radius-xl);
+  padding: 56px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-zone::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(45,106,159,.03), rgba(201,162,39,.03));
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.upload-zone:hover,
+.upload-zone.drag-over {
+  border-color: var(--navy-500);
+  background: var(--navy-50);
+}
+
+.upload-zone:hover::before,
+.upload-zone.drag-over::before { opacity: 1; }
+
+.upload-zone.drag-over {
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 4px rgba(201,162,39,.12);
+}
+
+.upload-icon-wrapper {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--navy-100);
+  border: 2px solid var(--navy-500);
+  margin: 0 auto 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  transition: var(--transition);
+}
+
+.upload-zone:hover .upload-icon-wrapper {
+  background: var(--navy-500);
+  transform: scale(1.05);
+}
+
+.upload-zone:hover .upload-icon-wrapper svg { stroke: white; }
+
+.upload-zone svg { stroke: var(--navy-600, #295281); }
+
+.upload-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--navy-900);
+  margin-bottom: 8px;
+}
+
+.upload-subtitle {
+  font-size: .9rem;
+  color: var(--slate-500);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.upload-formats {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center;
+}
+
+.upload-format-tag {
+  padding: 4px 12px;
+  background: var(--slate-100);
+  border: 1px solid var(--slate-300);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--slate-600, #4b5563);
+  letter-spacing: .04em;
+}
+
+#file-input { display: none; }
+
+/* ─── ARQUIVO CARREGADO ─── */
+.file-loaded {
+  background: var(--white);
+  border: 1.5px solid var(--success);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 20px;
+  box-shadow: var(--shadow-sm);
+  display: none;
+}
+
+.file-loaded.show { display: flex; }
+
+.file-icon {
+  width: 48px; height: 48px;
+  background: rgba(13,124,74,.1);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+
+.file-info { flex: 1; min-width: 0; }
+
+.file-name {
+  font-weight: 600;
+  color: var(--navy-900);
+  font-size: .92rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.file-meta {
+  font-size: .78rem;
+  color: var(--slate-500);
+  margin-top: 3px;
+}
+
+.file-actions {
+  display: flex; gap: 8px;
+}
+
+/* ══════════════════════════════════════════
+   RESULTADOS DE EXTRAÇÃO
+══════════════════════════════════════════ */
+.extraction-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.extraction-card {
+  background: var(--white);
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.extraction-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--navy-400);
+}
+
+.extraction-card-icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.extraction-card-label {
+  font-size: .73rem;
+  font-family: var(--font-mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--slate-500);
+  margin-bottom: 4px;
+}
+
+.extraction-card-value {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--navy-800);
+  line-height: 1;
+}
+
+.extraction-card-sub {
+  font-size: .78rem;
+  color: var(--slate-500);
+  margin-top: 4px;
+}
+
+/* ─── TABELA DE DISCIPLINAS EXTRAÍDAS ─── */
+.disciplines-table-wrapper {
+  background: var(--white);
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.disciplines-table-header {
+  padding: 16px 20px;
+  background: var(--navy-900);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.disciplines-table-title {
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.disciplines-count {
+  background: var(--gold-500);
+  color: var(--navy-900);
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.table-scroll { overflow-x: auto; }
+
+table.curriculum-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .84rem;
+}
+
+.curriculum-table th {
+  background: var(--navy-800);
+  color: rgba(255,255,255,.8);
+  font-family: var(--font-mono);
+  font-size: .69rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  text-align: left;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,.08);
+}
+
+.curriculum-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--slate-100);
+  border-right: 1px solid var(--slate-100);
+  color: var(--slate-700);
+  vertical-align: middle;
+}
+
+.curriculum-table tr:hover td { background: var(--navy-50); }
+
+.curriculum-table tr:last-child td { border-bottom: none; }
+
+.period-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--navy-700);
+  color: white;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  font-weight: 600;
+}
+
+.type-badge {
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.type-obrig   { background: rgba(29,111,164,.12); color: var(--info); }
+.type-optativa{ background: rgba(184,146,15,.12); color: var(--warning); }
+.type-extensao{ background: rgba(13,124,74,.12); color: var(--success); }
+.type-tcc     { background: rgba(185,28,28,.1); color: var(--danger); }
+.type-estagio { background: rgba(124,13,94,.1); color: #7c0d5e; }
+.type-comp    { background: rgba(80,80,80,.1); color: #505050; }
+
+/* ══════════════════════════════════════════
+   ALERTAS E NOTIFICAÇÕES
+══════════════════════════════════════════ */
+.alert {
+  display: flex; gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  font-size: .88rem;
+  line-height: 1.5;
+}
+
+.alert-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+.alert-warn {
+  background: rgba(194,125,14,.08);
+  border: 1px solid rgba(194,125,14,.3);
+  color: var(--warning);
+}
+
+.alert-info {
+  background: rgba(29,111,164,.08);
+  border: 1px solid rgba(29,111,164,.3);
+  color: var(--info);
+}
+
+.alert-success {
+  background: rgba(13,124,74,.08);
+  border: 1px solid rgba(13,124,74,.3);
+  color: var(--success);
+}
+
+.alert-error {
+  background: rgba(185,28,28,.08);
+  border: 1px solid rgba(185,28,28,.3);
+  color: var(--danger);
+}
+
+.alert-content { flex: 1; }
+.alert-title { font-weight: 700; margin-bottom: 3px; }
+
+/* ══════════════════════════════════════════
+   BOTÕES
+══════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  outline: none;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: .01em;
+}
+
+.btn-lg { padding: 13px 28px; font-size: 1rem; }
+.btn-sm { padding: 6px 14px; font-size: .8rem; }
+
+.btn-primary {
+  background: var(--navy-700);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover {
+  background: var(--navy-800);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-gold {
+  background: var(--gold-500);
+  color: var(--navy-900);
+  font-weight: 700;
+}
+.btn-gold:hover {
+  background: var(--gold-400);
+  box-shadow: 0 4px 14px rgba(201,162,39,.4);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--navy-700);
+  border: 1.5px solid var(--slate-300);
+}
+.btn-outline:hover {
+  border-color: var(--navy-500);
+  background: var(--navy-50);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1.5px solid rgba(185,28,28,.3);
+}
+.btn-danger:hover { background: rgba(185,28,28,.06); }
+
+.btn-success {
+  background: var(--success);
+  color: white;
+}
+.btn-success:hover { background: #0a6640; transform: translateY(-1px); }
+
+.btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ─── BARRA DE AÇÕES DO RODAPÉ ─── */
+.step-actions {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px;
+  background: var(--white);
+  border-top: 1px solid var(--slate-300);
+  position: sticky; bottom: 0;
+  z-index: 50;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+}
+
+.step-actions-left { display: flex; gap: 10px; }
+.step-actions-right { display: flex; gap: 10px; }
+
+/* ══════════════════════════════════════════
+   VISUALIZAÇÃO DO DOCUMENTO FINAL
+══════════════════════════════════════════ */
+#preview-area {
+  background: #e8e8e8;
+  min-height: 600px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* Página A4 simulada */
+.doc-page {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  box-shadow: var(--shadow-xl);
+  margin-bottom: 16px;
+  padding: 20mm 22mm 22mm;
+  position: relative;
+  font-family: 'Crimson Pro', Georgia, serif;
+}
+
+/* Cabeçalho do documento */
+.doc-header {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 3px solid var(--doc-primary, #1e3a5f);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.doc-logo-area {
+  display: flex; align-items: center; gap: 14px;
+}
+
+.doc-logo-placeholder {
+  width: 60px; height: 60px;
+  border: 2px solid var(--doc-primary, #1e3a5f);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  color: var(--doc-primary, #1e3a5f);
+}
+
+.doc-institution {
+  font-size: 11pt;
+  font-weight: 600;
+  color: var(--doc-primary, #1e3a5f);
+  line-height: 1.3;
+}
+
+.doc-institution-sub {
+  font-size: 9pt;
+  color: #666;
+  margin-top: 2px;
+}
+
+.doc-header-right {
+  text-align: right;
+  font-size: 8.5pt;
+  color: #888;
+}
+
+/* Capa do documento */
+.doc-cover {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 250mm;
+  text-align: center;
+}
+
+.doc-cover-badge {
+  background: var(--doc-primary, #1e3a5f);
+  color: white;
+  padding: 6px 20px;
+  border-radius: 100px;
+  font-size: 9pt;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  font-family: var(--font-mono);
+}
+
+.doc-cover-line {
+  width: 60px; height: 3px;
+  background: var(--doc-accent, #c9a227);
+  margin: 18px auto;
+}
+
+.doc-cover-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 28pt;
+  font-weight: 700;
+  color: var(--doc-primary, #1e3a5f);
+  line-height: 1.2;
+  max-width: 14cm;
+}
+
+.doc-cover-subtitle {
+  font-size: 13pt;
+  color: #555;
+  margin-top: 10px;
+}
+
+.doc-cover-meta {
+  margin-top: 48px;
+  padding: 20px 30px;
+  border: 1.5px solid var(--doc-primary, #1e3a5f);
+  border-radius: 8px;
+  display: inline-block;
+  text-align: left;
+}
+
+.doc-cover-meta table {
+  border-collapse: collapse;
+  font-size: 10pt;
+}
+
+.doc-cover-meta td {
+  padding: 5px 10px 5px 0;
+  vertical-align: top;
+}
+
+.doc-cover-meta td:first-child {
+  font-weight: 600;
+  color: var(--doc-primary, #1e3a5f);
+  white-space: nowrap;
+  padding-right: 20px;
+}
+
+/* Seções internas */
+.doc-section {
+  margin-bottom: 28px;
+}
+
+.doc-section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 14pt;
+  font-weight: 700;
+  color: var(--doc-primary, #1e3a5f);
+  border-bottom: 1.5px solid var(--doc-accent, #c9a227);
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+
+.doc-section-number {
+  width: 24px; height: 24px;
+  background: var(--doc-primary, #1e3a5f);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10pt;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.doc-text {
+  font-size: 10.5pt;
+  line-height: 1.65;
+  color: #333;
+  text-align: justify;
+}
+
+.doc-text + .doc-text { margin-top: 8px; }
+
+/* Tabela curricular do documento */
+.doc-curriculum-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+  margin: 12px 0;
+}
+
+.doc-curriculum-table th {
+  background: var(--doc-primary, #1e3a5f);
+  color: white;
+  padding: 7px 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 8.5pt;
+  letter-spacing: .03em;
+}
+
+.doc-curriculum-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #e8e8e8;
+  color: #333;
+  vertical-align: middle;
+}
+
+.doc-curriculum-table tr:nth-child(even) td { background: #f8f9fa; }
+.doc-curriculum-table tr:hover td { background: #eef3f8; }
+
+.doc-period-header td {
+  background: var(--doc-accent, #c9a227) !important;
+  color: var(--doc-primary, #1e3a5f) !important;
+  font-weight: 700 !important;
+  font-size: 9pt !important;
+}
+
+/* Rodapé do documento */
+.doc-footer {
+  position: absolute;
+  bottom: 14mm; left: 22mm; right: 22mm;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 8pt;
+  color: #999;
+}
+
+/* Assinatura */
+.doc-signature-line {
+  border-top: 1.5px solid #333;
+  width: 200px;
+  margin-top: 40px;
+  padding-top: 6px;
+  font-size: 9pt;
+  text-align: center;
+  color: #333;
+}
+
+/* ══════════════════════════════════════════
+   EXPORTAÇÃO — CARDS
+══════════════════════════════════════════ */
+.export-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 28px 0;
+}
+
+.export-card {
+  background: var(--white);
+  border: 1.5px solid var(--slate-300);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.export-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--card-accent, var(--navy-700));
+  transform: scaleX(0);
+  transition: transform .3s ease;
+}
+
+.export-card:hover::before { transform: scaleX(1); }
+
+.export-card:hover {
+  border-color: var(--navy-400);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+}
+
+.export-card-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.export-card-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  margin-bottom: 8px;
+}
+
+.export-card-desc {
+  font-size: .83rem;
+  color: var(--slate-500);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* ══════════════════════════════════════════
+   INDICADORES / ESTATÍSTICAS
+══════════════════════════════════════════ */
+.stats-row {
+  display: flex; gap: 14px;
+  margin: 20px 0;
+}
+
+.stat-card {
+  flex: 1;
+  background: var(--white);
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex; align-items: center; gap: 14px;
+}
+
+.stat-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.stat-icon-blue  { background: rgba(45,106,159,.12); }
+.stat-icon-gold  { background: rgba(201,162,39,.12); }
+.stat-icon-green { background: rgba(13,124,74,.12); }
+.stat-icon-red   { background: rgba(185,28,28,.1); }
+
+.stat-content {}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--navy-900);
+  line-height: 1;
+}
+.stat-label {
+  font-size: .77rem;
+  color: var(--slate-500);
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════ */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(13,27,42,.65);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s ease;
+}
+
+.modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  width: 100%; max-width: 560px;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: scale(.95) translateY(10px);
+  transition: transform .2s ease;
+}
+
+.modal-backdrop.open .modal {
+  transform: scale(1) translateY(0);
+}
+
+.modal-header {
+  padding: 22px 26px 18px;
+  border-bottom: 1px solid var(--slate-300);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.modal-close {
+  width: 32px; height: 32px;
+  border: none; background: var(--slate-100);
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--slate-500);
+  transition: var(--transition);
+}
+
+.modal-close:hover { background: var(--slate-300); color: var(--navy-900); }
+
+.modal-body { padding: 24px 26px; }
+.modal-footer {
+  padding: 16px 26px;
+  border-top: 1px solid var(--slate-300);
+  display: flex; justify-content: flex-end; gap: 10px;
+}
+
+/* ══════════════════════════════════════════
+   TOAST NOTIFICATIONS
+══════════════════════════════════════════ */
+#toast-container {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  z-index: 9999;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.toast {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: 10px;
+  font-size: .88rem;
+  min-width: 280px; max-width: 380px;
+  animation: toastIn .3s ease;
+  font-family: var(--font-body);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+.toast-success { background: #0d7c4a; color: white; }
+.toast-error   { background: #b91c1c; color: white; }
+.toast-info    { background: #1d6fa4; color: white; }
+.toast-warn    { background: #c27d0e; color: white; }
+
+/* ══════════════════════════════════════════
+   TABS
+══════════════════════════════════════════ */
+.tab-nav {
+  display: flex; gap: 2px;
+  border-bottom: 2px solid var(--slate-300);
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  padding: 10px 18px;
+  font-family: var(--font-body);
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--slate-500);
+  background: none; border: none;
+  cursor: pointer;
+  position: relative;
+  transition: color .2s;
+  white-space: nowrap;
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute; bottom: -2px; left: 0; right: 0;
+  height: 2px;
+  background: var(--navy-700);
+  transform: scaleX(0);
+  transition: transform .2s ease;
+}
+
+.tab-btn.active { color: var(--navy-700); }
+.tab-btn.active::after { transform: scaleX(1); }
+.tab-btn:hover:not(.active) { color: var(--navy-500); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeInUp .25s ease; }
+
+/* ══════════════════════════════════════════
+   COLOR PICKER CUSTOMIZADO
+══════════════════════════════════════════ */
+.color-presets {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.color-preset {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: var(--transition);
+  position: relative;
+}
+
+.color-preset.selected {
+  border-color: var(--navy-700);
+  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--navy-700);
+}
+
+.color-preset:hover { transform: scale(1.15); }
+
+/* ══════════════════════════════════════════
+   LOADING OVERLAY
+══════════════════════════════════════════ */
+#loading-overlay {
+  position: fixed; inset: 0;
+  background: rgba(13,27,42,.8);
+  backdrop-filter: blur(8px);
+  z-index: 5000;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+
+#loading-overlay.show { opacity: 1; pointer-events: auto; }
+
+.loading-spinner {
+  width: 52px; height: 52px;
+  border: 4px solid rgba(201,162,39,.3);
+  border-top-color: var(--gold-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  color: white;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.loading-sub {
+  color: rgba(255,255,255,.6);
+  font-size: .85rem;
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVIDADE
+══════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  .extraction-grid { grid-template-columns: repeat(2, 1fr); }
+  .export-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 900px) {
+  #app-sidebar { transform: translateX(-100%); }
+  #app-main { margin-left: 0; }
+  .form-grid { grid-template-columns: 1fr; }
+  .doc-page { width: 100%; padding: 14px; }
+}
+
+/* ══════════════════════════════════════════
+   IMPRESSÃO / PDF
+══════════════════════════════════════════ */
+@media print {
+  #app-header,
+  #app-sidebar,
+  .step-actions,
+  #progress-bar-container,
+  .no-print { display: none !important; }
+
+  #app-main { margin-left: 0 !important; }
+  body { background: white !important; }
+
+  #preview-area {
+    background: white !important;
+    padding: 0 !important;
+  }
+
+  .doc-page {
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    page-break-after: always;
+  }
+
+  .doc-page:last-child { page-break-after: avoid; }
+
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
+
+/* ══════════════════════════════════════════
+   UTILITIES
+══════════════════════════════════════════ */
+.hidden   { display: none !important; }
+.visible  { display: block !important; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.gap-10  { gap: 10px; }
+.mt-8    { margin-top: 8px; }
+.mt-16   { margin-top: 16px; }
+.mt-24   { margin-top: 24px; }
+.mb-16   { margin-bottom: 16px; }
+.mb-24   { margin-bottom: 24px; }
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+.font-mono   { font-family: var(--font-mono); }
+.text-sm     { font-size: .85rem; }
+.text-xs     { font-size: .75rem; }
+.text-muted  { color: var(--slate-500); }
+.fw-600      { font-weight: 600; }
+.divider {
+  border: none; border-top: 1px solid var(--slate-300);
+  margin: 24px 0;
+}
+
+.inline-edit {
+  border: 1.5px dashed transparent;
+  border-radius: 4px;
+  padding: 2px 6px;
+  transition: var(--transition);
+  outline: none;
+  min-width: 40px;
+  display: inline-block;
+}
+
+.inline-edit:hover { border-color: var(--navy-400); background: var(--navy-50); }
+.inline-edit:focus { border-color: var(--navy-600, #295281); border-style: solid; background: white; }
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--slate-500);
+}
+
+.empty-state-icon { font-size: 56px; margin-bottom: 16px; opacity: .5; }
+.empty-state-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--slate-700);
+  margin-bottom: 8px;
+}
+.empty-state-desc { font-size: .9rem; line-height: 1.6; max-width: 360px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOADING OVERLAY ═══════════════ -->
+<div id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Processando documento...</div>
+  <div class="loading-sub" id="loading-sub-text">Aguarde enquanto extraímos os dados</div>
+</div>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header id="app-header">
+  <div class="header-brand">
+    <div class="header-logo">M</div>
+    <div>
+      <div class="header-title">MatrizPro</div>
+      <div class="header-subtitle">Sistema de Gestão Curricular</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn-header btn-header-outline" onclick="resetApp()">↺ Novo Projeto</button>
+    <button class="btn-header btn-header-outline" onclick="saveProgress()">💾 Salvar</button>
+    <button class="btn-header btn-header-primary" id="btn-quick-export" onclick="goToStep(6)">⬇ Exportar</button>
+  </div>
+</header>
+
+<!-- ═══════════════ LAYOUT PRINCIPAL ═══════════════ -->
+<div id="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside id="app-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Etapas do Processo</div>
+
+      <div class="step-nav-item active" id="nav-1" onclick="goToStep(1)">
+        <div class="step-num">1</div>
+        <div class="step-nav-info">
+          <div class="step-nav-name">Upload</div>
+          <div class="step-nav-desc">Carregar arquivo curricular</div>
+        </div>
+      </div>
+      <div class="step-connector" id="conn-1"></div>
+
+      <div class="step-nav-item disabled" id="nav-2" onclick="goToStep(2)">
+        <div class="step-num">2</div>
+        <div class="step-nav-info">
+          <div class="step-nav-name">Leitura</div>
+          <div class="step-nav-desc">Extração e validação</div>
+        </div>
+      </div>
+      <div class="step-connector" id="conn-2"></div>
+
+      <div class="step-nav-item disabled" id="nav-3" onclick="goToStep(3)">
+        <div class="step-num">3</div>
+        <div class="step-nav-info">
+          <div class="step-nav-name">Dados Institucionais</div>
+          <div class="step-nav-desc">Identificação e curso</div>
+        </div>
+      </div>
+      <div class="step-connector" id="conn-3"></div>
+
+      <div class="step-nav-item disabled" id="nav-4" onclick="goToStep(4)">
+        <div class="step-num">4</div>
+        <div class="step-nav-info">
+          <div class="step-nav-name">Dados Pedagógicos</div>
+          <div class="step-nav-desc">Perfil, competências</div>
+        </div>
+      </div>
+      <div class="step-connector" id="conn-4"></div>
+
+      <div class="step-nav-item disabled" id="nav-5" onclick="goToStep(5)">
+        <div class="step-num">5</div>
+        <div class="step-nav-info">
+          <div class="step-nav-name">Padronização</div>
+          <div class="step-nav-desc">Revisão e visualização</div>
+        </div>
+      </div>
+      <div class="step-connector" id="conn-5"></div>
+
+      <div class="step-nav-item disabled" id="nav-6" onclick="goToStep(6)">
+        <div class="step-num">6</div>
+        <div class="step-nav-info">
+          <div class="step-nav-name">Exportação</div>
+          <div class="step-nav-desc">PDF, HTML, PPC</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAINEL DE CONFORMIDADE -->
+    <div class="compliance-panel" id="compliance-panel">
+      <div class="compliance-title">Conformidade Legal</div>
+      <div class="compliance-item">
+        <div class="compliance-dot idle" id="comp-ldb"></div>
+        <span>LDB 9.394/1996</span>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-dot idle" id="comp-dcn"></div>
+        <span>DCNs do curso</span>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-dot idle" id="comp-extensao"></div>
+        <span>Extensão 10% (Lei 13.005)</span>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-dot idle" id="comp-estagio"></div>
+        <span>Estágio supervisionado</span>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-dot idle" id="comp-tcc"></div>
+        <span>TCC previsto</span>
+      </div>
+      <div class="compliance-item">
+        <div class="compliance-dot idle" id="comp-comp"></div>
+        <span>Ativ. Complementares</span>
+      </div>
+    </div>
+
+    <!-- Versão -->
+    <div style="margin-top:auto; padding:16px 20px; border-top:1px solid rgba(255,255,255,.06);">
+      <div style="font-size:.7rem; color:rgba(255,255,255,.25); font-family:var(--font-mono);">
+        MatrizPro v1.0.0 · 2025<br>
+        Conforme MEC/INEP
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main id="app-main">
+    <div id="progress-bar-container">
+      <div id="progress-bar-fill"></div>
+    </div>
+
+    <!-- ════════ ETAPA 1: UPLOAD ════════ -->
+    <div class="step-panel active" id="step-1">
+      <div class="step-header">
+        <div class="step-badge">⬆ Etapa 1 de 6</div>
+        <h1 class="step-title">Upload da Matriz Curricular</h1>
+        <p class="step-desc">Faça o upload de um arquivo HTML contendo a matriz curricular existente, ou inicie do zero para criar uma nova matriz padronizada.</p>
+      </div>
+
+      <div class="alert alert-info">
+        <div class="alert-icon">ℹ</div>
+        <div class="alert-content">
+          <div class="alert-title">Formatos suportados</div>
+          Arquivos HTML exportados de sistemas acadêmicos (SIGAA, SIE, Q-Acadêmico), planilhas convertidas para HTML, e documentos web com estrutura tabular de disciplinas.
+        </div>
+      </div>
+
+      <!-- ZONA DE UPLOAD -->
+      <div class="upload-zone" id="upload-zone"
+           onclick="document.getElementById('file-input').click()"
+           ondragover="handleDragOver(event)"
+           ondragleave="handleDragLeave(event)"
+           ondrop="handleDrop(event)">
+        <div class="upload-icon-wrapper">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div class="upload-title">Arraste o arquivo aqui</div>
+        <div class="upload-subtitle">ou clique para selecionar do seu computador<br>Tamanho máximo: 20 MB</div>
+        <div class="upload-formats">
+          <span class="upload-format-tag">.html</span>
+          <span class="upload-format-tag">.htm</span>
+          <span class="upload-format-tag">.xhtml</span>
+        </div>
+      </div>
+      <input type="file" id="file-input" accept=".html,.htm,.xhtml" onchange="handleFileSelect(event)">
+
+      <!-- ARQUIVO CARREGADO -->
+      <div class="file-loaded" id="file-loaded-info">
+        <div class="file-icon">📄</div>
+        <div class="file-info">
+          <div class="file-name" id="file-loaded-name">arquivo.html</div>
+          <div class="file-meta" id="file-loaded-meta">0 KB · Pronto para processar</div>
+        </div>
+        <div class="file-actions">
+          <button class="btn btn-outline btn-sm" onclick="clearFile()">Remover</button>
+          <button class="btn btn-primary btn-sm" onclick="processFile()">Processar →</button>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- OPÇÃO SEM ARQUIVO -->
+      <div style="display:flex; align-items:center; gap:20px; padding:24px; background:var(--white); border:1.5px solid var(--slate-300); border-radius:var(--radius-lg); box-shadow:var(--shadow-sm);">
+        <div style="font-size:36px;">✏️</div>
+        <div style="flex:1;">
+          <div style="font-family:var(--font-display); font-size:1.05rem; font-weight:600; color:var(--navy-900); margin-bottom:4px;">Criar nova matriz do zero</div>
+          <div style="font-size:.88rem; color:var(--slate-500); line-height:1.5;">Preencha todos os dados manualmente e gere uma matriz completamente padronizada conforme as DCNs e normativas vigentes.</div>
+        </div>
+        <button class="btn btn-gold" onclick="startFromScratch()">Iniciar do zero →</button>
+      </div>
+    </div>
+
+    <!-- ════════ ETAPA 2: LEITURA/EXTRAÇÃO ════════ -->
+    <div class="step-panel" id="step-2">
+      <div class="step-header">
+        <div class="step-badge">🔍 Etapa 2 de 6</div>
+        <h1 class="step-title">Leitura e Extração de Dados</h1>
+        <p class="step-desc">Revise os dados extraídos automaticamente do documento. Corrija eventuais erros e complete informações ausentes antes de prosseguir.</p>
+      </div>
+
+      <!-- STATS DE EXTRAÇÃO -->
+      <div class="stats-row" id="extraction-stats">
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-blue">📚</div>
+          <div class="stat-content">
+            <div class="stat-value" id="stat-disciplinas">0</div>
+            <div class="stat-label">Disciplinas</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-gold">⏱</div>
+          <div class="stat-content">
+            <div class="stat-value" id="stat-ch">0</div>
+            <div class="stat-label">Carga Horária</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-green">📅</div>
+          <div class="stat-content">
+            <div class="stat-value" id="stat-periodos">0</div>
+            <div class="stat-label">Períodos</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon stat-icon-red">⚠</div>
+          <div class="stat-content">
+            <div class="stat-value" id="stat-alertas">0</div>
+            <div class="stat-label">Alertas</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERTAS DE EXTRAÇÃO -->
+      <div id="extraction-alerts-container"></div>
+
+      <!-- TABS DE DADOS EXTRAÍDOS -->
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('disciplines', this)">📋 Disciplinas</button>
+        <button class="tab-btn" onclick="switchTab('components', this)">🔷 Componentes Especiais</button>
+        <button class="tab-btn" onclick="switchTab('raw-preview', this)">👁 Pré-visualização</button>
+      </div>
+
+      <!-- Tab: Disciplinas -->
+      <div class="tab-panel active" id="tab-disciplines">
+        <div class="disciplines-table-wrapper">
+          <div class="disciplines-table-header">
+            <div class="disciplines-table-title">Disciplinas Extraídas</div>
+            <div class="disciplines-count" id="disc-count">0</div>
+          </div>
+          <div class="table-scroll">
+            <table class="curriculum-table">
+              <thead>
+                <tr>
+                  <th style="width:40px">#</th>
+                  <th>Nome da Disciplina</th>
+                  <th style="width:80px">Período</th>
+                  <th style="width:80px">CH (h)</th>
+                  <th style="width:70px">Créditos</th>
+                  <th style="width:120px">Tipo</th>
+                  <th style="width:150px">Pré-requisito</th>
+                  <th style="width:80px">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="disciplines-tbody">
+                <tr>
+                  <td colspan="8">
+                    <div class="empty-state">
+                      <div class="empty-state-icon">📋</div>
+                      <div class="empty-state-title">Nenhuma disciplina extraída</div>
+                      <div class="empty-state-desc">Faça o upload de um arquivo na etapa anterior para ver as disciplinas aqui.</div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <button class="btn btn-outline btn-sm" onclick="addDiscipline()">+ Adicionar disciplina</button>
+          <button class="btn btn-outline btn-sm" style="margin-left:8px" onclick="importFromClipboard()">📋 Colar do Excel</button>
+        </div>
+      </div>
+
+      <!-- Tab: Componentes Especiais -->
+      <div class="tab-panel" id="tab-components">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Estágio Supervisionado <span class="required">*</span></label>
+            <input class="form-input" id="ext-estagio" type="number" placeholder="Carga horária (h)" min="0">
+            <span class="form-help">Mínimo recomendado conforme DCNs do curso</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">TCC / Trabalho de Conclusão <span class="required">*</span></label>
+            <input class="form-input" id="ext-tcc" type="number" placeholder="Carga horária (h)" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Extensão Curricularizada <span class="required">*</span></label>
+            <input class="form-input" id="ext-extensao" type="number" placeholder="Carga horária (h)" min="0">
+            <span class="form-help">Mínimo 10% da CH total (Lei 13.005/2014 / Res. CNE 7/2018)</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Atividades Complementares <span class="required">*</span></label>
+            <input class="form-input" id="ext-comp" type="number" placeholder="Carga horária (h)" min="0">
+          </div>
+          <div class="form-group form-grid-full">
+            <label class="form-label">Observações sobre componentes especiais</label>
+            <textarea class="form-textarea" id="ext-obs" rows="3" placeholder="Ex: O estágio será realizado a partir do 6º período, em instituições conveniadas..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Raw Preview -->
+      <div class="tab-panel" id="tab-raw-preview">
+        <div style="background:var(--white); border:1px solid var(--slate-300); border-radius:var(--radius-md); padding:20px; max-height:400px; overflow-y:auto;">
+          <div id="raw-preview-content" style="font-family:var(--font-mono); font-size:.78rem; color:var(--slate-700); white-space:pre-wrap; line-height:1.6;">
+            Nenhum arquivo carregado. Faça o upload na Etapa 1.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ ETAPA 3: DADOS INSTITUCIONAIS ════════ -->
+    <div class="step-panel" id="step-3">
+      <div class="step-header">
+        <div class="step-badge">🏛 Etapa 3 de 6</div>
+        <h1 class="step-title">Dados Institucionais</h1>
+        <p class="step-desc">Informe os dados da instituição e do curso para compor a identificação oficial do documento.</p>
+      </div>
+
+      <!-- IDENTIFICAÇÃO INSTITUCIONAL -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon">🏛</div>
+          <div class="form-section-title">Identificação da Instituição</div>
+        </div>
+        <div class="form-section-body">
+          <div class="form-grid">
+            <div class="form-group form-grid-full">
+              <label class="form-label">Nome Completo da IES <span class="required">*</span></label>
+              <input class="form-input" id="inst-nome" placeholder="Ex: Universidade Federal de Minas Gerais" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Sigla <span class="required">*</span></label>
+              <input class="form-input" id="inst-sigla" placeholder="UFMG">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Categoria Administrativa</label>
+              <select class="form-select" id="inst-categoria">
+                <option value="">Selecione...</option>
+                <option>Pública Federal</option>
+                <option>Pública Estadual</option>
+                <option>Pública Municipal</option>
+                <option>Privada com fins lucrativos</option>
+                <option>Privada sem fins lucrativos</option>
+                <option>Comunitária/Confessional</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Organização Acadêmica</label>
+              <select class="form-select" id="inst-org">
+                <option value="">Selecione...</option>
+                <option>Universidade</option>
+                <option>Centro Universitário</option>
+                <option>Faculdade</option>
+                <option>Instituto Federal</option>
+                <option>CEFET</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cidade / UF <span class="required">*</span></label>
+              <input class="form-input" id="inst-cidade" placeholder="Belo Horizonte / MG">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Unidade / Campus</label>
+              <input class="form-input" id="inst-campus" placeholder="Campus Pampulha">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Faculdade / Departamento</label>
+              <input class="form-input" id="inst-depto" placeholder="Faculdade de Educação">
+            </div>
+            <div class="form-group">
+              <label class="form-label">CNPJ / Código e-MEC</label>
+              <input class="form-input" id="inst-cnpj" placeholder="00.000.000/0000-00">
+            </div>
+          </div>
+
+          <!-- LOGO UPLOAD -->
+          <div class="form-group" style="margin-top:8px;">
+            <label class="form-label">Logotipo Institucional</label>
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div id="logo-preview" style="width:80px;height:80px;border:2px dashed var(--slate-300);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;cursor:pointer;overflow:hidden;" onclick="document.getElementById('logo-input').click()">
+                🏛
+              </div>
+              <div>
+                <button class="btn btn-outline btn-sm" onclick="document.getElementById('logo-input').click()">Selecionar logotipo</button>
+                <input type="file" id="logo-input" accept="image/*" style="display:none" onchange="handleLogoUpload(event)">
+                <div class="form-help" style="margin-top:6px;">PNG, JPG ou SVG. Recomendado: fundo transparente.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IDENTIFICAÇÃO DO CURSO -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon">🎓</div>
+          <div class="form-section-title">Identificação do Curso</div>
+        </div>
+        <div class="form-section-body">
+          <div class="form-grid">
+            <div class="form-group form-grid-full">
+              <label class="form-label">Nome do Curso <span class="required">*</span></label>
+              <input class="form-input" id="curso-nome" placeholder="Bacharelado em Administração">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Grau Acadêmico <span class="required">*</span></label>
+              <select class="form-select" id="curso-grau">
+                <option value="">Selecione...</option>
+                <option>Bacharelado</option>
+                <option>Licenciatura</option>
+                <option>Tecnólogo</option>
+                <option>Bacharelado e Licenciatura</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Modalidade <span class="required">*</span></label>
+              <select class="form-select" id="curso-modalidade">
+                <option value="">Selecione...</option>
+                <option>Presencial</option>
+                <option>EaD</option>
+                <option>Semipresencial (Híbrido)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Turno</label>
+              <select class="form-select" id="curso-turno">
+                <option value="">Selecione...</option>
+                <option>Matutino</option>
+                <option>Vespertino</option>
+                <option>Noturno</option>
+                <option>Integral</option>
+                <option>Matutino e Noturno</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Carga Horária Total (h) <span class="required">*</span></label>
+              <input class="form-input" id="curso-ch" type="number" placeholder="3200" min="0" oninput="updateCompliance()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Vagas por Semestre</label>
+              <input class="form-input" id="curso-vagas" type="number" placeholder="50" min="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Prazo Mínimo (semestres) <span class="required">*</span></label>
+              <input class="form-input" id="curso-prazo-min" type="number" placeholder="8" min="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Prazo Máximo (semestres) <span class="required">*</span></label>
+              <input class="form-input" id="curso-prazo-max" type="number" placeholder="14" min="1">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Código do Curso (e-MEC)</label>
+              <input class="form-input" id="curso-codigo" placeholder="000000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data de Início de Vigência</label>
+              <input class="form-input" id="curso-vigencia" type="date">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ato de Criação / Resolução</label>
+              <input class="form-input" id="curso-ato" placeholder="Resolução CEPE nº 001/2024">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Área de Conhecimento (CAPES)</label>
+              <select class="form-select" id="curso-area">
+                <option value="">Selecione...</option>
+                <option>Ciências Exatas e da Terra</option>
+                <option>Ciências Biológicas</option>
+                <option>Engenharias</option>
+                <option>Ciências da Saúde</option>
+                <option>Ciências Agrárias</option>
+                <option>Ciências Sociais Aplicadas</option>
+                <option>Ciências Humanas</option>
+                <option>Linguística, Letras e Artes</option>
+                <option>Multidisciplinar</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESPONSÁVEIS -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon">👥</div>
+          <div class="form-section-title">Responsáveis e Gestão</div>
+        </div>
+        <div class="form-section-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Coordenador(a) do Curso <span class="required">*</span></label>
+              <input class="form-input" id="resp-coord" placeholder="Prof. Dr. Nome Sobrenome">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Titulação do(a) Coordenador(a)</label>
+              <select class="form-select" id="resp-coord-titulo">
+                <option value="">Selecione...</option>
+                <option>Doutor(a)</option>
+                <option>Mestre(a)</option>
+                <option>Especialista</option>
+                <option>Graduado(a)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Diretor(a) da Unidade</label>
+              <input class="form-input" id="resp-diretor" placeholder="Prof. Dr. Nome Sobrenome">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pró-Reitor(a) de Graduação</label>
+              <input class="form-input" id="resp-proreitor" placeholder="Prof. Dr. Nome Sobrenome">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESIGN INSTITUCIONAL -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon">🎨</div>
+          <div class="form-section-title">Identidade Visual</div>
+        </div>
+        <div class="form-section-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Cor Primária Institucional</label>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <input type="color" id="cor-primaria" value="#1e3a5f" style="width:48px;height:40px;border:1.5px solid var(--slate-300);border-radius:var(--radius-md);padding:3px;cursor:pointer;">
+                <input class="form-input" id="cor-primaria-hex" value="#1e3a5f" placeholder="#1e3a5f" style="max-width:120px;" oninput="syncColor(this,'cor-primaria')">
+              </div>
+              <div class="color-presets">
+                <div class="color-preset" style="background:#1e3a5f" title="Azul Marinho" onclick="setColor('#1e3a5f')"></div>
+                <div class="color-preset" style="background:#1a472a" title="Verde Escuro" onclick="setColor('#1a472a')"></div>
+                <div class="color-preset" style="background:#7b1d1d" title="Vermelho Escuro" onclick="setColor('#7b1d1d')"></div>
+                <div class="color-preset" style="background:#2c3e50" title="Cinza Azulado" onclick="setColor('#2c3e50')"></div>
+                <div class="color-preset" style="background:#4a235a" title="Roxo Institucional" onclick="setColor('#4a235a')"></div>
+                <div class="color-preset" style="background:#1b4f72" title="Azul Cobalto" onclick="setColor('#1b4f72')"></div>
+                <div class="color-preset" style="background:#154360" title="Azul Petróleo" onclick="setColor('#154360')"></div>
+                <div class="color-preset" style="background:#17202a" title="Preto Institucional" onclick="setColor('#17202a')"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cor de Destaque (Acento)</label>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <input type="color" id="cor-acento" value="#c9a227" style="width:48px;height:40px;border:1.5px solid var(--slate-300);border-radius:var(--radius-md);padding:3px;cursor:pointer;">
+                <input class="form-input" id="cor-acento-hex" value="#c9a227" placeholder="#c9a227" style="max-width:120px;" oninput="syncColor(this,'cor-acento')">
+              </div>
+              <div class="color-presets">
+                <div class="color-preset" style="background:#c9a227" title="Dourado" onclick="setAccent('#c9a227')"></div>
+                <div class="color-preset" style="background:#e74c3c" title="Vermelho" onclick="setAccent('#e74c3c')"></div>
+                <div class="color-preset" style="background:#27ae60" title="Verde" onclick="setAccent('#27ae60')"></div>
+                <div class="color-preset" style="background:#2980b9" title="Azul" onclick="setAccent('#2980b9')"></div>
+                <div class="color-preset" style="background:#8e44ad" title="Roxo" onclick="setAccent('#8e44ad')"></div>
+                <div class="color-preset" style="background:#e67e22" title="Laranja" onclick="setAccent('#e67e22')"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Texto do Rodapé</label>
+              <input class="form-input" id="doc-rodape" placeholder="Documento elaborado conforme DCNs. Aprovado em __/__/____">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Texto do Cabeçalho</label>
+              <input class="form-input" id="doc-cabecalho" placeholder="PROJETO PEDAGÓGICO DE CURSO — PPC">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ano/Versão do Documento</label>
+              <input class="form-input" id="doc-versao" placeholder="2025 · Versão 1.0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Numeração de páginas</label>
+              <select class="form-select" id="doc-paginacao">
+                <option value="bottom-center">Inferior centralizada</option>
+                <option value="bottom-right">Inferior direita</option>
+                <option value="top-right">Superior direita</option>
+                <option value="none">Sem numeração</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ ETAPA 4: DADOS PEDAGÓGICOS ════════ -->
+    <div class="step-panel" id="step-4">
+      <div class="step-header">
+        <div class="step-badge">📖 Etapa 4 de 6</div>
+        <h1 class="step-title">Dados Pedagógicos</h1>
+        <p class="step-desc">Complete as informações pedagógicas obrigatórias do PPC: perfil do egresso, competências, metodologias e referências normativas.</p>
+      </div>
+
+      <!-- TABS PEDAGÓGICOS -->
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('ped-perfil', this)">👤 Perfil do Egresso</button>
+        <button class="tab-btn" onclick="switchTab('ped-competencias', this)">🎯 Competências</button>
+        <button class="tab-btn" onclick="switchTab('ped-metodologias', this)">⚙ Metodologias</button>
+        <button class="tab-btn" onclick="switchTab('ped-legal', this)">⚖ Base Legal</button>
+        <button class="tab-btn" onclick="switchTab('ped-transversais', this)">🔄 Transversais</button>
+      </div>
+
+      <!-- PERFIL DO EGRESSO -->
+      <div class="tab-panel active" id="tab-ped-perfil">
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-icon">👤</div>
+            <div class="form-section-title">Perfil do Egresso</div>
+          </div>
+          <div class="form-section-body">
+            <div class="form-group mb-24">
+              <label class="form-label">Descrição do Perfil do Egresso <span class="required">*</span></label>
+              <textarea class="form-textarea" id="ped-perfil" rows="6" placeholder="Descreva o perfil do profissional formado pelo curso: conhecimentos, habilidades, atitudes e valores esperados ao concluir a graduação..."></textarea>
+              <span class="form-help">Mínimo recomendado: 150 palavras. Deve estar alinhado às DCNs do curso.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Áreas de Atuação Profissional</label>
+              <textarea class="form-textarea" id="ped-atuacao" rows="4" placeholder="Enumere as principais áreas de atuação do egresso no mercado de trabalho..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPETÊNCIAS -->
+      <div class="tab-panel" id="tab-ped-competencias">
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-icon">🎯</div>
+            <div class="form-section-title">Competências e Habilidades</div>
+          </div>
+          <div class="form-section-body">
+            <div class="form-group mb-24">
+              <label class="form-label">Competências Gerais <span class="required">*</span></label>
+              <textarea class="form-textarea" id="ped-competencias-gerais" rows="6" placeholder="Liste as competências gerais do egresso (ex: pensamento crítico, comunicação, resolução de problemas, trabalho em equipe, ética profissional...)"></textarea>
+            </div>
+            <div class="form-group mb-24">
+              <label class="form-label">Competências Específicas da Área <span class="required">*</span></label>
+              <textarea class="form-textarea" id="ped-competencias-espec" rows="6" placeholder="Liste as competências específicas da área de formação..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Habilidades Técnicas</label>
+              <textarea class="form-textarea" id="ped-habilidades" rows="4" placeholder="Liste as habilidades técnicas e instrumentais esperadas..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- METODOLOGIAS -->
+      <div class="tab-panel" id="tab-ped-metodologias">
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-icon">⚙</div>
+            <div class="form-section-title">Metodologias e Organização Curricular</div>
+          </div>
+          <div class="form-section-body">
+            <div class="form-grid">
+              <div class="form-group form-grid-full">
+                <label class="form-label">Regime Acadêmico</label>
+                <select class="form-select" id="ped-regime">
+                  <option value="">Selecione...</option>
+                  <option>Seriado Semestral</option>
+                  <option>Seriado Anual</option>
+                  <option>Créditos Livre</option>
+                  <option>Modular</option>
+                  <option>Ciclos</option>
+                </select>
+              </div>
+              <div class="form-group form-grid-full">
+                <label class="form-label">Metodologias de Ensino-Aprendizagem <span class="required">*</span></label>
+                <textarea class="form-textarea" id="ped-metodologias-desc" rows="5" placeholder="Descreva as metodologias pedagógicas adotadas: aulas expositivas, metodologias ativas, PBL, flipped classroom, estudo de caso, etc."></textarea>
+              </div>
+              <div class="form-group form-grid-full">
+                <label class="form-label">Formas de Avaliação</label>
+                <textarea class="form-textarea" id="ped-avaliacao" rows="4" placeholder="Descreva os critérios e instrumentos de avaliação utilizados no curso..."></textarea>
+              </div>
+              <div class="form-group form-grid-full">
+                <label class="form-label">Infraestrutura e Recursos de Apoio</label>
+                <textarea class="form-textarea" id="ped-infra" rows="4" placeholder="Laboratórios, bibliotecas, recursos tecnológicos, etc."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXTENSÃO -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-icon">🌱</div>
+            <div class="form-section-title">Extensão Universitária</div>
+          </div>
+          <div class="form-section-body">
+            <div class="alert alert-warn">
+              <div class="alert-icon">⚠</div>
+              <div class="alert-content">
+                <div class="alert-title">Obrigatoriedade Legal</div>
+                A curricularização da extensão é obrigatória para todos os cursos de graduação (mínimo 10% da CH total), conforme Resolução CNE/CES nº 7/2018 e Lei nº 13.005/2014 (PNE, Meta 12.7).
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">CH de Extensão (h) <span class="required">*</span></label>
+                <input class="form-input" id="ped-extensao-ch" type="number" placeholder="320" oninput="updateCompliance()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">% da CH Total</label>
+                <input class="form-input" id="ped-extensao-pct" readonly placeholder="Calculado automaticamente" style="background:var(--slate-100)">
+              </div>
+              <div class="form-group form-grid-full">
+                <label class="form-label">Formas de Curricularização da Extensão</label>
+                <textarea class="form-textarea" id="ped-extensao-desc" rows="4" placeholder="Descreva como a extensão está curricularizada: disciplinas de extensão, atividades integradas, projetos comunitários, etc."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESTÁGIO -->
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-icon">🤝</div>
+            <div class="form-section-title">Estágio Supervisionado</div>
+          </div>
+          <div class="form-section-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">CH de Estágio Obrigatório (h)</label>
+                <input class="form-input" id="ped-estagio-ch" type="number" placeholder="0" oninput="updateCompliance()">
+              </div>
+              <div class="form-group">
+                <label class="form-label">A partir do (período)</label>
+                <input class="form-input" id="ped-estagio-periodo" type="number" placeholder="5" min="1">
+              </div>
+              <div class="form-group form-grid-full">
+                <label class="form-label">Regulamentação do Estágio</label>
+                <textarea class="form-textarea" id="ped-estagio-reg" rows="3" placeholder="Regulamento de estágio, convênios, campos de estágio..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BASE LEGAL -->
+      <div class="tab-panel" id="tab-ped-legal">
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-icon">⚖</div>
+            <div class="form-section-title">Base Legal e Referências Normativas</div>
+          </div>
+          <div class="form-section-body">
+            <div class="alert alert-info">
+              <div class="alert-icon">ℹ</div>
+              <div class="alert-content">Selecione todas as normativas que fundamentam este currículo. As selecionadas aparecerão na seção de base legal do documento.</div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--slate-300);border-radius:var(--radius-md);cursor:pointer;font-size:.85rem;line-height:1.4;">
+                <input type="checkbox" id="legal-ldb" checked style="margin-top:2px; flex-shrink:0;">
+                <span><strong>LDB 9.394/1996</strong><br><span class="text-muted">Lei de Diretrizes e Bases da Educação Nacional</span></span>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--slate-300);border-radius:var(--radius-md);cursor:pointer;font-size:.85rem;line-height:1.4;">
+                <input type="checkbox" id="legal-pne" style="margin-top:2px; flex-shrink:0;">
+                <span><strong>PNE – Lei 13.005/2014</strong><br><span class="text-muted">Plano Nacional de Educação (Metas 12 e 13)</span></span>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--slate-300);border-radius:var(--radius-md);cursor:pointer;font-size:.85rem;line-height:1.4;">
+                <input type="checkbox" id="legal-ext" checked style="margin-top:2px; flex-shrink:0;">
+                <span><strong>Res. CNE/CES 7/2018</strong><br><span class="text-muted">Diretrizes para curricularização da extensão</span></span>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--slate-300);border-radius:var(--radius-md);cursor:pointer;font-size:.85rem;line-height:1.4;">
+                <input type="checkbox" id="legal-csa" style="margin-top:2px; flex-shrink:0;">
+                <span><strong>Res. CNE/CP 1/2021</strong><br><span class="text-muted">DCNs para Formação Continuada de Docentes</span></span>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--slate-300);border-radius:var(--radius-md);cursor:pointer;font-size:.85rem;line-height:1.4;">
+                <input type="checkbox" id="legal-acessib" style="margin-top:2px; flex-shrink:0;">
+                <span><strong>Lei 13.146/2015 (LBI)</strong><br><span class="text-muted">Lei Brasileira de Inclusão / Acessibilidade</span></span>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--slate-300);border-radius:var(--radius-md);cursor:pointer;font-size:.85rem;line-height:1.4;">
+                <input type="checkbox" id="legal-ea" style="margin-top:2px; flex-shrink:0;">
+                <span><strong>Lei 9.795/1999</strong><br><span class="text-muted">Política Nacional de Educação Ambiental</span></span>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--slate-300);border-radius:var(--radius-md);cursor:pointer;font-size:.85rem;line-height:1.4;">
+                <input type="checkbox" id="legal-er" style="margin-top:2px; flex-shrink:0;">
+                <span><strong>Lei 10.639/2003 e 11.645/2008</strong><br><span class="text-muted">Hist. e Cultura Afro-Brasileira e Indígena</span></span>
+              </label>
+              <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--slate-300);border-radius:var(--radius-md);cursor:pointer;font-size:.85rem;line-height:1.4;">
+                <input type="checkbox" id="legal-dm" style="margin-top:2px; flex-shrink:0;">
+                <span><strong>Dec. 5.296/2004</strong><br><span class="text-muted">Acessibilidade para PcD – regulamentação</span></span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">DCNs Específicas do Curso</label>
+              <input class="form-input" id="legal-dcn-curso" placeholder="Ex: Resolução CNE/CES nº 4, de 13 de julho de 2005 (Administração)">
+            </div>
+            <div class="form-group mt-16">
+              <label class="form-label">Outras normativas / regulamentos internos</label>
+              <textarea class="form-textarea" id="legal-outros" rows="3" placeholder="Resolução interna, regimento, normas complementares..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTEÚDOS TRANSVERSAIS -->
+      <div class="tab-panel" id="tab-ped-transversais">
+        <div class="form-section">
+          <div class="form-section-header">
+            <div class="form-section-icon">🔄</div>
+            <div class="form-section-title">Conteúdos Transversais Obrigatórios</div>
+          </div>
+          <div class="form-section-body">
+            <div class="alert alert-warn">
+              <div class="alert-icon">⚠</div>
+              <div class="alert-content">
+                <div class="alert-title">Temas obrigatórios por lei</div>
+                Indicar como cada tema está inserido no currículo (disciplina específica, conteúdo transversal ou atividade complementar).
+              </div>
+            </div>
+
+            <div id="transversais-container">
+              <!-- Gerado pelo JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ ETAPA 5: PADRONIZAÇÃO/VISUALIZAÇÃO ════════ -->
+    <div class="step-panel" id="step-5">
+      <div class="step-header">
+        <div class="step-badge">👁 Etapa 5 de 6</div>
+        <h1 class="step-title">Padronização e Visualização</h1>
+        <p class="step-desc">Revise o documento padronizado. Você pode editar campos diretamente clicando no texto. Verifique a conformidade legal antes de exportar.</p>
+      </div>
+
+      <!-- BARRA DE CONFORMIDADE -->
+      <div class="form-section" style="margin-bottom:20px;">
+        <div class="form-section-header">
+          <div class="form-section-icon">✅</div>
+          <div class="form-section-title">Verificação de Conformidade</div>
+        </div>
+        <div class="form-section-body" id="conformidade-checks">
+          <!-- Gerado pelo JS -->
+        </div>
+      </div>
+
+      <!-- CONTROLES DE PREVIEW -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;" class="no-print">
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline btn-sm" onclick="togglePreviewZoom(-0.1)">🔍−</button>
+          <button class="btn btn-outline btn-sm" onclick="togglePreviewZoom(0.1)">🔍+</button>
+          <button class="btn btn-outline btn-sm" onclick="resetPreviewZoom()">100%</button>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="generateDocument()">↻ Regenerar documento</button>
+      </div>
+
+      <!-- PREVIEW DO DOCUMENTO -->
+      <div id="preview-area">
+        <div class="empty-state" id="preview-placeholder">
+          <div class="empty-state-icon">📄</div>
+          <div class="empty-state-title">Documento será gerado aqui</div>
+          <div class="empty-state-desc">Complete as etapas anteriores e clique em "Avançar" para visualizar o documento padronizado.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════ ETAPA 6: EXPORTAÇÃO ════════ -->
+    <div class="step-panel" id="step-6">
+      <div class="step-header">
+        <div class="step-badge">⬇ Etapa 6 de 6</div>
+        <h1 class="step-title">Exportação do Documento</h1>
+        <p class="step-desc">Escolha o formato de exportação desejado. O documento está pronto para uso institucional e apresentação ao MEC/INEP.</p>
+      </div>
+
+      <div class="alert alert-success">
+        <div class="alert-icon">✅</div>
+        <div class="alert-content">
+          <div class="alert-title">Documento pronto para exportação</div>
+          A matriz curricular foi padronizada e está em conformidade com as normativas vigentes. Selecione o formato de exportação desejado.
+        </div>
+      </div>
+
+      <div class="export-grid">
+        <!-- PDF -->
+        <div class="export-card" style="--card-accent: #b91c1c;" onclick="exportPDF()">
+          <span class="export-card-icon">📕</span>
+          <div class="export-card-title">PDF Institucional</div>
+          <div class="export-card-desc">Documento formatado para impressão e arquivamento. Inclui cabeçalho, rodapé, paginação e qualidade MEC/INEP.</div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;">⬇ Exportar PDF</button>
+        </div>
+
+        <!-- HTML -->
+        <div class="export-card" style="--card-accent: #1d6fa4;" onclick="exportHTML()">
+          <span class="export-card-icon">🌐</span>
+          <div class="export-card-title">HTML Padronizado</div>
+          <div class="export-card-desc">Arquivo HTML pronto para publicação em portal institucional. Responsivo e acessível (WCAG).</div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;">⬇ Exportar HTML</button>
+        </div>
+
+        <!-- PPC JSON -->
+        <div class="export-card" style="--card-accent: #0d7c4a;" onclick="exportJSON()">
+          <span class="export-card-icon">📊</span>
+          <div class="export-card-title">Dados Estruturados</div>
+          <div class="export-card-desc">Exporta todos os dados em formato JSON para integração com sistemas acadêmicos (SIGAA, SIE, Totvs).</div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;">⬇ Exportar JSON</button>
+        </div>
+      </div>
+
+      <!-- RESUMO FINAL -->
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon">📊</div>
+          <div class="form-section-title">Resumo da Matriz Curricular</div>
+        </div>
+        <div class="form-section-body">
+          <div id="resumo-final-content">
+            <!-- Gerado pelo JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTÓRICO -->
+      <div style="text-align:center; padding:24px; color:var(--slate-500); font-size:.82rem; font-family:var(--font-mono);">
+        Documento gerado pelo MatrizPro · Conforme normativas MEC/INEP · <span id="export-date"></span>
+      </div>
+    </div>
+
+    <!-- AÇÕES DO RODAPÉ -->
+    <div class="step-actions">
+      <div class="step-actions-left">
+        <button class="btn btn-outline" id="btn-prev" onclick="prevStep()" style="display:none">← Anterior</button>
+        <button class="btn btn-outline btn-sm" id="btn-skip" onclick="nextStep()">Pular etapa</button>
+      </div>
+      <div class="step-actions-right">
+        <div id="step-indicator" style="font-family:var(--font-mono);font-size:.75rem;color:var(--slate-500);margin-right:14px;align-self:center;">Etapa 1 / 6</div>
+        <button class="btn btn-gold btn-lg" id="btn-next" onclick="nextStep()">Avançar →</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ═══════════════ TOAST CONTAINER ═══════════════ -->
+<div id="toast-container"></div>
+
+<!-- ═══════════════ MODAL EDITAR DISCIPLINA ═══════════════ -->
+<div class="modal-backdrop" id="modal-discipline">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-disc-title">Editar Disciplina</div>
+      <button class="modal-close" onclick="closeModal('modal-discipline')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group form-grid-full">
+          <label class="form-label">Nome da Disciplina <span class="required">*</span></label>
+          <input class="form-input" id="modal-disc-nome" placeholder="Ex: Fundamentos de Administração">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Período / Semestre</label>
+          <input class="form-input" id="modal-disc-periodo" type="number" min="1" max="20" placeholder="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Carga Horária (h)</label>
+          <input class="form-input" id="modal-disc-ch" type="number" min="0" placeholder="60">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Créditos</label>
+          <input class="form-input" id="modal-disc-creditos" type="number" min="0" step="0.5" placeholder="4">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo</label>
+          <select class="form-select" id="modal-disc-tipo">
+            <option value="obrigatoria">Obrigatória</option>
+            <option value="optativa">Optativa/Eletiva</option>
+            <option value="extensao">Extensão</option>
+            <option value="estagio">Estágio</option>
+            <option value="tcc">TCC</option>
+            <option value="complementar">Ativ. Complementar</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Natureza</label>
+          <select class="form-select" id="modal-disc-natureza">
+            <option value="teorica">Teórica</option>
+            <option value="pratica">Prática</option>
+            <option value="teorico-pratica">Teórico-Prática</option>
+            <option value="estagio">Estágio</option>
+          </select>
+        </div>
+        <div class="form-group form-grid-full">
+          <label class="form-label">Pré-requisito(s)</label>
+          <input class="form-input" id="modal-disc-prereq" placeholder="Nome da disciplina pré-requisito">
+        </div>
+        <div class="form-group form-grid-full">
+          <label class="form-label">Ementa resumida</label>
+          <textarea class="form-textarea" id="modal-disc-ementa" rows="3" placeholder="Breve descrição dos conteúdos abordados..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-discipline')">Cancelar</button>
+      <button class="btn btn-gold" id="modal-disc-save" onclick="saveDiscipline()">Salvar disciplina</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   MATRIZPRO — LÓGICA PRINCIPAL
+   Módulos: State, Steps, File, Parser, Form, Document, Export
+   ═══════════════════════════════════════════════════════════ */
+
+// ─── ESTADO GLOBAL DA APLICAÇÃO ───
+const AppState = {
+  currentStep: 1,
+  maxUnlockedStep: 1,
+  file: null,
+  fileContent: null,
+  disciplines: [],
+  extractionDone: false,
+  previewZoom: 1,
+  editingDisciplineIndex: -1,
+  logoDataUrl: null,
+
+  // Dados institucionais
+  inst: {
+    nome: '', sigla: '', categoria: '', org: '',
+    cidade: '', campus: '', depto: '', cnpj: ''
+  },
+  curso: {
+    nome: '', grau: '', modalidade: '', turno: '',
+    ch: 0, vagas: 0, prazoMin: 0, prazoMax: 0,
+    codigo: '', vigencia: '', ato: '', area: ''
+  },
+  resp: { coord: '', coordTitulo: '', diretor: '', proreitor: '' },
+  design: {
+    corPrimaria: '#1e3a5f',
+    corAcento: '#c9a227',
+    rodape: '',
+    cabecalho: 'PROJETO PEDAGÓGICO DE CURSO — PPC',
+    versao: new Date().getFullYear() + ' · Versão 1.0',
+    paginacao: 'bottom-center'
+  },
+
+  // Dados pedagógicos
+  ped: {
+    perfil: '', atuacao: '',
+    competenciasGerais: '', competenciasEspec: '', habilidades: '',
+    regime: '', metodologias: '', avaliacao: '', infra: '',
+    extensaoCH: 0, extensaoDesc: '',
+    estagioCH: 0, estagioPeriodo: 0, estagioReg: '',
+    tccCH: 0, compCH: 0,
+    legal: {}, dcnCurso: '', outros: '',
+    transversais: {}
+  },
+
+  get totalCH() {
+    return this.disciplines
+      .filter(d => d.tipo !== 'complementar')
+      .reduce((s, d) => s + (parseInt(d.ch) || 0), 0);
+  },
+
+  get disciplinasByPeriodo() {
+    const map = {};
+    this.disciplines.forEach(d => {
+      const p = d.periodo || '?';
+      if (!map[p]) map[p] = [];
+      map[p].push(d);
+    });
+    return map;
+  }
+};
+
+// ─── TEMAS TRANSVERSAIS OBRIGATÓRIOS ───
+const TRANSVERSAIS = [
+  { id: 'afro', label: 'História e Cultura Afro-Brasileira e Africana', lei: 'Lei 10.639/2003' },
+  { id: 'indigena', label: 'História e Cultura Indígena', lei: 'Lei 11.645/2008' },
+  { id: 'ambiental', label: 'Educação Ambiental', lei: 'Lei 9.795/1999' },
+  { id: 'dh', label: 'Direitos Humanos', lei: 'Res. CNE/CP 1/2012' },
+  { id: 'relacoes', label: 'Relações Étnico-Raciais', lei: 'Res. CNE/CP 1/2004' },
+  { id: 'libras', label: 'LIBRAS (disciplina obrigatória p/ Licenciatura)', lei: 'Dec. 5.626/2005' },
+  { id: 'ead', label: 'Metodologias de EaD e Tecnologias Digitais', lei: 'Dec. 9.235/2017' },
+  { id: 'acessib', label: 'Acessibilidade e Inclusão', lei: 'Lei 13.146/2015' },
+];
+
+// ─── INICIALIZAÇÃO ───
+document.addEventListener('DOMContentLoaded', () => {
+  renderTransversais();
+  document.getElementById('export-date').textContent = new Date().toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'});
+
+  // Sincronizar color pickers
+  document.getElementById('cor-primaria').addEventListener('input', e => {
+    document.getElementById('cor-primaria-hex').value = e.target.value;
+    updateDocColors();
+  });
+  document.getElementById('cor-acento').addEventListener('input', e => {
+    document.getElementById('cor-acento-hex').value = e.target.value;
+    updateDocColors();
+  });
+
+  // Calcular % extensão em tempo real
+  document.getElementById('ped-extensao-ch').addEventListener('input', calcExtensaoPct);
+  document.getElementById('curso-ch').addEventListener('input', calcExtensaoPct);
+
+  updateStepUI();
+});
+
+// ─── NAVEGAÇÃO ENTRE ETAPAS ───
+function goToStep(n) {
+  if (n > AppState.maxUnlockedStep) {
+    showToast('Complete as etapas anteriores primeiro.', 'warn');
+    return;
+  }
+  AppState.currentStep = n;
+  updateStepUI();
+}
+
+function nextStep() {
+  if (!validateCurrentStep()) return;
+  if (AppState.currentStep < 6) {
+    if (AppState.currentStep === 4) collectPedagogicalData();
+    if (AppState.currentStep === 3) collectInstitutionalData();
+    AppState.currentStep++;
+    AppState.maxUnlockedStep = Math.max(AppState.maxUnlockedStep, AppState.currentStep);
+    if (AppState.currentStep === 5) generateDocument();
+    if (AppState.currentStep === 6) buildResumoFinal();
+    updateStepUI();
+  }
+}
+
+function prevStep() {
+  if (AppState.currentStep > 1) {
+    AppState.currentStep--;
+    updateStepUI();
+  }
+}
+
+function validateCurrentStep() {
+  const s = AppState.currentStep;
+  if (s === 3) {
+    const instNome = document.getElementById('inst-nome').value.trim();
+    const cursoNome = document.getElementById('curso-nome').value.trim();
+    const cursoGrau = document.getElementById('curso-grau').value;
+    const cursoModal = document.getElementById('curso-modalidade').value;
+    if (!instNome) { showToast('Informe o nome da instituição.', 'error'); document.getElementById('inst-nome').classList.add('error'); return false; }
+    if (!cursoNome) { showToast('Informe o nome do curso.', 'error'); document.getElementById('curso-nome').classList.add('error'); return false; }
+    if (!cursoGrau) { showToast('Selecione o grau acadêmico.', 'error'); return false; }
+    if (!cursoModal) { showToast('Selecione a modalidade.', 'error'); return false; }
+  }
+  return true;
+}
+
+function updateStepUI() {
+  // Atualizar painéis
+  document.querySelectorAll('.step-panel').forEach((p, i) => {
+    p.classList.toggle('active', i + 1 === AppState.currentStep);
+  });
+
+  // Atualizar nav do sidebar
+  for (let i = 1; i <= 6; i++) {
+    const nav = document.getElementById(`nav-${i}`);
+    if (!nav) continue;
+    nav.classList.remove('active', 'completed', 'disabled');
+    if (i === AppState.currentStep) nav.classList.add('active');
+    else if (i < AppState.currentStep) nav.classList.add('completed');
+    else if (i > AppState.maxUnlockedStep) nav.classList.add('disabled');
+
+    // Ícone de check para completados
+    const numEl = nav.querySelector('.step-num');
+    if (i < AppState.currentStep) numEl.textContent = '✓';
+    else numEl.textContent = i;
+
+    // Conector
+    const conn = document.getElementById(`conn-${i}`);
+    if (conn) conn.classList.toggle('done', i < AppState.currentStep);
+  }
+
+  // Barra de progresso
+  document.getElementById('progress-bar-fill').style.width = ((AppState.currentStep / 6) * 100) + '%';
+
+  // Indicador de etapa
+  document.getElementById('step-indicator').textContent = `Etapa ${AppState.currentStep} / 6`;
+
+  // Botão anterior
+  document.getElementById('btn-prev').style.display = AppState.currentStep > 1 ? 'inline-flex' : 'none';
+
+  // Botão próximo
+  const btnNext = document.getElementById('btn-next');
+  if (AppState.currentStep === 6) {
+    btnNext.textContent = '✅ Concluído';
+    btnNext.disabled = true;
+  } else {
+    btnNext.textContent = 'Avançar →';
+    btnNext.disabled = false;
+  }
+
+  // Skip button
+  document.getElementById('btn-skip').style.display = AppState.currentStep === 1 ? 'none' : 'inline-flex';
+}
+
+// ─── DRAG & DROP ───
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.add('drag-over');
+}
+
+function handleDragLeave(e) {
+  document.getElementById('upload-zone').classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  const files = e.dataTransfer.files;
+  if (files.length > 0) loadFile(files[0]);
+}
+
+function handleFileSelect(e) {
+  if (e.target.files.length > 0) loadFile(e.target.files[0]);
+}
+
+function loadFile(file) {
+  if (!file.name.match(/\.(html|htm|xhtml)$/i)) {
+    showToast('Formato não suportado. Use arquivos HTML.', 'error');
+    return;
+  }
+  AppState.file = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    AppState.fileContent = e.target.result;
+    document.getElementById('file-loaded-name').textContent = file.name;
+    document.getElementById('file-loaded-meta').textContent =
+      formatFileSize(file.size) + ' · Pronto para processar';
+    document.getElementById('file-loaded-info').classList.add('show');
+    showToast('Arquivo carregado com sucesso!', 'success');
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function clearFile() {
+  AppState.file = null;
+  AppState.fileContent = null;
+  document.getElementById('file-loaded-info').classList.remove('show');
+  document.getElementById('file-input').value = '';
+  showToast('Arquivo removido.', 'info');
+}
+
+function processFile() {
+  if (!AppState.fileContent) { showToast('Nenhum arquivo carregado.', 'error'); return; }
+  showLoading('Analisando estrutura do documento...');
+  setTimeout(() => {
+    parseHTMLCurriculum(AppState.fileContent);
+    hideLoading();
+    AppState.currentStep = 2;
+    AppState.maxUnlockedStep = Math.max(AppState.maxUnlockedStep, 2);
+    updateStepUI();
+    showToast('Extração concluída! Revise os dados.', 'success');
+    updateCompliance();
+  }, 1200);
+}
+
+function startFromScratch() {
+  AppState.disciplines = [];
+  AppState.extractionDone = true;
+  AppState.currentStep = 2;
+  AppState.maxUnlockedStep = Math.max(AppState.maxUnlockedStep, 2);
+  updateStepUI();
+  renderDisciplinesTable();
+  showToast('Iniciando criação do zero.', 'info');
+}
+
+// ─── PARSER DE HTML ───
+function parseHTMLCurriculum(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const disciplines = [];
+
+  // Tentar extrair nome do curso
+  const titleEl = doc.querySelector('h1, h2, .curso-nome, .course-title, [class*="curso"], [class*="course"]');
+  if (titleEl) {
+    const extracted = titleEl.textContent.trim();
+    if (extracted.length > 3 && extracted.length < 120) {
+      document.getElementById('curso-nome').value = extracted;
+    }
+  }
+
+  // Buscar tabelas
+  const tables = doc.querySelectorAll('table');
+  let maxRows = 0;
+  let bestTable = null;
+
+  tables.forEach(t => {
+    if (t.rows.length > maxRows) {
+      maxRows = t.rows.length;
+      bestTable = t;
+    }
+  });
+
+  if (bestTable) {
+    const rows = Array.from(bestTable.rows);
+    let periodoAtual = 1;
+    let headerSkipped = false;
+
+    rows.forEach((row, idx) => {
+      const cells = Array.from(row.cells).map(c => c.textContent.trim());
+      if (cells.length < 2) return;
+
+      const rowText = cells.join(' ').toLowerCase();
+
+      // Detectar linha de período
+      if (rowText.match(/(\d+)[°ºo]?\s*(período|semestre|módulo|fase)/i) ||
+          rowText.match(/^período\s*\d+/i)) {
+        const m = rowText.match(/(\d+)/);
+        if (m) periodoAtual = parseInt(m[1]);
+        return;
+      }
+
+      // Pular cabeçalhos
+      if (idx === 0 || rowText.match(/^(código|disciplina|nome|componente|carga|crédito|pré)/)) {
+        headerSkipped = true;
+        return;
+      }
+      if (!headerSkipped && idx < 3) return;
+
+      // Células com possível nome de disciplina
+      const nome = cells[0] || cells[1] || '';
+      if (!nome || nome.length < 3 || nome.match(/^\d+$/) ||
+          nome.toLowerCase().match(/^(total|subtotal|carga|crédito)/)) return;
+
+      // Extrair CH (procurar número razoável como CH)
+      let ch = 0;
+      const chMatch = cells.join('|').match(/\b(30|45|60|75|90|120|150|180|200|240|300|360|400|420)\b/);
+      if (chMatch) ch = parseInt(chMatch[1]);
+
+      // Extrair créditos
+      let creditos = 0;
+      const credMatch = cells.join('|').match(/\b([2-8])\b/);
+      if (credMatch) creditos = parseInt(credMatch[1]);
+      if (ch > 0 && creditos === 0) creditos = Math.round(ch / 15);
+
+      // Detectar tipo
+      let tipo = 'obrigatoria';
+      const fullText = cells.join(' ').toLowerCase();
+      if (fullText.includes('estágio') || fullText.includes('estagio')) tipo = 'estagio';
+      else if (fullText.includes('tcc') || fullText.includes('trabalho de conclusão')) tipo = 'tcc';
+      else if (fullText.includes('extensão') || fullText.includes('extensao')) tipo = 'extensao';
+      else if (fullText.includes('optativa') || fullText.includes('eletiva')) tipo = 'optativa';
+      else if (fullText.includes('complementar')) tipo = 'complementar';
+
+      // Pré-requisito (última coluna geralmente)
+      const prereq = cells.length > 3 ? cells[cells.length - 1] : '';
+
+      disciplines.push({
+        id: Date.now() + Math.random(),
+        nome: formatDisciplineName(nome),
+        periodo: periodoAtual,
+        ch: ch || 60,
+        creditos: creditos || 4,
+        tipo,
+        prereq: prereq.length < 80 ? prereq : '',
+        ementa: '',
+        natureza: 'teorica'
+      });
+    });
+  }
+
+  // Se nada foi extraído de tabelas, tentar listas
+  if (disciplines.length === 0) {
+    const listItems = doc.querySelectorAll('li, p');
+    let periodo = 1;
+    listItems.forEach(item => {
+      const text = item.textContent.trim();
+      if (text.match(/\d+[°º]\s*(semestre|período|módulo)/i)) {
+        const m = text.match(/(\d+)/);
+        if (m) periodo = parseInt(m[1]);
+        return;
+      }
+      if (text.length > 5 && text.length < 120 && !text.match(/^\d+$/)) {
+        disciplines.push({
+          id: Date.now() + Math.random(),
+          nome: formatDisciplineName(text),
+          periodo, ch: 60, creditos: 4,
+          tipo: 'obrigatoria', prereq: '', ementa: '', natureza: 'teorica'
+        });
+      }
+    });
+  }
+
+  // Deduplicate
+  const seen = new Set();
+  AppState.disciplines = disciplines.filter(d => {
+    const key = d.nome.toLowerCase().trim();
+    if (seen.has(key) || key.length < 3) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, 200);
+
+  // Mostrar preview raw
+  document.getElementById('raw-preview-content').textContent =
+    doc.body?.textContent?.replace(/\s+/g, ' ').substring(0, 3000) + '...\n[truncado para exibição]';
+
+  // Preencher componentes especiais extraídos
+  const chTotal = AppState.disciplines.reduce((s, d) => s + (parseInt(d.ch) || 0), 0);
+  const estagioDiscs = AppState.disciplines.filter(d => d.tipo === 'estagio');
+  const tccDiscs = AppState.disciplines.filter(d => d.tipo === 'tcc');
+  const extDiscs = AppState.disciplines.filter(d => d.tipo === 'extensao');
+
+  if (estagioDiscs.length > 0) document.getElementById('ext-estagio').value = estagioDiscs.reduce((s,d) => s+(parseInt(d.ch)||0),0);
+  if (tccDiscs.length > 0) document.getElementById('ext-tcc').value = tccDiscs.reduce((s,d) => s+(parseInt(d.ch)||0),0);
+  if (extDiscs.length > 0) document.getElementById('ext-extensao').value = extDiscs.reduce((s,d) => s+(parseInt(d.ch)||0),0);
+  if (chTotal > 0) document.getElementById('curso-ch').value = chTotal;
+
+  AppState.extractionDone = true;
+  renderDisciplinesTable();
+  updateExtractionStats();
+  generateExtractionAlerts();
+}
+
+function formatDisciplineName(name) {
+  return name
+    .replace(/^\d+\s*[-.]?\s*/, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, l => l.toUpperCase());
+}
+
+// ─── RENDERIZAÇÃO DA TABELA DE DISCIPLINAS ───
+function renderDisciplinesTable() {
+  const tbody = document.getElementById('disciplines-tbody');
+  document.getElementById('disc-count').textContent = AppState.disciplines.length;
+
+  if (AppState.disciplines.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8">
+      <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-title">Nenhuma disciplina ainda</div>
+        <div class="empty-state-desc">Clique em "+ Adicionar disciplina" para inserir manualmente.</div>
+      </div></td></tr>`;
+    return;
+  }
+
+  const typeBadges = {
+    obrigatoria: '<span class="type-badge type-obrig">Obrigatória</span>',
+    optativa:    '<span class="type-badge type-optativa">Optativa</span>',
+    extensao:    '<span class="type-badge type-extensao">Extensão</span>',
+    tcc:         '<span class="type-badge type-tcc">TCC</span>',
+    estagio:     '<span class="type-badge type-estagio">Estágio</span>',
+    complementar:'<span class="type-badge type-comp">Complementar</span>',
+  };
+
+  tbody.innerHTML = AppState.disciplines.map((d, i) => `
+    <tr>
+      <td style="font-family:var(--font-mono);font-size:.75rem;color:var(--slate-500)">${i+1}</td>
+      <td style="font-weight:600;color:var(--navy-900);max-width:260px">
+        <span contenteditable="true" class="inline-edit"
+          onblur="AppState.disciplines[${i}].nome=this.textContent.trim();updateExtractionStats()"
+          >${escHtml(d.nome)}</span>
+      </td>
+      <td><div class="period-badge">${d.periodo || '?'}</div></td>
+      <td style="font-family:var(--font-mono);font-weight:600">${d.ch || '—'}</td>
+      <td style="font-family:var(--font-mono)">${d.creditos || '—'}</td>
+      <td>${typeBadges[d.tipo] || typeBadges.obrigatoria}</td>
+      <td style="font-size:.8rem;color:var(--slate-500)">${escHtml(d.prereq||'—')}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-outline btn-sm" style="padding:4px 8px;" onclick="editDiscipline(${i})" title="Editar">✏</button>
+          <button class="btn btn-danger btn-sm" style="padding:4px 8px;" onclick="removeDiscipline(${i})" title="Remover">🗑</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  updateExtractionStats();
+}
+
+function updateExtractionStats() {
+  const discs = AppState.disciplines;
+  const periodos = new Set(discs.map(d => d.periodo).filter(Boolean));
+  const chTotal = discs.reduce((s, d) => s + (parseInt(d.ch) || 0), 0);
+
+  const alertas = [];
+  const extCH = parseInt(document.getElementById('ext-extensao')?.value) || 0;
+  const cursoChEl = document.getElementById('curso-ch');
+  const cursoCH = parseInt(cursoChEl?.value) || chTotal;
+  if (extCH < cursoCH * 0.10 && cursoCH > 0) alertas.push('extensao');
+  if (!discs.some(d => d.tipo === 'estagio') && !parseInt(document.getElementById('ext-estagio')?.value)) alertas.push('estagio');
+  if (!discs.some(d => d.tipo === 'tcc') && !parseInt(document.getElementById('ext-tcc')?.value)) alertas.push('tcc');
+
+  document.getElementById('stat-disciplinas').textContent = discs.length;
+  document.getElementById('stat-ch').textContent = chTotal + 'h';
+  document.getElementById('stat-periodos').textContent = periodos.size || (periodos.size === 0 && discs.length > 0 ? '?' : 0);
+  document.getElementById('stat-alertas').textContent = alertas.length;
+}
+
+function generateExtractionAlerts() {
+  const container = document.getElementById('extraction-alerts-container');
+  const alerts = [];
+  const discs = AppState.disciplines;
+
+  if (discs.length === 0) {
+    alerts.push({ type: 'warn', title: 'Nenhuma disciplina extraída', msg: 'O arquivo pode estar em formato não padronizado. Adicione disciplinas manualmente.' });
+  }
+
+  const chTotal = discs.reduce((s,d) => s+(parseInt(d.ch)||0),0);
+  const cursoCH = parseInt(document.getElementById('curso-ch')?.value) || chTotal;
+  const extCH = parseInt(document.getElementById('ext-extensao')?.value) || 0;
+
+  if (cursoCH > 0 && extCH < cursoCH * 0.10) {
+    alerts.push({ type: 'warn', title: 'Extensão abaixo do mínimo legal (10%)',
+      msg: `A carga horária de extensão (${extCH}h) é inferior a 10% da CH total (${Math.ceil(cursoCH*0.1)}h mínimo). Res. CNE/CES 7/2018.` });
+  }
+
+  if (!discs.some(d => d.tipo === 'estagio') && !(parseInt(document.getElementById('ext-estagio')?.value))) {
+    alerts.push({ type: 'info', title: 'Estágio supervisionado não identificado',
+      msg: 'Verifique se o curso exige estágio e informe a carga horária na aba "Componentes Especiais".' });
+  }
+
+  container.innerHTML = alerts.map(a => `
+    <div class="alert alert-${a.type}">
+      <div class="alert-icon">${a.type==='warn'?'⚠':'ℹ'}</div>
+      <div class="alert-content"><div class="alert-title">${a.title}</div>${a.msg}</div>
+    </div>
+  `).join('');
+}
+
+// ─── DISCIPLINAS CRUD ───
+function addDiscipline() {
+  AppState.editingDisciplineIndex = -1;
+  document.getElementById('modal-disc-title').textContent = 'Adicionar Disciplina';
+  document.getElementById('modal-disc-nome').value = '';
+  document.getElementById('modal-disc-periodo').value = '';
+  document.getElementById('modal-disc-ch').value = '60';
+  document.getElementById('modal-disc-creditos').value = '4';
+  document.getElementById('modal-disc-tipo').value = 'obrigatoria';
+  document.getElementById('modal-disc-natureza').value = 'teorica';
+  document.getElementById('modal-disc-prereq').value = '';
+  document.getElementById('modal-disc-ementa').value = '';
+  openModal('modal-discipline');
+}
+
+function editDiscipline(idx) {
+  AppState.editingDisciplineIndex = idx;
+  const d = AppState.disciplines[idx];
+  document.getElementById('modal-disc-title').textContent = 'Editar Disciplina';
+  document.getElementById('modal-disc-nome').value = d.nome;
+  document.getElementById('modal-disc-periodo').value = d.periodo || '';
+  document.getElementById('modal-disc-ch').value = d.ch || '';
+  document.getElementById('modal-disc-creditos').value = d.creditos || '';
+  document.getElementById('modal-disc-tipo').value = d.tipo || 'obrigatoria';
+  document.getElementById('modal-disc-natureza').value = d.natureza || 'teorica';
+  document.getElementById('modal-disc-prereq').value = d.prereq || '';
+  document.getElementById('modal-disc-ementa').value = d.ementa || '';
+  openModal('modal-discipline');
+}
+
+function saveDiscipline() {
+  const nome = document.getElementById('modal-disc-nome').value.trim();
+  if (!nome) { showToast('Informe o nome da disciplina.', 'error'); return; }
+
+  const disc = {
+    id: Date.now() + Math.random(),
+    nome,
+    periodo: parseInt(document.getElementById('modal-disc-periodo').value) || 1,
+    ch: parseInt(document.getElementById('modal-disc-ch').value) || 60,
+    creditos: parseFloat(document.getElementById('modal-disc-creditos').value) || 4,
+    tipo: document.getElementById('modal-disc-tipo').value,
+    natureza: document.getElementById('modal-disc-natureza').value,
+    prereq: document.getElementById('modal-disc-prereq').value.trim(),
+    ementa: document.getElementById('modal-disc-ementa').value.trim(),
+  };
+
+  if (AppState.editingDisciplineIndex >= 0) {
+    AppState.disciplines[AppState.editingDisciplineIndex] = disc;
+    showToast('Disciplina atualizada!', 'success');
+  } else {
+    AppState.disciplines.push(disc);
+    showToast('Disciplina adicionada!', 'success');
+  }
+
+  closeModal('modal-discipline');
+  renderDisciplinesTable();
+  updateCompliance();
+}
+
+function removeDiscipline(idx) {
+  AppState.disciplines.splice(idx, 1);
+  renderDisciplinesTable();
+  updateCompliance();
+  showToast('Disciplina removida.', 'info');
+}
+
+// ─── CONFORMIDADE ───
+function updateCompliance() {
+  const discs = AppState.disciplines;
+  const cursoCH = parseInt(document.getElementById('curso-ch')?.value) || discs.reduce((s,d) => s+(parseInt(d.ch)||0), 0);
+  const extCH = parseInt(document.getElementById('ext-extensao')?.value || document.getElementById('ped-extensao-ch')?.value) || 0;
+  const estagCH = parseInt(document.getElementById('ext-estagio')?.value || document.getElementById('ped-estagio-ch')?.value) || 0;
+  const tccCH = parseInt(document.getElementById('ext-tcc')?.value) || 0;
+  const compCH = parseInt(document.getElementById('ext-comp')?.value) || 0;
+
+  setCompDot('comp-ldb', document.getElementById('legal-ldb')?.checked ? 'ok' : 'idle');
+  setCompDot('comp-dcn', document.getElementById('legal-dcn-curso')?.value ? 'ok' : 'warn');
+  setCompDot('comp-extensao', extCH >= cursoCH * 0.10 && cursoCH > 0 ? 'ok' : extCH > 0 ? 'warn' : 'error');
+  setCompDot('comp-estagio', estagCH > 0 || discs.some(d=>d.tipo==='estagio') ? 'ok' : 'warn');
+  setCompDot('comp-tcc', tccCH > 0 || discs.some(d=>d.tipo==='tcc') ? 'ok' : 'warn');
+  setCompDot('comp-comp', compCH > 0 ? 'ok' : 'warn');
+
+  calcExtensaoPct();
+}
+
+function setCompDot(id, status) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = `compliance-dot ${status}`;
+}
+
+function calcExtensaoPct() {
+  const cursoCH = parseInt(document.getElementById('curso-ch')?.value) || 0;
+  const extCH = parseInt(document.getElementById('ped-extensao-ch')?.value) || 0;
+  const pctEl = document.getElementById('ped-extensao-pct');
+  if (!pctEl) return;
+  if (cursoCH > 0) {
+    const pct = ((extCH / cursoCH) * 100).toFixed(1);
+    pctEl.value = `${pct}% ${pct >= 10 ? '✓ Conforme' : '⚠ Abaixo do mínimo legal'}`;
+    pctEl.style.color = pct >= 10 ? 'var(--success)' : 'var(--danger)';
+  }
+}
+
+// ─── COLETA DE DADOS ───
+function collectInstitutionalData() {
+  AppState.inst = {
+    nome: document.getElementById('inst-nome').value.trim(),
+    sigla: document.getElementById('inst-sigla').value.trim(),
+    categoria: document.getElementById('inst-categoria').value,
+    org: document.getElementById('inst-org').value,
+    cidade: document.getElementById('inst-cidade').value.trim(),
+    campus: document.getElementById('inst-campus').value.trim(),
+    depto: document.getElementById('inst-depto').value.trim(),
+    cnpj: document.getElementById('inst-cnpj').value.trim(),
+  };
+  AppState.curso = {
+    nome: document.getElementById('curso-nome').value.trim(),
+    grau: document.getElementById('curso-grau').value,
+    modalidade: document.getElementById('curso-modalidade').value,
+    turno: document.getElementById('curso-turno').value,
+    ch: parseInt(document.getElementById('curso-ch').value) || 0,
+    vagas: parseInt(document.getElementById('curso-vagas').value) || 0,
+    prazoMin: parseInt(document.getElementById('curso-prazo-min').value) || 0,
+    prazoMax: parseInt(document.getElementById('curso-prazo-max').value) || 0,
+    codigo: document.getElementById('curso-codigo').value.trim(),
+    vigencia: document.getElementById('curso-vigencia').value,
+    ato: document.getElementById('curso-ato').value.trim(),
+    area: document.getElementById('curso-area').value,
+  };
+  AppState.resp = {
+    coord: document.getElementById('resp-coord').value.trim(),
+    coordTitulo: document.getElementById('resp-coord-titulo').value,
+    diretor: document.getElementById('resp-diretor').value.trim(),
+    proreitor: document.getElementById('resp-proreitor').value.trim(),
+  };
+  AppState.design = {
+    corPrimaria: document.getElementById('cor-primaria').value,
+    corAcento: document.getElementById('cor-acento').value,
+    rodape: document.getElementById('doc-rodape').value.trim(),
+    cabecalho: document.getElementById('doc-cabecalho').value.trim() || 'PROJETO PEDAGÓGICO DE CURSO — PPC',
+    versao: document.getElementById('doc-versao').value.trim(),
+    paginacao: document.getElementById('doc-paginacao').value,
+  };
+}
+
+function collectPedagogicalData() {
+  AppState.ped = {
+    perfil: document.getElementById('ped-perfil')?.value.trim() || '',
+    atuacao: document.getElementById('ped-atuacao')?.value.trim() || '',
+    competenciasGerais: document.getElementById('ped-competencias-gerais')?.value.trim() || '',
+    competenciasEspec: document.getElementById('ped-competencias-espec')?.value.trim() || '',
+    habilidades: document.getElementById('ped-habilidades')?.value.trim() || '',
+    regime: document.getElementById('ped-regime')?.value || '',
+    metodologias: document.getElementById('ped-metodologias-desc')?.value.trim() || '',
+    avaliacao: document.getElementById('ped-avaliacao')?.value.trim() || '',
+    infra: document.getElementById('ped-infra')?.value.trim() || '',
+    extensaoCH: parseInt(document.getElementById('ped-extensao-ch')?.value) || parseInt(document.getElementById('ext-extensao')?.value) || 0,
+    extensaoDesc: document.getElementById('ped-extensao-desc')?.value.trim() || '',
+    estagioCH: parseInt(document.getElementById('ped-estagio-ch')?.value) || parseInt(document.getElementById('ext-estagio')?.value) || 0,
+    estagioPeriodo: parseInt(document.getElementById('ped-estagio-periodo')?.value) || 0,
+    estagioReg: document.getElementById('ped-estagio-reg')?.value.trim() || '',
+    tccCH: parseInt(document.getElementById('ext-tcc')?.value) || 0,
+    compCH: parseInt(document.getElementById('ext-comp')?.value) || 0,
+    dcnCurso: document.getElementById('legal-dcn-curso')?.value.trim() || '',
+    outros: document.getElementById('legal-outros')?.value.trim() || '',
+    legal: {
+      ldb: document.getElementById('legal-ldb')?.checked,
+      pne: document.getElementById('legal-pne')?.checked,
+      ext: document.getElementById('legal-ext')?.checked,
+      csa: document.getElementById('legal-csa')?.checked,
+      acessib: document.getElementById('legal-acessib')?.checked,
+      ea: document.getElementById('legal-ea')?.checked,
+      er: document.getElementById('legal-er')?.checked,
+      dm: document.getElementById('legal-dm')?.checked,
+    }
+  };
+}
+
+// ─── GERAÇÃO DO DOCUMENTO ───
+function generateDocument() {
+  collectInstitutionalData();
+  collectPedagogicalData();
+  showLoading('Gerando documento padronizado...');
+
+  setTimeout(() => {
+    const preview = document.getElementById('preview-area');
+    const placeholder = document.getElementById('preview-placeholder');
+    if (placeholder) placeholder.remove();
+
+    // Limpar páginas anteriores
+    preview.querySelectorAll('.doc-page').forEach(p => p.remove());
+
+    const primary = AppState.design.corPrimaria || '#1e3a5f';
+    const accent = AppState.design.corAcento || '#c9a227';
+    const instNome = AppState.inst.nome || 'INSTITUIÇÃO DE ENSINO SUPERIOR';
+    const cursoNome = AppState.curso.nome || 'NOME DO CURSO';
+    const grau = AppState.curso.grau || 'Bacharelado';
+    const modalidade = AppState.curso.modalidade || 'Presencial';
+    const chTotal = AppState.curso.ch || AppState.totalCH;
+    const versao = AppState.design.versao || new Date().getFullYear().toString();
+    const cabecalho = AppState.design.cabecalho;
+    const rodape = AppState.design.rodape || `${instNome} — Documento Institucional`;
+    const logoHTML = AppState.logoDataUrl
+      ? `<img src="${AppState.logoDataUrl}" style="width:60px;height:60px;object-fit:contain;">`
+      : `<div style="font-size:28px;color:${primary};">🏛</div>`;
+
+    // ── CAPA (Página 1) ──
+    const pageCover = createPage(primary, accent, instNome, cabecalho, rodape, 1);
+    pageCover.querySelector('.doc-page-body').innerHTML = `
+      <div class="doc-cover">
+        <div style="margin-bottom:40px;">${logoHTML}</div>
+        <div class="doc-cover-badge" style="background:${primary}">${instNome}${AppState.inst.sigla ? ' · ' + AppState.inst.sigla : ''}</div>
+        <div class="doc-cover-line" style="background:${accent}"></div>
+        <div class="doc-cover-title" style="color:${primary}">${grau} em<br>${cursoNome}</div>
+        <div class="doc-cover-subtitle">Projeto Pedagógico de Curso — PPC</div>
+        <div class="doc-cover-line" style="background:${accent}"></div>
+        <div class="doc-cover-meta">
+          <table>
+            <tr><td>Grau Acadêmico:</td><td>${grau}</td></tr>
+            <tr><td>Modalidade:</td><td>${modalidade}</td></tr>
+            ${AppState.curso.turno ? `<tr><td>Turno:</td><td>${AppState.curso.turno}</td></tr>` : ''}
+            <tr><td>Carga Horária:</td><td>${chTotal}h</td></tr>
+            ${AppState.curso.prazoMin ? `<tr><td>Integralização:</td><td>Mín. ${AppState.curso.prazoMin} · Máx. ${AppState.curso.prazoMax} semestres</td></tr>` : ''}
+            ${AppState.inst.cidade ? `<tr><td>Local:</td><td>${AppState.inst.cidade}</td></tr>` : ''}
+            ${AppState.resp.coord ? `<tr><td>Coordenação:</td><td>${AppState.resp.coord}</td></tr>` : ''}
+            <tr><td>Versão:</td><td>${versao}</td></tr>
+          </table>
+        </div>
+      </div>
+    `;
+    preview.appendChild(pageCover);
+
+    // ── SUMÁRIO (Página 2) ──
+    const pageSumario = createPage(primary, accent, instNome, cabecalho, rodape, 2);
+    pageSumario.querySelector('.doc-page-body').innerHTML = `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">S</div>
+          Sumário
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:10.5pt;">
+          ${[
+            ['1. Identificação Institucional', '3'],
+            ['2. Identificação do Curso', '3'],
+            ['3. Perfil do Egresso', '4'],
+            ['4. Competências e Habilidades', '4'],
+            ['5. Metodologias de Ensino', '5'],
+            ['6. Extensão Universitária', '5'],
+            ['7. Estágio Supervisionado', '6'],
+            ['8. TCC e Atividades Complementares', '6'],
+            ['9. Base Legal e Referências Normativas', '7'],
+            ['10. Matriz Curricular por Períodos', '8'],
+            ['11. Conteúdos Transversais', '—'],
+            ['12. Assinaturas e Validação', '—'],
+          ].map(([t, p]) => `
+            <tr style="border-bottom:1px dotted #ddd;">
+              <td style="padding:7px 0;color:#333;">${t}</td>
+              <td style="text-align:right;font-family:monospace;color:${primary};font-weight:600;padding:7px 0;">${p}</td>
+            </tr>
+          `).join('')}
+        </table>
+      </div>
+    `;
+    preview.appendChild(pageSumario);
+
+    // ── IDENTIFICAÇÃO (Página 3) ──
+    const pageIdent = createPage(primary, accent, instNome, cabecalho, rodape, 3);
+    pageIdent.querySelector('.doc-page-body').innerHTML = `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">1</div>
+          Identificação Institucional
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:10.5pt;margin-bottom:12px;">
+          ${[
+            ['Instituição', AppState.inst.nome || '—'],
+            ['Sigla', AppState.inst.sigla || '—'],
+            ['Categoria Administrativa', AppState.inst.categoria || '—'],
+            ['Organização Acadêmica', AppState.inst.org || '—'],
+            ['Cidade/UF', AppState.inst.cidade || '—'],
+            ['Campus/Unidade', AppState.inst.campus || '—'],
+            ['Departamento/Faculdade', AppState.inst.depto || '—'],
+            ['CNPJ/Código e-MEC', AppState.inst.cnpj || '—'],
+          ].map(([k,v]) => `<tr>
+            <td style="padding:6px 12px 6px 0;font-weight:600;color:${primary};width:38%;vertical-align:top;font-size:10pt;">${k}:</td>
+            <td style="padding:6px 0;color:#333;font-size:10.5pt;">${v}</td>
+          </tr>`).join('')}
+        </table>
+      </div>
+
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">2</div>
+          Identificação do Curso
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:10.5pt;">
+          ${[
+            ['Nome do Curso', AppState.curso.nome || '—'],
+            ['Grau Acadêmico', AppState.curso.grau || '—'],
+            ['Modalidade', AppState.curso.modalidade || '—'],
+            ['Turno', AppState.curso.turno || '—'],
+            ['Carga Horária Total', (AppState.curso.ch || AppState.totalCH) + 'h'],
+            ['Prazo Mínimo', AppState.curso.prazoMin ? AppState.curso.prazoMin + ' semestres' : '—'],
+            ['Prazo Máximo', AppState.curso.prazoMax ? AppState.curso.prazoMax + ' semestres' : '—'],
+            ['Vagas por Semestre', AppState.curso.vagas || '—'],
+            ['Código e-MEC', AppState.curso.codigo || '—'],
+            ['Ato de Criação', AppState.curso.ato || '—'],
+            ['Coordenador(a)', AppState.resp.coord ? (AppState.resp.coordTitulo ? AppState.resp.coordTitulo + ' ' : '') + AppState.resp.coord : '—'],
+            ['Início de Vigência', AppState.curso.vigencia ? formatDate(AppState.curso.vigencia) : '—'],
+          ].map(([k,v]) => `<tr>
+            <td style="padding:6px 12px 6px 0;font-weight:600;color:${primary};width:38%;vertical-align:top;font-size:10pt;">${k}:</td>
+            <td style="padding:6px 0;color:#333;font-size:10.5pt;">${v}</td>
+          </tr>`).join('')}
+        </table>
+      </div>
+    `;
+    preview.appendChild(pageIdent);
+
+    // ── PEDAGÓGICO (Página 4) ──
+    const pagePed = createPage(primary, accent, instNome, cabecalho, rodape, 4);
+    pagePed.querySelector('.doc-page-body').innerHTML = `
+      ${AppState.ped.perfil ? `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">3</div>
+          Perfil do Egresso
+        </div>
+        <p class="doc-text">${AppState.ped.perfil.replace(/\n/g, '<br>')}</p>
+        ${AppState.ped.atuacao ? `<p class="doc-text" style="margin-top:10px;"><strong style="color:${primary}">Áreas de atuação:</strong> ${AppState.ped.atuacao}</p>` : ''}
+      </div>` : ''}
+
+      ${AppState.ped.competenciasGerais ? `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">4</div>
+          Competências e Habilidades
+        </div>
+        ${AppState.ped.competenciasGerais ? `
+        <p style="font-size:10.5pt;font-weight:600;color:${primary};margin-bottom:6px;">Competências Gerais:</p>
+        <p class="doc-text">${AppState.ped.competenciasGerais.replace(/\n/g, '<br>')}</p>` : ''}
+        ${AppState.ped.competenciasEspec ? `
+        <p style="font-size:10.5pt;font-weight:600;color:${primary};margin:12px 0 6px;">Competências Específicas:</p>
+        <p class="doc-text">${AppState.ped.competenciasEspec.replace(/\n/g, '<br>')}</p>` : ''}
+        ${AppState.ped.habilidades ? `
+        <p style="font-size:10.5pt;font-weight:600;color:${primary};margin:12px 0 6px;">Habilidades Técnicas:</p>
+        <p class="doc-text">${AppState.ped.habilidades.replace(/\n/g, '<br>')}</p>` : ''}
+      </div>` : ''}
+
+      ${AppState.ped.metodologias ? `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">5</div>
+          Metodologias de Ensino-Aprendizagem
+        </div>
+        <p class="doc-text">${AppState.ped.metodologias.replace(/\n/g, '<br>')}</p>
+        ${AppState.ped.avaliacao ? `<p style="font-size:10.5pt;font-weight:600;color:${primary};margin:12px 0 6px;">Avaliação:</p><p class="doc-text">${AppState.ped.avaliacao.replace(/\n/g, '<br>')}</p>` : ''}
+        ${AppState.ped.regime ? `<p style="margin-top:10px;font-size:10.5pt;color:#555;"><strong style="color:${primary}">Regime:</strong> ${AppState.ped.regime}</p>` : ''}
+      </div>` : ''}
+
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">6</div>
+          Extensão Universitária Curricularizada
+        </div>
+        <p class="doc-text"><strong style="color:${primary}">Carga horária:</strong> ${AppState.ped.extensaoCH || 0}h
+        ${AppState.curso.ch ? ` (${((AppState.ped.extensaoCH/AppState.curso.ch)*100).toFixed(1)}% da CH total)` : ''}.</p>
+        ${AppState.ped.extensaoDesc ? `<p class="doc-text" style="margin-top:8px;">${AppState.ped.extensaoDesc.replace(/\n/g, '<br>')}</p>` : ''}
+        <p class="doc-text" style="margin-top:8px;font-style:italic;color:#666;">Fundamentação: Resolução CNE/CES nº 7/2018; Lei nº 13.005/2014 (PNE, Meta 12.7).</p>
+      </div>
+    `;
+    preview.appendChild(pagePed);
+
+    // ── ESTÁGIO / TCC (Página 5) ──
+    const pageComp = createPage(primary, accent, instNome, cabecalho, rodape, 5);
+    const legalItems = [];
+    if (AppState.ped.legal?.ldb) legalItems.push('Lei nº 9.394/1996 – LDB');
+    if (AppState.ped.legal?.pne) legalItems.push('Lei nº 13.005/2014 – PNE');
+    if (AppState.ped.legal?.ext) legalItems.push('Resolução CNE/CES nº 7/2018 – Extensão');
+    if (AppState.ped.legal?.csa) legalItems.push('Resolução CNE/CP nº 1/2021');
+    if (AppState.ped.legal?.acessib) legalItems.push('Lei nº 13.146/2015 – LBI');
+    if (AppState.ped.legal?.ea) legalItems.push('Lei nº 9.795/1999 – Educação Ambiental');
+    if (AppState.ped.legal?.er) legalItems.push('Leis nº 10.639/2003 e 11.645/2008');
+    if (AppState.ped.legal?.dm) legalItems.push('Decreto nº 5.296/2004');
+    if (AppState.ped.dcnCurso) legalItems.push(AppState.ped.dcnCurso);
+    if (AppState.ped.outros) legalItems.push(AppState.ped.outros);
+
+    pageComp.querySelector('.doc-page-body').innerHTML = `
+      ${AppState.ped.estagioCH > 0 ? `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">7</div>
+          Estágio Supervisionado
+        </div>
+        <p class="doc-text"><strong style="color:${primary}">Carga horária obrigatória:</strong> ${AppState.ped.estagioCH}h</p>
+        ${AppState.ped.estagioPeriodo ? `<p class="doc-text"><strong style="color:${primary}">A partir do:</strong> ${AppState.ped.estagioPeriodo}º período</p>` : ''}
+        ${AppState.ped.estagioReg ? `<p class="doc-text" style="margin-top:8px;">${AppState.ped.estagioReg.replace(/\n/g,'<br>')}</p>` : ''}
+      </div>` : ''}
+
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">8</div>
+          TCC e Atividades Complementares
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:10.5pt;">
+          <tr><td style="padding:7px 12px 7px 0;font-weight:600;color:${primary};width:50%">Trabalho de Conclusão de Curso (TCC):</td>
+              <td style="padding:7px 0;color:#333;">${AppState.ped.tccCH > 0 ? AppState.ped.tccCH + 'h' : 'Consultar regulamento'}</td></tr>
+          <tr><td style="padding:7px 12px 7px 0;font-weight:600;color:${primary}">Atividades Complementares:</td>
+              <td style="padding:7px 0;color:#333;">${AppState.ped.compCH > 0 ? AppState.ped.compCH + 'h' : 'Consultar regulamento'}</td></tr>
+        </table>
+      </div>
+
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">9</div>
+          Base Legal e Referências Normativas
+        </div>
+        ${legalItems.length > 0
+          ? `<ul style="list-style:none;padding:0;margin:0;">${legalItems.map(l =>
+              `<li style="padding:5px 0;font-size:10.5pt;color:#333;border-bottom:1px solid #f0f0f0;display:flex;gap:8px;align-items:center;">
+                <span style="color:${accent};font-weight:700;">▸</span>${l}</li>`).join('')}</ul>`
+          : '<p class="doc-text" style="color:#999;font-style:italic;">Nenhuma base legal especificada.</p>'
+        }
+      </div>
+    `;
+    preview.appendChild(pageComp);
+
+    // ── MATRIZ CURRICULAR (Páginas de disciplinas) ──
+    const byPeriodo = AppState.disciplinasByPeriodo;
+    const periodos = Object.keys(byPeriodo).sort((a,b) => {
+      const na = parseInt(a), nb = parseInt(b);
+      if (!isNaN(na) && !isNaN(nb)) return na - nb;
+      return a.localeCompare(b);
+    });
+
+    const pageMatrix = createPage(primary, accent, instNome, cabecalho, rodape, 6);
+    let matrixHTML = `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">10</div>
+          Matriz Curricular — ${AppState.curso.grau ? AppState.curso.grau + ' em ' : ''}${AppState.curso.nome || 'Curso'}
+        </div>
+        <p style="font-size:9.5pt;color:#666;margin-bottom:14px;font-style:italic;">
+          Carga Horária Total: ${AppState.curso.ch || AppState.totalCH}h
+          ${AppState.curso.prazoMin ? '· Integralização: ' + AppState.curso.prazoMin + '–' + AppState.curso.prazoMax + ' semestres' : ''}
+          · Modalidade: ${AppState.curso.modalidade || 'Presencial'}
+        </p>
+    `;
+
+    if (AppState.disciplines.length === 0) {
+      matrixHTML += `<p class="doc-text" style="color:#999;font-style:italic;">Nenhuma disciplina cadastrada.</p>`;
+    } else if (periodos.length > 0) {
+      matrixHTML += `<table class="doc-curriculum-table">
+        <thead>
+          <tr>
+            <th style="width:30%;background:${primary}">Componente Curricular</th>
+            <th style="width:10%;text-align:center;background:${primary}">CH (h)</th>
+            <th style="width:8%;text-align:center;background:${primary}">Créd.</th>
+            <th style="width:14%;background:${primary}">Tipo</th>
+            <th style="width:13%;background:${primary}">Natureza</th>
+            <th style="width:25%;background:${primary}">Pré-requisito</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+
+      const tipoLabels = {
+        obrigatoria: 'Obrigatória', optativa: 'Optativa/Eletiva',
+        extensao: 'Extensão', estagio: 'Estágio', tcc: 'TCC', complementar: 'Ativ. Complementar'
+      };
+      const naturezaLabels = {
+        teorica: 'Teórica', pratica: 'Prática',
+        'teorico-pratica': 'Teórico-Prática', estagio: 'Estágio'
+      };
+
+      periodos.forEach(per => {
+        const discsNoPeriodo = byPeriodo[per];
+        const chPeriodo = discsNoPeriodo.reduce((s,d) => s+(parseInt(d.ch)||0), 0);
+        const perLabel = isNaN(parseInt(per)) ? per : `${parseInt(per)}º Semestre / Período`;
+
+        matrixHTML += `<tr class="doc-period-header" style="background:${accent} !important">
+          <td colspan="6" style="font-weight:700;color:${primary};font-size:9.5pt;background:${accent} !important">
+            ${perLabel} — Total: ${chPeriodo}h
+          </td>
+        </tr>`;
+
+        discsNoPeriodo.forEach(d => {
+          matrixHTML += `<tr>
+            <td style="font-weight:500">${escHtml(d.nome)}</td>
+            <td style="text-align:center;font-weight:600;font-family:monospace">${d.ch}</td>
+            <td style="text-align:center;font-family:monospace">${d.creditos || '—'}</td>
+            <td style="font-size:8.5pt">${tipoLabels[d.tipo] || d.tipo}</td>
+            <td style="font-size:8.5pt">${naturezaLabels[d.natureza] || '—'}</td>
+            <td style="font-size:8.5pt;color:#666">${escHtml(d.prereq || '—')}</td>
+          </tr>`;
+        });
+      });
+
+      // Linha de totais
+      matrixHTML += `<tr style="background:#1e3a5f !important">
+        <td style="font-weight:700;color:white;background:${primary} !important">TOTAL GERAL</td>
+        <td style="font-weight:700;color:white;text-align:center;font-family:monospace;background:${primary} !important">${AppState.totalCH}</td>
+        <td colspan="4" style="background:${primary} !important"></td>
+      </tr>`;
+
+      matrixHTML += '</tbody></table>';
+    } else {
+      // Lista simples sem períodos
+      matrixHTML += `<table class="doc-curriculum-table">
+        <thead><tr>
+          <th style="background:${primary}">Componente Curricular</th>
+          <th style="width:80px;text-align:center;background:${primary}">CH (h)</th>
+          <th style="width:70px;text-align:center;background:${primary}">Créd.</th>
+          <th style="background:${primary}">Tipo</th>
+        </tr></thead>
+        <tbody>
+          ${AppState.disciplines.map(d => `<tr>
+            <td>${escHtml(d.nome)}</td>
+            <td style="text-align:center;font-weight:600;font-family:monospace">${d.ch}</td>
+            <td style="text-align:center;font-family:monospace">${d.creditos||'—'}</td>
+            <td>${d.tipo}</td>
+          </tr>`).join('')}
+          <tr style="background:${primary}">
+            <td style="font-weight:700;color:white">TOTAL</td>
+            <td style="font-weight:700;color:white;text-align:center;font-family:monospace">${AppState.totalCH}</td>
+            <td colspan="2"></td>
+          </tr>
+        </tbody>
+      </table>`;
+    }
+
+    matrixHTML += '</div>';
+    pageMatrix.querySelector('.doc-page-body').innerHTML = matrixHTML;
+    preview.appendChild(pageMatrix);
+
+    // ── ASSINATURAS (Última página) ──
+    const pageSig = createPage(primary, accent, instNome, cabecalho, rodape, 7);
+    pageSig.querySelector('.doc-page-body').innerHTML = `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">12</div>
+          Validação e Assinaturas
+        </div>
+        <p class="doc-text" style="margin-bottom:40px;">
+          Este Projeto Pedagógico de Curso foi elaborado em conformidade com as Diretrizes Curriculares Nacionais vigentes e aprovado pelos órgãos colegiados competentes da ${instNome}.
+        </p>
+
+        <div style="display:flex;gap:60px;flex-wrap:wrap;margin-top:20px;">
+          ${AppState.resp.coord ? `
+          <div>
+            <div class="doc-signature-line">${AppState.resp.coord}<br>
+              <span style="font-size:8pt;color:#666">Coordenador(a) do Curso<br>${AppState.curso.nome || ''}</span>
+            </div>
+          </div>` : `<div><div class="doc-signature-line">_______________________________<br>
+            <span style="font-size:8pt;color:#666">Coordenador(a) do Curso</span></div></div>`}
+
+          ${AppState.resp.diretor ? `
+          <div>
+            <div class="doc-signature-line">${AppState.resp.diretor}<br>
+              <span style="font-size:8pt;color:#666">Diretor(a) da Unidade</span>
+            </div>
+          </div>` : `<div><div class="doc-signature-line">_______________________________<br>
+            <span style="font-size:8pt;color:#666">Diretor(a) da Unidade</span></div></div>`}
+
+          ${AppState.resp.proreitor ? `
+          <div>
+            <div class="doc-signature-line">${AppState.resp.proreitor}<br>
+              <span style="font-size:8pt;color:#666">Pró-Reitor(a) de Graduação</span>
+            </div>
+          </div>` : ''}
+        </div>
+
+        <p style="margin-top:60px;font-size:9pt;color:#999;text-align:center;">
+          ${instNome} · ${AppState.inst.cidade || ''} · ${versao}<br>
+          Documento gerado pelo MatrizPro — Sistema de Gestão Curricular
+        </p>
+      </div>
+    `;
+    preview.appendChild(pageSig);
+
+    // Verificar conformidade
+    renderConformidadeChecks();
+    hideLoading();
+    showToast('Documento gerado com sucesso!', 'success');
+    updateDocColors();
+  }, 800);
+}
+
+function createPage(primary, accent, instNome, cabecalho, rodape, pageNum) {
+  const page = document.createElement('div');
+  page.className = 'doc-page';
+  page.style.setProperty('--doc-primary', primary);
+  page.style.setProperty('--doc-accent', accent);
+  page.innerHTML = `
+    <div class="doc-header">
+      <div class="doc-logo-area">
+        <div style="font-size:10.5pt;font-weight:700;color:${primary};line-height:1.3;">
+          ${instNome}<br>
+          <span style="font-size:9pt;font-weight:400;color:#666;">${cabecalho}</span>
+        </div>
+      </div>
+      <div class="doc-header-right">
+        ${AppState.curso.nome || ''}<br>
+        Fl. ${pageNum}
+      </div>
+    </div>
+    <div class="doc-page-body"></div>
+    <div class="doc-footer">
+      <span>${rodape || instNome}</span>
+      <span>Página ${pageNum}</span>
+    </div>
+  `;
+  return page;
+}
+
+function renderConformidadeChecks() {
+  const container = document.getElementById('conformidade-checks');
+  if (!container) return;
+
+  const checks = [
+    { label: 'Identificação institucional completa', ok: !!(AppState.inst.nome && AppState.curso.nome) },
+    { label: 'Grau acadêmico e modalidade definidos', ok: !!(AppState.curso.grau && AppState.curso.modalidade) },
+    { label: 'Carga horária total informada', ok: !!(AppState.curso.ch || AppState.totalCH > 0) },
+    { label: 'Disciplinas cadastradas', ok: AppState.disciplines.length > 0 },
+    { label: 'Perfil do egresso descrito', ok: !!AppState.ped.perfil },
+    { label: 'Competências definidas', ok: !!AppState.ped.competenciasGerais },
+    {
+      label: `Extensão ≥ 10% da CH total (atual: ${AppState.ped.extensaoCH || 0}h / ${((AppState.ped.extensaoCH / (AppState.curso.ch || AppState.totalCH || 1)) * 100).toFixed(1)}%)`,
+      ok: AppState.ped.extensaoCH > 0 && AppState.curso.ch > 0 && AppState.ped.extensaoCH >= AppState.curso.ch * 0.10
+    },
+    { label: 'Estágio supervisionado previsto', ok: AppState.ped.estagioCH > 0 || AppState.disciplines.some(d=>d.tipo==='estagio') },
+    { label: 'Base legal referenciada', ok: Object.values(AppState.ped.legal || {}).some(v => v) },
+    { label: 'Coordenador(a) identificado(a)', ok: !!AppState.resp.coord },
+  ];
+
+  container.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      ${checks.map(c => `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;border:1px solid ${c.ok ? '#d1fae5' : '#fee2e2'};border-radius:8px;background:${c.ok ? '#f0fdf4' : '#fff5f5'}">
+          <span style="font-size:16px;flex-shrink:0">${c.ok ? '✅' : '⚠️'}</span>
+          <span style="font-size:.83rem;color:${c.ok ? '#065f46' : '#991b1b'}">${c.label}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top:14px;padding:12px;background:var(--slate-100);border-radius:8px;font-size:.8rem;color:var(--slate-600);font-family:var(--font-mono);">
+      ${checks.filter(c=>c.ok).length}/${checks.length} verificações passaram
+      · ${checks.filter(c=>!c.ok).length} ${checks.filter(c=>!c.ok).length === 1 ? 'item requer' : 'itens requerem'} atenção
+    </div>
+  `;
+}
+
+function buildResumoFinal() {
+  const el = document.getElementById('resumo-final-content');
+  if (!el) return;
+
+  const chTotal = AppState.curso.ch || AppState.totalCH;
+  const extPct = chTotal > 0 ? ((AppState.ped.extensaoCH / chTotal) * 100).toFixed(1) : 0;
+  const byTipo = {};
+  AppState.disciplines.forEach(d => {
+    byTipo[d.tipo] = (byTipo[d.tipo] || 0) + 1;
+  });
+
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+      ${[
+        ['📚', AppState.disciplines.length, 'Disciplinas'],
+        ['⏱', chTotal + 'h', 'CH Total'],
+        ['📅', new Set(AppState.disciplines.map(d=>d.periodo)).size, 'Períodos'],
+        ['🌱', AppState.ped.extensaoCH + 'h (' + extPct + '%)', 'Extensão'],
+      ].map(([icon, val, label]) => `
+        <div style="text-align:center;padding:16px;background:var(--navy-50);border:1px solid var(--slate-300);border-radius:var(--radius-md);">
+          <div style="font-size:24px;margin-bottom:8px">${icon}</div>
+          <div style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--navy-900)">${val}</div>
+          <div style="font-size:.75rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:.05em">${label}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <table style="width:100%;border-collapse:collapse;font-size:.88rem;">
+      <thead><tr style="background:var(--navy-900)">
+        <th style="padding:10px 14px;color:white;text-align:left">Tipo de Componente</th>
+        <th style="padding:10px 14px;color:white;text-align:center">Qtd.</th>
+        <th style="padding:10px 14px;color:white;text-align:center">CH Total</th>
+      </tr></thead>
+      <tbody>
+        ${Object.entries(byTipo).map(([tipo, qtd]) => {
+          const ch = AppState.disciplines.filter(d=>d.tipo===tipo).reduce((s,d)=>s+(parseInt(d.ch)||0),0);
+          const labels = {obrigatoria:'Obrigatória',optativa:'Optativa/Eletiva',extensao:'Extensão',estagio:'Estágio',tcc:'TCC',complementar:'Ativ. Complementar'};
+          return `<tr style="border-bottom:1px solid var(--slate-100)">
+            <td style="padding:8px 14px">${labels[tipo]||tipo}</td>
+            <td style="padding:8px 14px;text-align:center;font-family:monospace">${qtd}</td>
+            <td style="padding:8px 14px;text-align:center;font-family:monospace;font-weight:600">${ch}h</td>
+          </tr>`;
+        }).join('')}
+        <tr style="background:var(--navy-900)">
+          <td style="padding:9px 14px;font-weight:700;color:white">TOTAL</td>
+          <td style="padding:9px 14px;text-align:center;font-weight:700;color:white;font-family:monospace">${AppState.disciplines.length}</td>
+          <td style="padding:9px 14px;text-align:center;font-weight:700;color:white;font-family:monospace">${AppState.totalCH}h</td>
+        </tr>
+      </tbody>
+    </table>
+  `;
+}
+
+// ─── EXPORTAÇÃO ───
+function exportPDF() {
+  if (AppState.disciplines.length === 0 && !AppState.inst.nome) {
+    showToast('Gere o documento antes de exportar.', 'warn');
+    return;
+  }
+  showLoading('Preparando PDF...');
+  setTimeout(() => {
+    hideLoading();
+    // Ir para step 5 para mostrar preview e imprimir
+    AppState.currentStep = 5;
+    updateStepUI();
+    if (!document.querySelector('#preview-area .doc-page')) generateDocument();
+    setTimeout(() => window.print(), 600);
+  }, 600);
+}
+
+function exportHTML() {
+  collectInstitutionalData();
+  collectPedagogicalData();
+
+  const cursoNome = AppState.curso.nome || 'matriz-curricular';
+  const filename = 'matriz-' + cursoNome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '.html';
+
+  const previewArea = document.getElementById('preview-area');
+  if (!previewArea.querySelector('.doc-page')) {
+    showToast('Gere o documento na etapa 5 primeiro.', 'warn');
+    return;
+  }
+
+  const htmlContent = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matriz Curricular — ${AppState.curso.nome || 'Curso'}</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Crimson Pro', Georgia, serif; background: #f5f5f5; margin: 0; padding: 20px; }
+  .doc-page { width: 210mm; background: white; margin: 0 auto 20px; padding: 20mm 22mm; box-shadow: 0 4px 20px rgba(0,0,0,.15); }
+  ${document.querySelector('style')?.textContent.match(/\/\* IMPRESSÃO[^*]*\*\/[\s\S]*?@media print[\s\S]*?}/)?.[0] || ''}
+  @media print { body { background: white; } .doc-page { box-shadow: none; margin: 0; width: 100%; page-break-after: always; } }
+</style>
+</head>
+<body>
+${previewArea.innerHTML}
+</body>
+</html>`;
+
+  downloadFile(htmlContent, filename, 'text/html');
+  showToast('HTML exportado com sucesso!', 'success');
+}
+
+function exportJSON() {
+  collectInstitutionalData();
+  collectPedagogicalData();
+
+  const data = {
+    meta: {
+      geradoPor: 'MatrizPro v1.0',
+      data: new Date().toISOString(),
+      versao: '1.0.0'
+    },
+    instituicao: AppState.inst,
+    curso: AppState.curso,
+    responsaveis: AppState.resp,
+    design: AppState.design,
+    pedagogico: AppState.ped,
+    disciplinas: AppState.disciplines,
+    resumo: {
+      totalDisciplinas: AppState.disciplines.length,
+      chTotal: AppState.totalCH,
+      periodos: new Set(AppState.disciplines.map(d=>d.periodo)).size,
+      extensaoCH: AppState.ped.extensaoCH || 0,
+    }
+  };
+
+  const cursoNome = AppState.curso.nome || 'curso';
+  const filename = 'matriz-' + cursoNome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-dados.json';
+
+  downloadFile(JSON.stringify(data, null, 2), filename, 'application/json');
+  showToast('Dados JSON exportados!', 'success');
+}
+
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], { type: type + ';charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ─── TRANSVERSAIS ───
+function renderTransversais() {
+  const container = document.getElementById('transversais-container');
+  if (!container) return;
+  container.innerHTML = TRANSVERSAIS.map(t => `
+    <div style="padding:14px;border:1px solid var(--slate-300);border-radius:var(--radius-md);margin-bottom:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div>
+          <div style="font-weight:600;color:var(--navy-900);font-size:.9rem">${t.label}</div>
+          <div style="font-size:.75rem;color:var(--slate-500);font-family:var(--font-mono)">${t.lei}</div>
+        </div>
+        <select class="form-select" style="width:200px;font-size:.8rem" id="trans-${t.id}">
+          <option value="">Não informado</option>
+          <option value="disciplina-especifica">Disciplina específica</option>
+          <option value="conteudo-transversal">Conteúdo transversal</option>
+          <option value="atividade-complementar">Atividade complementar</option>
+          <option value="nao-aplicavel">Não se aplica ao curso</option>
+        </select>
+      </div>
+      <input class="form-input" style="font-size:.8rem" id="trans-${t.id}-detail"
+        placeholder="Informe em qual(is) disciplina(s) ou como é abordado..." />
+    </div>
+  `).join('');
+}
+
+// ─── TABS ───
+function switchTab(panelId, btn) {
+  const parent = btn.closest('.tab-nav').parentElement;
+  parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  parent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const panel = parent.querySelector(`#tab-${panelId}`);
+  if (panel) panel.classList.add('active');
+}
+
+// ─── CORES ───
+function setColor(hex) {
+  document.getElementById('cor-primaria').value = hex;
+  document.getElementById('cor-primaria-hex').value = hex;
+  document.querySelectorAll('[onclick^="setColor"]').forEach(el => el.classList.remove('selected'));
+  event.target.classList.add('selected');
+  updateDocColors();
+}
+
+function setAccent(hex) {
+  document.getElementById('cor-acento').value = hex;
+  document.getElementById('cor-acento-hex').value = hex;
+  updateDocColors();
+}
+
+function syncColor(input, pickerId) {
+  const hex = input.value;
+  if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+    document.getElementById(pickerId).value = hex;
+    updateDocColors();
+  }
+}
+
+function updateDocColors() {
+  const primary = document.getElementById('cor-primaria').value;
+  const accent = document.getElementById('cor-acento').value;
+  document.querySelectorAll('.doc-page').forEach(page => {
+    page.style.setProperty('--doc-primary', primary);
+    page.style.setProperty('--doc-accent', accent);
+  });
+}
+
+function togglePreviewZoom(delta) {
+  AppState.previewZoom = Math.max(0.4, Math.min(1.5, AppState.previewZoom + delta));
+  document.querySelectorAll('.doc-page').forEach(p => {
+    p.style.transform = `scale(${AppState.previewZoom})`;
+    p.style.transformOrigin = 'top center';
+  });
+}
+
+function resetPreviewZoom() {
+  AppState.previewZoom = 1;
+  document.querySelectorAll('.doc-page').forEach(p => {
+    p.style.transform = 'scale(1)';
+  });
+}
+
+// ─── LOGO ───
+function handleLogoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    AppState.logoDataUrl = ev.target.result;
+    const preview = document.getElementById('logo-preview');
+    preview.innerHTML = `<img src="${ev.target.result}" style="width:100%;height:100%;object-fit:contain;">`;
+    showToast('Logotipo carregado!', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── MODAL ───
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Fechar modal clicando fora
+document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+  backdrop.addEventListener('click', e => {
+    if (e.target === backdrop) closeModal(backdrop.id);
+  });
+});
+
+// ─── LOADING ───
+function showLoading(msg, sub) {
+  document.querySelector('.loading-text').textContent = msg || 'Processando...';
+  document.getElementById('loading-sub-text').textContent = sub || 'Aguarde...';
+  document.getElementById('loading-overlay').classList.add('show');
+}
+
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.remove('show');
+}
+
+// ─── TOAST ───
+function showToast(msg, type = 'info') {
+  const container = document.getElementById('toast-container');
+  const icons = { success: '✓', error: '✕', warn: '⚠', info: 'ℹ' };
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `<span style="font-size:16px">${icons[type]||'ℹ'}</span><span>${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.animation = 'toastIn .3s ease reverse';
+    setTimeout(() => toast.remove(), 280);
+  }, 3500);
+}
+
+// ─── UTILITIES ───
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function formatFileSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+}
+
+function formatDate(str) {
+  if (!str) return '';
+  const [y, m, d] = str.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function resetApp() {
+  if (!confirm('Iniciar novo projeto? Todos os dados não salvos serão perdidos.')) return;
+  location.reload();
+}
+
+function saveProgress() {
+  collectInstitutionalData();
+  collectPedagogicalData();
+  const data = JSON.stringify({
+    disciplines: AppState.disciplines,
+    inst: AppState.inst,
+    curso: AppState.curso,
+    resp: AppState.resp,
+    design: AppState.design,
+    ped: AppState.ped,
+    version: '1.0'
+  });
+  localStorage.setItem('matrizpro_save', data);
+  showToast('Progresso salvo localmente!', 'success');
+}
+
+function importFromClipboard() {
+  showToast('Cole os dados copiados do Excel na caixa abaixo. Em breve: importação direta.', 'info');
+}
+
+// Atalhos de teclado
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveProgress(); }
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+    document.body.style.overflow = '';
+  }
+});
+
+// ─── CARREGAR SAVE LOCAL AO INICIAR ───
+(function loadLocalSave() {
+  try {
+    const saved = localStorage.getItem('matrizpro_save');
+    if (saved) {
+      const data = JSON.parse(saved);
+      if (data.inst?.nome) document.getElementById('inst-nome').value = data.inst.nome;
+      if (data.inst?.sigla) document.getElementById('inst-sigla').value = data.inst.sigla;
+      if (data.inst?.cidade) document.getElementById('inst-cidade').value = data.inst.cidade;
+      if (data.curso?.nome) document.getElementById('curso-nome').value = data.curso.nome;
+      if (data.curso?.ch) document.getElementById('curso-ch').value = data.curso.ch;
+      if (data.disciplines?.length) {
+        AppState.disciplines = data.disciplines;
+        AppState.maxUnlockedStep = 2;
+        renderDisciplinesTable();
+      }
+      if (data.design?.corPrimaria) {
+        document.getElementById('cor-primaria').value = data.design.corPrimaria;
+        document.getElementById('cor-primaria-hex').value = data.design.corPrimaria;
+      }
+    }
+  } catch(e) { /* ignora erros de carregamento */ }
+})();
+</script>
+</body>
+</html>

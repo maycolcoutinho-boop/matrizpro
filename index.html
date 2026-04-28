@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MatrizPro — Sistema de Gestão Curricular Institucional</title>
+<title>EmentaPro — Sistema de Gestão de Ementários de Curso</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1584,14 +1584,14 @@ table.curriculum-table {
   <div class="header-brand">
     <div class="header-logo">M</div>
     <div>
-      <div class="header-title">MatrizPro</div>
-      <div class="header-subtitle">Sistema de Gestão Curricular</div>
+      <div class="header-title">EmentaPro</div>
+      <div class="header-subtitle">Ementários de Curso</div>
     </div>
   </div>
   <div class="header-actions">
     <button class="btn-header btn-header-outline" onclick="resetApp()">↺ Novo</button>
-    <button class="btn-header btn-header-outline" onclick="document.getElementById('load-progress-input').click()" title="Carregar projeto salvo (.matrizpro)">📂 Carregar</button>
-    <input type="file" id="load-progress-input" accept=".matrizpro,.json" style="display:none" onchange="loadProgressFile(this.files[0]); this.value='';">
+    <button class="btn-header btn-header-outline" onclick="document.getElementById('load-progress-input').click()" title="Carregar ementário salvo (.ementapro)">📂 Carregar</button>
+    <input type="file" id="load-progress-input" accept=".ementapro,.json" style="display:none" onchange="loadProgressFile(this.files[0]); this.value='';">
     <button class="btn-header btn-header-outline" onclick="saveProgress()" title="Baixar arquivo de progresso (Ctrl+S)">💾 Salvar</button>
     <button class="btn-header btn-header-primary" id="btn-quick-export" onclick="goToStep(6)">⬇ Exportar</button>
   </div>
@@ -1609,7 +1609,7 @@ table.curriculum-table {
         <div class="step-num">1</div>
         <div class="step-nav-info">
           <div class="step-nav-name">Upload</div>
-          <div class="step-nav-desc">Carregar arquivo curricular</div>
+          <div class="step-nav-desc">Carregar ementário do curso</div>
         </div>
       </div>
       <div class="step-connector" id="conn-1"></div>
@@ -1654,7 +1654,7 @@ table.curriculum-table {
         <div class="step-num">6</div>
         <div class="step-nav-info">
           <div class="step-nav-name">Exportação</div>
-          <div class="step-nav-desc">PDF, HTML, PPC</div>
+          <div class="step-nav-desc">PDF, HTML, JSON</div>
         </div>
       </div>
     </div>
@@ -1691,8 +1691,8 @@ table.curriculum-table {
     <!-- Versão -->
     <div style="margin-top:auto; padding:16px 20px; border-top:1px solid rgba(255,255,255,.06);">
       <div style="font-size:.7rem; color:rgba(255,255,255,.25); font-family:var(--font-mono);">
-        MatrizPro v1.0.0 · 2025<br>
-        Conforme MEC/INEP
+        EmentaPro v1.0.0 · 2025<br>
+        Conforme DCNs / MEC
       </div>
     </div>
   </aside>
@@ -1707,8 +1707,8 @@ table.curriculum-table {
     <div class="step-panel active" id="step-1">
       <div class="step-header">
         <div class="step-badge">⬆ Etapa 1 de 6</div>
-        <h1 class="step-title">Upload da Matriz Curricular</h1>
-        <p class="step-desc">Faça o upload de um arquivo HTML contendo a matriz curricular existente, ou inicie do zero para criar uma nova matriz padronizada.</p>
+        <h1 class="step-title">Upload da Ementa do Curso</h1>
+        <p class="step-desc">Faça o upload de um arquivo contendo a ementa do curso existente, ou inicie do zero para criar um novo ementário padronizado.</p>
       </div>
 
       <div class="alert alert-info">
@@ -1723,8 +1723,8 @@ table.curriculum-table {
       <div style="display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--gold-100);border:1.5px solid var(--gold-300);border-radius:var(--radius-lg);margin-bottom:20px;">
         <div style="font-size:26px;flex-shrink:0">📂</div>
         <div style="flex:1;">
-          <div style="font-family:var(--font-display);font-size:.95rem;font-weight:600;color:var(--gold-700);margin-bottom:3px;">Retomar um projeto salvo?</div>
-          <div style="font-size:.83rem;color:var(--gold-700);line-height:1.5;">Carregue um arquivo <code style="background:rgba(0,0,0,.08);padding:1px 5px;border-radius:3px;font-family:monospace">.matrizpro</code> gerado pelo botão <strong>💾 Salvar</strong> para continuar de onde parou — todos os dados, disciplinas e etapas serão restaurados.</div>
+          <div style="font-family:var(--font-display);font-size:.95rem;font-weight:600;color:var(--gold-700);margin-bottom:3px;">Retomar um ementário salvo?</div>
+          <div style="font-size:.83rem;color:var(--gold-700);line-height:1.5;">Carregue um arquivo <code style="background:rgba(0,0,0,.08);padding:1px 5px;border-radius:3px;font-family:monospace">.ementapro</code> gerado pelo botão <strong>💾 Salvar</strong> para continuar de onde parou — todos os dados, disciplinas e etapas serão restaurados.</div>
         </div>
         <button class="btn btn-sm" style="background:var(--gold-600);color:white;white-space:nowrap;font-weight:700;flex-shrink:0;"
           onclick="document.getElementById('load-progress-input').click()">
@@ -1824,8 +1824,8 @@ table.curriculum-table {
       <div style="display:flex; align-items:center; gap:20px; padding:24px; background:var(--white); border:1.5px solid var(--slate-300); border-radius:var(--radius-lg); box-shadow:var(--shadow-sm);">
         <div style="font-size:36px;">✏️</div>
         <div style="flex:1;">
-          <div style="font-family:var(--font-display); font-size:1.05rem; font-weight:600; color:var(--navy-900); margin-bottom:4px;">Criar nova matriz do zero</div>
-          <div style="font-size:.88rem; color:var(--slate-500); line-height:1.5;">Preencha todos os dados manualmente e gere uma matriz completamente padronizada conforme as DCNs e normativas vigentes.</div>
+          <div style="font-family:var(--font-display); font-size:1.05rem; font-weight:600; color:var(--navy-900); margin-bottom:4px;">Criar novo ementário do zero</div>
+          <div style="font-size:.88rem; color:var(--slate-500); line-height:1.5;">Preencha todos os dados manualmente e gere um ementário completamente padronizado conforme as DCNs e normativas vigentes.</div>
         </div>
         <button class="btn btn-gold" onclick="startFromScratch()">Iniciar do zero →</button>
       </div>
@@ -1835,8 +1835,8 @@ table.curriculum-table {
     <div class="step-panel" id="step-2">
       <div class="step-header">
         <div class="step-badge">🔍 Etapa 2 de 6</div>
-        <h1 class="step-title">Leitura e Extração de Dados</h1>
-        <p class="step-desc">Revise os dados extraídos automaticamente do documento. Corrija eventuais erros e complete informações ausentes antes de prosseguir.</p>
+        <h1 class="step-title">Leitura e Extração do Ementário</h1>
+        <p class="step-desc">Revise os dados extraídos automaticamente. Corrija eventuais erros e complete informações ausentes antes de prosseguir.</p>
       </div>
 
       <!-- STATS DE EXTRAÇÃO -->
@@ -2211,7 +2211,7 @@ table.curriculum-table {
             </div>
             <div class="form-group">
               <label class="form-label">Texto do Cabeçalho</label>
-              <input class="form-input" id="doc-cabecalho" placeholder="PROJETO PEDAGÓGICO DE CURSO — PPC">
+              <input class="form-input" id="doc-cabecalho" placeholder="EMENTÁRIO DO CURSO — [NOME DA INSTITUIÇÃO]">
             </div>
             <div class="form-group">
               <label class="form-label">Ano/Versão do Documento</label>
@@ -2236,7 +2236,7 @@ table.curriculum-table {
       <div class="step-header">
         <div class="step-badge">📖 Etapa 4 de 6</div>
         <h1 class="step-title">Dados Pedagógicos</h1>
-        <p class="step-desc">Complete as informações pedagógicas obrigatórias do PPC: perfil do egresso, competências, metodologias e referências normativas.</p>
+        <p class="step-desc">Complete as informações pedagógicas obrigatórias do ementário: perfil do egresso, competências, metodologias e referências normativas.</p>
       </div>
 
       <!-- TABS PEDAGÓGICOS -->
@@ -2473,8 +2473,8 @@ table.curriculum-table {
     <div class="step-panel" id="step-5">
       <div class="step-header">
         <div class="step-badge">👁 Etapa 5 de 6</div>
-        <h1 class="step-title">Padronização e Visualização</h1>
-        <p class="step-desc">Revise o documento padronizado. Você pode editar campos diretamente clicando no texto. Verifique a conformidade legal antes de exportar.</p>
+        <h1 class="step-title">Padronização e Visualização do Ementário</h1>
+        <p class="step-desc">Revise o ementário padronizado. Edite campos diretamente clicando no texto. Verifique a conformidade legal antes de exportar.</p>
       </div>
 
       <!-- BARRA DE CONFORMIDADE -->
@@ -2513,14 +2513,14 @@ table.curriculum-table {
       <div class="step-header">
         <div class="step-badge">⬇ Etapa 6 de 6</div>
         <h1 class="step-title">Exportação do Documento</h1>
-        <p class="step-desc">Escolha o formato de exportação desejado. O documento está pronto para uso institucional e apresentação ao MEC/INEP.</p>
+        <p class="step-desc">Escolha o formato de exportação desejado. O ementário está pronto para uso institucional, consulta regulatória e apresentação ao MEC/INEP.</p>
       </div>
 
       <div class="alert alert-success">
         <div class="alert-icon">✅</div>
         <div class="alert-content">
           <div class="alert-title">Documento pronto para exportação</div>
-          A matriz curricular foi padronizada e está em conformidade com as normativas vigentes. Selecione o formato de exportação desejado.
+          O ementário do curso foi padronizado e está em conformidade com as normativas vigentes. Selecione o formato de exportação desejado.
         </div>
       </div>
 
@@ -2528,24 +2528,24 @@ table.curriculum-table {
         <!-- PDF -->
         <div class="export-card" style="--card-accent: #b91c1c;" onclick="exportPDF()">
           <span class="export-card-icon">📕</span>
-          <div class="export-card-title">PDF Institucional</div>
-          <div class="export-card-desc">Documento formatado para impressão e arquivamento. Inclui cabeçalho, rodapé, paginação e qualidade MEC/INEP.</div>
+          <div class="export-card-title">Ementário em PDF</div>
+          <div class="export-card-desc">Ementário formatado para impressão e arquivamento oficial. Inclui cabeçalho, rodapé, paginação e qualidade MEC/INEP.</div>
           <button class="btn btn-primary" style="width:100%;justify-content:center;">⬇ Exportar PDF</button>
         </div>
 
         <!-- HTML -->
         <div class="export-card" style="--card-accent: #1d6fa4;" onclick="exportHTML()">
           <span class="export-card-icon">🌐</span>
-          <div class="export-card-title">HTML Padronizado</div>
-          <div class="export-card-desc">Arquivo HTML pronto para publicação em portal institucional. Responsivo e acessível (WCAG).</div>
+          <div class="export-card-title">Ementário em HTML</div>
+          <div class="export-card-desc">Ementário em HTML pronto para publicação em portal institucional. Responsivo e acessível (WCAG).</div>
           <button class="btn btn-primary" style="width:100%;justify-content:center;">⬇ Exportar HTML</button>
         </div>
 
-        <!-- PPC JSON -->
+        <!-- Dados JSON -->
         <div class="export-card" style="--card-accent: #0d7c4a;" onclick="exportJSON()">
           <span class="export-card-icon">📊</span>
-          <div class="export-card-title">Dados Estruturados</div>
-          <div class="export-card-desc">Exporta todos os dados em formato JSON para integração com sistemas acadêmicos (SIGAA, SIE, Totvs).</div>
+          <div class="export-card-title">Dados do Ementário</div>
+          <div class="export-card-desc">Exporta todos os dados do ementário em JSON para integração com sistemas acadêmicos (SIGAA, SIE, Totvs).</div>
           <button class="btn btn-primary" style="width:100%;justify-content:center;">⬇ Exportar JSON</button>
         </div>
       </div>
@@ -2554,7 +2554,7 @@ table.curriculum-table {
       <div class="form-section">
         <div class="form-section-header">
           <div class="form-section-icon">📊</div>
-          <div class="form-section-title">Resumo da Matriz Curricular</div>
+          <div class="form-section-title">Resumo do Ementário do Curso</div>
         </div>
         <div class="form-section-body">
           <div id="resumo-final-content">
@@ -2565,7 +2565,7 @@ table.curriculum-table {
 
       <!-- HISTÓRICO -->
       <div style="text-align:center; padding:24px; color:var(--slate-500); font-size:.82rem; font-family:var(--font-mono);">
-        Documento gerado pelo MatrizPro · Conforme normativas MEC/INEP · <span id="export-date"></span>
+        Documento gerado pelo EmentaPro · Conforme normativas MEC/INEP · <span id="export-date"></span>
       </div>
     </div>
 
@@ -2681,7 +2681,7 @@ const AppState = {
     corPrimaria: '#1e3a5f',
     corAcento: '#c9a227',
     rodape: '',
-    cabecalho: 'PROJETO PEDAGÓGICO DE CURSO — PPC',
+    cabecalho: 'EMENTÁRIO DO CURSO',
     versao: new Date().getFullYear() + ' · Versão 1.0',
     paginacao: 'bottom-center'
   },
@@ -3547,7 +3547,7 @@ function collectInstitutionalData() {
     corPrimaria: document.getElementById('cor-primaria').value,
     corAcento: document.getElementById('cor-acento').value,
     rodape: document.getElementById('doc-rodape').value.trim(),
-    cabecalho: document.getElementById('doc-cabecalho').value.trim() || 'PROJETO PEDAGÓGICO DE CURSO — PPC',
+    cabecalho: document.getElementById('doc-cabecalho').value.trim() || 'EMENTÁRIO DO CURSO',
     versao: document.getElementById('doc-versao').value.trim(),
     paginacao: document.getElementById('doc-paginacao').value,
   };
@@ -3622,7 +3622,7 @@ function generateDocument() {
         <div class="doc-cover-badge" style="background:${primary}">${instNome}${AppState.inst.sigla ? ' · ' + AppState.inst.sigla : ''}</div>
         <div class="doc-cover-line" style="background:${accent}"></div>
         <div class="doc-cover-title" style="color:${primary}">${grau} em<br>${cursoNome}</div>
-        <div class="doc-cover-subtitle">Projeto Pedagógico de Curso — PPC</div>
+        <div class="doc-cover-subtitle">Ementário do Curso</div>
         <div class="doc-cover-line" style="background:${accent}"></div>
         <div class="doc-cover-meta">
           <table>
@@ -3659,7 +3659,7 @@ function generateDocument() {
             ['7. Estágio Supervisionado', '6'],
             ['8. TCC e Atividades Complementares', '6'],
             ['9. Base Legal e Referências Normativas', '7'],
-            ['10. Matriz Curricular por Períodos', '8'],
+            ['10. Estrutura Curricular por Períodos', '8'],
             ['11. Conteúdos Transversais', '—'],
             ['12. Assinaturas e Validação', '—'],
           ].map(([t, p]) => `
@@ -3847,7 +3847,7 @@ function generateDocument() {
       <div class="doc-section">
         <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
           <div class="doc-section-number" style="background:${primary}">10</div>
-          Matriz Curricular — ${AppState.curso.grau ? AppState.curso.grau + ' em ' : ''}${AppState.curso.nome || 'Curso'}
+          Estrutura Curricular — ${AppState.curso.grau ? AppState.curso.grau + ' em ' : ''}${AppState.curso.nome || 'Curso'}
         </div>
         <p style="font-size:9.5pt;color:#666;margin-bottom:14px;font-style:italic;">
           Carga Horária Total: ${AppState.curso.ch || AppState.totalCH}h
@@ -3951,7 +3951,7 @@ function generateDocument() {
           Validação e Assinaturas
         </div>
         <p class="doc-text" style="margin-bottom:40px;">
-          Este Projeto Pedagógico de Curso foi elaborado em conformidade com as Diretrizes Curriculares Nacionais vigentes e aprovado pelos órgãos colegiados competentes da ${instNome}.
+          Este ementário foi elaborado em conformidade com as Diretrizes Curriculares Nacionais vigentes e aprovado pelos órgãos colegiados competentes da ${instNome}.
         </p>
 
         <div style="display:flex;gap:60px;flex-wrap:wrap;margin-top:20px;">
@@ -3981,7 +3981,7 @@ function generateDocument() {
 
         <p style="margin-top:60px;font-size:9pt;color:#999;text-align:center;">
           ${instNome} · ${AppState.inst.cidade || ''} · ${versao}<br>
-          Documento gerado pelo MatrizPro — Sistema de Gestão Curricular
+          Documento gerado pelo EmentaPro — Ementários de Curso
         </p>
       </div>
     `;
@@ -4156,7 +4156,7 @@ function _printDocumentWindow() {
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>${AppState.curso.nome || 'Matriz Curricular'} — ${AppState.inst.nome || 'Documento'}</title>
+<title>${AppState.curso.nome || 'Ementário do Curso'} — ${AppState.inst.nome || 'Documento'}</title>
 ${fontsHref}
 <style>
 /* Reset para impressão limpa */
@@ -4225,8 +4225,8 @@ function exportHTML() {
   collectInstitutionalData();
   collectPedagogicalData();
 
-  const cursoNome = AppState.curso.nome || 'matriz-curricular';
-  const filename = 'matriz-' + cursoNome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '.html';
+  const cursoNome = AppState.curso.nome || 'ementa-curso';
+  const filename = 'ementa-' + cursoNome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '.html';
 
   const previewArea = document.getElementById('preview-area');
   if (!previewArea.querySelector('.doc-page')) {
@@ -4239,7 +4239,7 @@ function exportHTML() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Matriz Curricular — ${AppState.curso.nome || 'Curso'}</title>
+<title>Ementário — ${AppState.curso.nome || 'Curso'}</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Crimson+Pro:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   body { font-family: 'Crimson Pro', Georgia, serif; background: #f5f5f5; margin: 0; padding: 20px; }
@@ -4263,7 +4263,7 @@ function exportJSON() {
 
   const data = {
     meta: {
-      geradoPor: 'MatrizPro v1.0',
+      geradoPor: 'EmentaPro v1.0',
       data: new Date().toISOString(),
       versao: '1.0.0'
     },
@@ -4282,7 +4282,7 @@ function exportJSON() {
   };
 
   const cursoNome = AppState.curso.nome || 'curso';
-  const filename = 'matriz-' + cursoNome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-dados.json';
+  const filename = 'ementa-' + cursoNome.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') + '-dados.json';
 
   downloadFile(JSON.stringify(data, null, 2), filename, 'application/json');
   showToast('Dados JSON exportados!', 'success');
@@ -4461,7 +4461,7 @@ function formatDate(str) {
 }
 
 function resetApp() {
-  if (!confirm('Iniciar novo projeto? Todos os dados não salvos serão perdidos.')) return;
+  if (!confirm('Iniciar novo ementário? Todos os dados não salvos serão perdidos.')) return;
   location.reload();
 }
 
@@ -4473,10 +4473,10 @@ function saveProgress() {
   const cursoSlug = (AppState.curso.nome || 'projeto')
     .toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').substring(0, 40);
   const ts = new Date().toISOString().slice(0, 10);
-  const filename = `matrizpro_${cursoSlug}_${ts}.matrizpro`;
+  const filename = `ementapro_${cursoSlug}_${ts}.ementapro`;
 
   const saveData = {
-    _app: 'MatrizPro',
+    _app: 'EmentaPro',
     _version: '1.0',
     _savedAt: new Date().toISOString(),
     currentStep: AppState.currentStep,
@@ -4535,20 +4535,21 @@ function snapshotFormFields() {
 
 // ─── CARREGAR ARQUIVO DE PROGRESSO ───
 function loadProgressFile(file) {
-  if (!file || !file.name.match(/\.(matrizpro|json)$/i)) {
-    showToast('Selecione um arquivo .matrizpro ou .json gerado pelo MatrizPro.', 'error');
+  if (!file || !file.name.match(/\.(ementapro|matrizpro|json)$/i)) {
+    showToast('Selecione um arquivo .ementapro ou .json gerado pelo EmentaPro.', 'error');
     return;
   }
   const reader = new FileReader();
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      if (data._app !== 'MatrizPro') {
-        showToast('Arquivo inválido. Use somente arquivos gerados pelo MatrizPro.', 'error');
+      // Aceita tanto EmentaPro quanto MatrizPro (retrocompatibilidade)
+      if (data._app !== 'EmentaPro' && data._app !== 'MatrizPro') {
+        showToast('Arquivo inválido. Use somente arquivos gerados pelo EmentaPro.', 'error');
         return;
       }
       restoreFromSaveData(data);
-      showToast(`Projeto restaurado: ${data.curso?.nome || 'sem nome'} · salvo em ${data._savedAt ? new Date(data._savedAt).toLocaleString('pt-BR') : '—'}`, 'success');
+      showToast(`Ementário restaurado: ${data.curso?.nome || 'sem nome'} · salvo em ${data._savedAt ? new Date(data._savedAt).toLocaleString('pt-BR') : '—'}`, 'success');
     } catch(err) {
       showToast('Erro ao ler arquivo: ' + err.message, 'error');
     }
@@ -4606,7 +4607,7 @@ document.addEventListener('keydown', e => {
 });
 
 // ─── INICIALIZAÇÃO LIMPA (sem localStorage) ───
-// O progresso é salvo como arquivo .matrizpro e carregado pelo botão "Carregar" no header.
+// O progresso é salvo como arquivo .ementapro e carregado pelo botão "Carregar" no header.
 (function init() {
   // Nada a restaurar automaticamente — o usuário usa o botão 📂 Carregar
 })();

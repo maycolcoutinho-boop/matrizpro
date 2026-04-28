@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <style>
 /* ═══════════════════════════════════════════════════════════
@@ -1712,7 +1713,7 @@ table.curriculum-table {
         <div class="alert-icon">ℹ</div>
         <div class="alert-content">
           <div class="alert-title">Formatos suportados</div>
-          Arquivos HTML exportados de sistemas acadêmicos (SIGAA, SIE, Q-Acadêmico), planilhas convertidas para HTML, e documentos web com estrutura tabular de disciplinas.
+          Arquivos HTML exportados de sistemas acadêmicos (SIGAA, SIE, Q-Acadêmico), planilhas Excel (.xlsx/.xls), arquivos CSV e documentos web com estrutura tabular de disciplinas.
         </div>
       </div>
 
@@ -1732,12 +1733,14 @@ table.curriculum-table {
         <div class="upload-title">Arraste o arquivo aqui</div>
         <div class="upload-subtitle">ou clique para selecionar do seu computador<br>Tamanho máximo: 20 MB</div>
         <div class="upload-formats">
+          <span class="upload-format-tag">.xlsx</span>
+          <span class="upload-format-tag">.xls</span>
+          <span class="upload-format-tag">.csv</span>
           <span class="upload-format-tag">.html</span>
           <span class="upload-format-tag">.htm</span>
-          <span class="upload-format-tag">.xhtml</span>
         </div>
       </div>
-      <input type="file" id="file-input" accept=".html,.htm,.xhtml" onchange="handleFileSelect(event)">
+      <input type="file" id="file-input" accept=".xlsx,.xls,.csv,.html,.htm,.xhtml" onchange="handleFileSelect(event)">
 
       <!-- ARQUIVO CARREGADO -->
       <div class="file-loaded" id="file-loaded-info">
@@ -1749,6 +1752,54 @@ table.curriculum-table {
         <div class="file-actions">
           <button class="btn btn-outline btn-sm" onclick="clearFile()">Remover</button>
           <button class="btn btn-primary btn-sm" onclick="processFile()">Processar →</button>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <!-- GUIA DE FORMATO EXCEL -->
+      <div style="background:var(--white);border:1.5px solid var(--slate-300);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);">
+        <div style="padding:14px 20px;background:var(--navy-900);display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;">📊</span>
+          <span style="font-family:var(--font-display);font-size:.95rem;font-weight:600;color:white;">Formato recomendado para planilhas Excel / CSV</span>
+          <button onclick="this.closest('div').nextElementSibling.classList.toggle('hidden')" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:white;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:.78rem;">mostrar / ocultar</button>
+        </div>
+        <div style="padding:18px 22px;">
+          <p style="font-size:.85rem;color:var(--slate-600);margin-bottom:14px;">
+            A planilha pode ter qualquer estrutura — o sistema detecta as colunas automaticamente. Para melhores resultados, utilize os nomes de coluna abaixo:
+          </p>
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:.82rem;">
+              <thead>
+                <tr style="background:var(--navy-800);">
+                  <th style="padding:8px 12px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;">COLUNA</th>
+                  <th style="padding:8px 12px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;">EXEMPLOS DE NOME</th>
+                  <th style="padding:8px 12px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;">EXEMPLO DE VALOR</th>
+                  <th style="padding:8px 12px;color:rgba(255,255,255,.9);text-align:center;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;">OBRIG.</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${[
+                  ['Disciplina',  '"Disciplina", "Componente", "Nome"',     'Cálculo Diferencial e Integral I', '✅'],
+                  ['CH',          '"CH", "Carga Horária", "Horas"',         '60',  '✅'],
+                  ['Créditos',    '"Créditos", "Créd."',                    '4',   '—'],
+                  ['Período',     '"Período", "Semestre", "Módulo"',        '2',   '—'],
+                  ['Tipo',        '"Tipo", "Natureza", "Obrig./Opt."',      'Obrigatória / Optativa', '—'],
+                  ['Pré-requisito','"Pré-requisito", "Prereq"',             'Cálculo I', '—'],
+                ].map(([col, nomes, ex, obr]) => `
+                  <tr style="border-bottom:1px solid var(--slate-100);">
+                    <td style="padding:8px 12px;font-weight:700;color:var(--navy-800)">${col}</td>
+                    <td style="padding:8px 12px;font-family:var(--font-mono);font-size:.75rem;color:var(--slate-600)">${nomes}</td>
+                    <td style="padding:8px 12px;color:var(--slate-700)">${ex}</td>
+                    <td style="padding:8px 12px;text-align:center">${obr}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top:14px;padding:10px 14px;background:var(--gold-100);border:1px solid var(--gold-300);border-radius:var(--radius-sm);font-size:.8rem;color:var(--gold-700);">
+            💡 <strong>Dica:</strong> Se a planilha usar linhas de cabeçalho de período (ex: "1º Semestre", "2º Período"), o sistema as reconhece automaticamente e agrupa as disciplinas por período.
+          </div>
         </div>
       </div>
 
@@ -2798,21 +2849,41 @@ function handleFileSelect(e) {
 }
 
 function loadFile(file) {
-  if (!file.name.match(/\.(html|htm|xhtml)$/i)) {
-    showToast('Formato não suportado. Use arquivos HTML.', 'error');
+  const isExcel = /\.(xlsx|xls)$/i.test(file.name);
+  const isCSV   = /\.csv$/i.test(file.name);
+  const isHTML  = /\.(html|htm|xhtml)$/i.test(file.name);
+
+  if (!isExcel && !isCSV && !isHTML) {
+    showToast('Formato não suportado. Use .xlsx, .xls, .csv ou .html.', 'error');
     return;
   }
+
   AppState.file = file;
+  AppState.fileType = isExcel ? 'excel' : isCSV ? 'csv' : 'html';
+
   const reader = new FileReader();
-  reader.onload = e => {
-    AppState.fileContent = e.target.result;
-    document.getElementById('file-loaded-name').textContent = file.name;
-    document.getElementById('file-loaded-meta').textContent =
-      formatFileSize(file.size) + ' · Pronto para processar';
-    document.getElementById('file-loaded-info').classList.add('show');
-    showToast('Arquivo carregado com sucesso!', 'success');
-  };
-  reader.readAsText(file, 'UTF-8');
+
+  if (isExcel) {
+    reader.onload = e => {
+      AppState.fileContent = e.target.result; // ArrayBuffer
+      document.getElementById('file-loaded-name').textContent = file.name;
+      document.getElementById('file-loaded-meta').textContent =
+        formatFileSize(file.size) + ' · Planilha Excel — Pronto para processar';
+      document.getElementById('file-loaded-info').classList.add('show');
+      showToast('Planilha Excel carregada!', 'success');
+    };
+    reader.readAsArrayBuffer(file);
+  } else {
+    reader.onload = e => {
+      AppState.fileContent = e.target.result;
+      document.getElementById('file-loaded-name').textContent = file.name;
+      document.getElementById('file-loaded-meta').textContent =
+        formatFileSize(file.size) + (isCSV ? ' · CSV' : ' · HTML') + ' — Pronto para processar';
+      document.getElementById('file-loaded-info').classList.add('show');
+      showToast('Arquivo carregado!', 'success');
+    };
+    reader.readAsText(file, 'UTF-8');
+  }
 }
 
 function clearFile() {
@@ -2825,16 +2896,38 @@ function clearFile() {
 
 function processFile() {
   if (!AppState.fileContent) { showToast('Nenhum arquivo carregado.', 'error'); return; }
-  showLoading('Analisando estrutura do documento...');
+  showLoading('Analisando estrutura do arquivo...');
+
+  // Excel precisa da lib XLSX — garantir que carregou
+  if (AppState.fileType === 'excel' && typeof XLSX === 'undefined') {
+    hideLoading();
+    showToast('Biblioteca XLSX não carregada. Verifique sua conexão e tente novamente.', 'error');
+    return;
+  }
+
   setTimeout(() => {
-    parseHTMLCurriculum(AppState.fileContent);
+    try {
+      if (AppState.fileType === 'excel') {
+        parseExcelCurriculum(AppState.fileContent);
+      } else if (AppState.fileType === 'csv') {
+        parseCSVCurriculum(AppState.fileContent);
+      } else {
+        parseHTMLCurriculum(AppState.fileContent);
+      }
+    } catch(err) {
+      console.error('Erro ao processar arquivo:', err);
+      showToast('Erro ao processar arquivo: ' + err.message, 'error');
+      hideLoading();
+      return;
+    }
+
     hideLoading();
     AppState.currentStep = 2;
     AppState.maxUnlockedStep = Math.max(AppState.maxUnlockedStep, 2);
     updateStepUI();
     showToast('Extração concluída! Revise os dados.', 'success');
     updateCompliance();
-  }, 1200);
+  }, 800);
 }
 
 function startFromScratch() {
@@ -2845,6 +2938,205 @@ function startFromScratch() {
   updateStepUI();
   renderDisciplinesTable();
   showToast('Iniciando criação do zero.', 'info');
+}
+
+// ─── PARSER EXCEL (.xlsx / .xls) ───
+function parseExcelCurriculum(arrayBuffer) {
+  const workbook = XLSX.read(arrayBuffer, { type: 'arraybuffer' });
+
+  // Usar a primeira aba, ou a que tiver mais linhas
+  let bestSheet = workbook.Sheets[workbook.SheetNames[0]];
+  let bestRows  = 0;
+
+  workbook.SheetNames.forEach(name => {
+    const sheet = workbook.Sheets[name];
+    const data  = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+    if (data.length > bestRows) { bestRows = data.length; bestSheet = sheet; }
+  });
+
+  const rows = XLSX.utils.sheet_to_json(bestSheet, { header: 1, defval: '' });
+
+  // Mostrar preview textual
+  document.getElementById('raw-preview-content').textContent =
+    rows.slice(0, 40).map(r => r.join('\t')).join('\n') + '\n...[truncado]';
+
+  parseRowsArray(rows);
+}
+
+// ─── PARSER CSV ───
+function parseCSVCurriculum(csvText) {
+  // Detectar separador (vírgula ou ponto-e-vírgula)
+  const sep = csvText.indexOf(';') > csvText.indexOf(',') &&
+              csvText.split('\n')[0].split(';').length > csvText.split('\n')[0].split(',').length
+              ? ';' : ',';
+
+  const rows = csvText.split('\n').map(line => {
+    // Lidar com campos entre aspas
+    const result = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      if (line[i] === '"') { inQ = !inQ; }
+      else if (line[i] === sep && !inQ) { result.push(cur.trim()); cur = ''; }
+      else { cur += line[i]; }
+    }
+    result.push(cur.trim());
+    return result;
+  }).filter(r => r.some(c => c !== ''));
+
+  document.getElementById('raw-preview-content').textContent =
+    rows.slice(0, 40).map(r => r.join(' | ')).join('\n') + '\n...[truncado]';
+
+  parseRowsArray(rows);
+}
+
+// ─── PARSER GENÉRICO DE LINHAS (Excel + CSV) ───
+function parseRowsArray(rows) {
+  if (rows.length === 0) return;
+
+  // ── Detectar colunas pelo cabeçalho ──
+  const headerRow = findHeaderRow(rows);
+  const colMap    = detectColumns(rows[headerRow] || []);
+
+  // ── Detectar nome do curso ──
+  for (let i = 0; i < Math.min(headerRow + 1, 10); i++) {
+    const joined = rows[i].join(' ').trim();
+    if (joined.length > 8 && joined.length < 120 &&
+        /curso|bacharelado|licenciatura|tecnolog/i.test(joined)) {
+      const m = joined.match(/(?:curso[:\s]+|bacharelado[:\s]+|licenciatura[:\s]+|tecnolog[^\s]*[:\s]+)?(.{8,80})/i);
+      if (m) document.getElementById('curso-nome').value = m[1].trim();
+      break;
+    }
+  }
+
+  const disciplines = [];
+  let periodoAtual  = 1;
+
+  for (let i = headerRow + 1; i < rows.length; i++) {
+    const row     = rows[i];
+    const joined  = row.join(' ').toLowerCase().trim();
+    if (!joined) continue;
+
+    // Detectar linha de período/semestre
+    const periodMatch = joined.match(/(\d+)[°º]?\s*(per[ií]odo|semestre|m[oó]dulo|fase|ciclo)/i);
+    if (periodMatch && row.filter(c => String(c).trim()).length <= 3) {
+      periodoAtual = parseInt(periodMatch[1]);
+      continue;
+    }
+
+    // Extrair nome da disciplina
+    const nome = String(
+      colMap.nome >= 0 ? row[colMap.nome] :
+      row.find(c => typeof c === 'string' && c.trim().length > 3) || ''
+    ).trim();
+
+    if (!nome || nome.length < 3 || /^(total|subtotal|carga hor|crédito|componente|disciplina|código)/i.test(nome))
+      continue;
+
+    // Extrair CH
+    let ch = 0;
+    if (colMap.ch >= 0) ch = parseFloat(String(row[colMap.ch]).replace(/[^0-9.]/g, '')) || 0;
+    if (!ch) {
+      const chMatch = row.join('|').match(/\b(15|20|30|36|45|54|60|72|75|80|90|100|120|150|160|180|200|240|300|360|400|420|480)\b/);
+      if (chMatch) ch = parseInt(chMatch[1]);
+    }
+
+    // Extrair créditos
+    let creditos = 0;
+    if (colMap.creditos >= 0) creditos = parseFloat(String(row[colMap.creditos]).replace(/[^0-9.]/g, '')) || 0;
+    if (!creditos && ch) creditos = Math.round(ch / 15);
+
+    // Extrair período da própria linha (se tiver coluna)
+    let periodo = periodoAtual;
+    if (colMap.periodo >= 0) {
+      const pVal = parseInt(String(row[colMap.periodo]).replace(/[^0-9]/g, ''));
+      if (pVal > 0 && pVal <= 20) periodo = pVal;
+    }
+
+    // Pré-requisito
+    let prereq = '';
+    if (colMap.prereq >= 0) prereq = String(row[colMap.prereq] || '').trim().substring(0, 80);
+
+    // Tipo
+    let tipo = 'obrigatoria';
+    const fullText = joined;
+    if (/estágio|estagio/.test(fullText))           tipo = 'estagio';
+    else if (/\btcc\b|trabalho de conclusão/.test(fullText)) tipo = 'tcc';
+    else if (/extensão|extensao/.test(fullText))    tipo = 'extensao';
+    else if (/optativa|eletiva/.test(fullText))     tipo = 'optativa';
+    else if (/complementar/.test(fullText))         tipo = 'complementar';
+    else if (colMap.tipo >= 0) {
+      const tipoVal = String(row[colMap.tipo] || '').toLowerCase();
+      if (/opt|elet/.test(tipoVal)) tipo = 'optativa';
+      else if (/ext/.test(tipoVal)) tipo = 'extensao';
+      else if (/est[aá]g/.test(tipoVal)) tipo = 'estagio';
+      else if (/tcc|conclus/.test(tipoVal)) tipo = 'tcc';
+    }
+
+    disciplines.push({
+      id: Date.now() + Math.random(),
+      nome: formatDisciplineName(nome),
+      periodo,
+      ch: ch || 60,
+      creditos: creditos || 4,
+      tipo,
+      prereq,
+      ementa: '',
+      natureza: 'teorica'
+    });
+  }
+
+  // Deduplicar
+  const seen = new Set();
+  AppState.disciplines = disciplines.filter(d => {
+    const key = d.nome.toLowerCase().trim();
+    if (seen.has(key) || key.length < 3) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, 200);
+
+  // Preencher CH total
+  const chTotal = AppState.disciplines.reduce((s, d) => s + (d.ch || 0), 0);
+  if (chTotal > 0 && !document.getElementById('curso-ch').value) {
+    document.getElementById('curso-ch').value = chTotal;
+  }
+
+  // Preencher componentes especiais
+  const fill = (id, tipo) => {
+    const v = AppState.disciplines.filter(d=>d.tipo===tipo).reduce((s,d)=>s+(d.ch||0),0);
+    if (v) document.getElementById(id).value = v;
+  };
+  fill('ext-estagio', 'estagio');
+  fill('ext-tcc', 'tcc');
+  fill('ext-extensao', 'extensao');
+
+  AppState.extractionDone = true;
+  renderDisciplinesTable();
+  updateExtractionStats();
+  generateExtractionAlerts();
+}
+
+// Detecta qual linha é o cabeçalho (tem palavras-chave)
+function findHeaderRow(rows) {
+  const keywords = /disciplina|componente|código|carga|crédito|período|semestre|nome|ch\b|préreq/i;
+  for (let i = 0; i < Math.min(rows.length, 15); i++) {
+    if (rows[i].some(c => keywords.test(String(c)))) return i;
+  }
+  return 0;
+}
+
+// Mapeia índices de colunas a partir do cabeçalho
+function detectColumns(headerRow) {
+  const map = { nome: -1, ch: -1, creditos: -1, periodo: -1, tipo: -1, prereq: -1 };
+  headerRow.forEach((cell, i) => {
+    const c = String(cell).toLowerCase().trim();
+    if (map.nome    < 0 && /disciplina|componente|nome/.test(c))      map.nome    = i;
+    if (map.ch      < 0 && /\bch\b|carga.hor|hora/.test(c))           map.ch      = i;
+    if (map.creditos< 0 && /crédit|credit/.test(c))                   map.creditos= i;
+    if (map.periodo < 0 && /período|semestre|módulo|per\./.test(c))   map.periodo = i;
+    if (map.tipo    < 0 && /tipo|naturez|obrig|opt/.test(c))          map.tipo    = i;
+    if (map.prereq  < 0 && /pré.req|prereq|dep[ée]nd/.test(c))       map.prereq  = i;
+  });
+  return map;
 }
 
 // ─── PARSER DE HTML ───

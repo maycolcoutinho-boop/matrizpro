@@ -2154,11 +2154,11 @@ table.curriculum-table {
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Diretor(a) da Unidade</label>
+              <label class="form-label" id="label-cargo2">Reitor(a)</label>
               <input class="form-input" id="resp-diretor" placeholder="Prof. Dr. Nome Sobrenome">
             </div>
             <div class="form-group">
-              <label class="form-label">Pró-Reitor(a) de Graduação</label>
+              <label class="form-label" id="label-cargo3">Pró-Reitor(a) Acadêmico(a)</label>
               <input class="form-input" id="resp-proreitor" placeholder="Prof. Dr. Nome Sobrenome">
             </div>
           </div>
@@ -2745,6 +2745,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Calcular % extensão em tempo real
   document.getElementById('ped-extensao-ch').addEventListener('input', calcExtensaoPct);
   document.getElementById('curso-ch').addEventListener('input', calcExtensaoPct);
+
+  // Sincronizar labels de cargos de assinatura ao mudar tipo de IES
+  const orgSelect = document.getElementById('inst-org');
+  if (orgSelect) {
+    orgSelect.addEventListener('change', syncCargoLabels);
+    syncCargoLabels(); // estado inicial
+  }
 
   updateStepUI();
 });
@@ -3944,6 +3951,7 @@ function generateDocument() {
 
     // ── ASSINATURAS (Última página) ──
     const pageSig = createPage(primary, accent, instNome, cabecalho, rodape, 7);
+    const cargos = getCargoLabels(AppState.inst.org);
     pageSig.querySelector('.doc-page-body').innerHTML = `
       <div class="doc-section">
         <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
@@ -3954,29 +3962,28 @@ function generateDocument() {
           Este ementário foi elaborado em conformidade com as Diretrizes Curriculares Nacionais vigentes e aprovado pelos órgãos colegiados competentes da ${instNome}.
         </p>
 
-        <div style="display:flex;gap:60px;flex-wrap:wrap;margin-top:20px;">
-          ${AppState.resp.coord ? `
-          <div>
-            <div class="doc-signature-line">${AppState.resp.coord}<br>
-              <span style="font-size:8pt;color:#666">Coordenador(a) do Curso<br>${AppState.curso.nome || ''}</span>
+        <!-- Linha superior: Coordenador + Cargo 2 -->
+        <div style="display:flex;justify-content:space-between;gap:40px;margin-top:20px;">
+          <div style="flex:1;">
+            <div class="doc-signature-line" style="width:100%;max-width:220px;">
+              ${AppState.resp.coord || '_______________________________'}<br>
+              <span style="font-size:8pt;color:#666;">${cargos.cargo1}<br>${AppState.curso.nome || ''}</span>
             </div>
-          </div>` : `<div><div class="doc-signature-line">_______________________________<br>
-            <span style="font-size:8pt;color:#666">Coordenador(a) do Curso</span></div></div>`}
+          </div>
+          <div style="flex:1;display:flex;justify-content:flex-end;">
+            <div class="doc-signature-line" style="width:100%;max-width:220px;">
+              ${AppState.resp.diretor || '_______________________________'}<br>
+              <span style="font-size:8pt;color:#666;">${cargos.cargo2}</span>
+            </div>
+          </div>
+        </div>
 
-          ${AppState.resp.diretor ? `
-          <div>
-            <div class="doc-signature-line">${AppState.resp.diretor}<br>
-              <span style="font-size:8pt;color:#666">Diretor(a) da Unidade</span>
-            </div>
-          </div>` : `<div><div class="doc-signature-line">_______________________________<br>
-            <span style="font-size:8pt;color:#666">Diretor(a) da Unidade</span></div></div>`}
-
-          ${AppState.resp.proreitor ? `
-          <div>
-            <div class="doc-signature-line">${AppState.resp.proreitor}<br>
-              <span style="font-size:8pt;color:#666">Pró-Reitor(a) de Graduação</span>
-            </div>
-          </div>` : ''}
+        <!-- Linha inferior: Cargo 3 centralizado -->
+        <div style="display:flex;justify-content:center;margin-top:50px;">
+          <div class="doc-signature-line" style="width:100%;max-width:240px;text-align:center;">
+            ${AppState.resp.proreitor || '_______________________________'}<br>
+            <span style="font-size:8pt;color:#666;">${cargos.cargo3}</span>
+          </div>
         </div>
 
         <p style="margin-top:60px;font-size:9pt;color:#999;text-align:center;">
@@ -4590,6 +4597,7 @@ function restoreFromSaveData(data) {
   renderDisciplinesTable();
   updateExtractionStats();
   updateCompliance();
+  syncCargoLabels(); // recalcular cargos conforme tipo de IES restaurado
   updateStepUI();
 }
 
@@ -4605,6 +4613,72 @@ document.addEventListener('keydown', e => {
     document.body.style.overflow = '';
   }
 });
+
+// ─── HIERARQUIA DE ASSINATURAS POR TIPO DE IES ───
+// Retorna os três cargos corretos conforme a organização acadêmica selecionada.
+// Fonte: regulação MEC — portarias de autorização e reconhecimento de cursos.
+function getCargoLabels(orgTipo) {
+  const org = (orgTipo || '').toLowerCase();
+
+  if (org.includes('universidade')) {
+    return {
+      cargo1: 'Coordenador(a) do Curso',
+      cargo2: 'Reitor(a)',
+      cargo3: 'Pró-Reitor(a) Acadêmico(a)',
+    };
+  }
+  if (org.includes('centro universitário') || org.includes('centro universitario')) {
+    return {
+      cargo1: 'Coordenador(a) do Curso',
+      cargo2: 'Reitor(a)',
+      cargo3: 'Pró-Reitor(a) Acadêmico(a)',
+    };
+  }
+  if (org.includes('faculdade')) {
+    return {
+      cargo1: 'Coordenador(a) do Curso',
+      cargo2: 'Diretor(a) Geral',
+      cargo3: 'Coordenador(a) Acadêmico(a)',
+    };
+  }
+  if (org.includes('instituto federal')) {
+    return {
+      cargo1: 'Coordenador(a) do Curso',
+      cargo2: 'Reitor(a)',
+      cargo3: 'Pró-Reitor(a) de Ensino',
+    };
+  }
+  if (org.includes('cefet')) {
+    return {
+      cargo1: 'Coordenador(a) do Curso',
+      cargo2: 'Diretor(a) Geral',
+      cargo3: 'Diretor(a) Acadêmico(a)',
+    };
+  }
+  // Padrão (não informado ou desconhecido): hierarquia universal MEC
+  return {
+    cargo1: 'Coordenador(a) do Curso',
+    cargo2: 'Reitor(a)',
+    cargo3: 'Pró-Reitor(a) Acadêmico(a)',
+  };
+}
+
+// Atualiza os labels do formulário de Responsáveis em tempo real
+// ao mudar o tipo de organização acadêmica (campo inst-org).
+function syncCargoLabels() {
+  const org = document.getElementById('inst-org')?.value || '';
+  const cargos = getCargoLabels(org);
+  const l2 = document.getElementById('label-cargo2');
+  const l3 = document.getElementById('label-cargo3');
+  if (l2) l2.textContent = cargos.cargo2;
+  if (l3) l3.textContent = cargos.cargo3;
+
+  // Atualizar placeholders dos campos
+  const d2 = document.getElementById('resp-diretor');
+  const d3 = document.getElementById('resp-proreitor');
+  if (d2) d2.placeholder = 'Prof. Dr. Nome Sobrenome — ' + cargos.cargo2;
+  if (d3) d3.placeholder = 'Prof. Dr. Nome Sobrenome — ' + cargos.cargo3;
+}
 
 // ─── INICIALIZAÇÃO LIMPA (sem localStorage) ───
 // O progresso é salvo como arquivo .ementapro e carregado pelo botão "Carregar" no header.

@@ -1486,8 +1486,147 @@ table.curriculum-table {
 }
 
 /* ══════════════════════════════════════════
-   IMPRESSÃO / PDF
-══════════════════════════════════════════ */
+   MÓDULO REGULATÓRIO — Decreto 12.456/2025
+   ══════════════════════════════════════════ */
+
+/* Badges de modalidade regulatória */
+.mod-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+}
+.mod-presencial      { background: rgba(13,124,74,.12);  color: #065f46; }
+.mod-presencial-rem  { background: rgba(29,111,164,.12); color: #1e40af; }
+.mod-semipresencial  { background: rgba(124,58,237,.12); color: #5b21b6; }
+.mod-ead             { background: rgba(234,88,12,.12);  color: #9a3412; }
+.mod-extensao-r      { background: rgba(5,150,105,.12);  color: #065f46; }
+.mod-estagio-r       { background: rgba(124,13,94,.1);   color: #7c0d5e; }
+.mod-sincrono        { background: rgba(8,145,178,.12);  color: #0e4f6b; }
+
+/* Painel regulatório no sidebar */
+.reg-panel {
+  margin: 0 20px 12px;
+  padding: 14px;
+  background: rgba(13,27,42,.5);
+  border: 1px solid rgba(201,162,39,.2);
+  border-radius: var(--radius-md);
+}
+.reg-panel-title {
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold-400);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* Barras de percentual */
+.reg-bar-row { margin-bottom: 7px; }
+.reg-bar-label {
+  display: flex; justify-content: space-between;
+  font-size: .7rem; color: rgba(255,255,255,.6);
+  margin-bottom: 3px;
+}
+.reg-bar-track {
+  height: 5px;
+  background: rgba(255,255,255,.1);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.reg-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+}
+.reg-bar-ok    { background: #10b981; }
+.reg-bar-warn  { background: #f59e0b; }
+.reg-bar-error { background: #ef4444; }
+
+/* Status chip */
+.reg-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: .7rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  letter-spacing: .04em;
+}
+.reg-status-ok    { background: rgba(16,185,129,.2); color: #10b981; }
+.reg-status-warn  { background: rgba(245,158,11,.2); color: #f59e0b; }
+.reg-status-error { background: rgba(239,68,68,.2);  color: #ef4444; }
+
+/* Alert regulatório */
+.reg-alert {
+  padding: 10px 13px;
+  border-radius: var(--radius-md);
+  font-size: .82rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  border-left: 3px solid;
+  display: flex; gap: 9px;
+}
+.reg-alert-ok    { background: #f0fdf4; border-color: #10b981; color: #065f46; }
+.reg-alert-warn  { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
+.reg-alert-error { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+.reg-alert-info  { background: #eff6ff; border-color: #3b82f6; color: #1e3a8a; }
+
+/* Caixa do painel regulatório na tela */
+.reg-panel-box {
+  background: var(--white);
+  border: 1.5px solid var(--slate-300);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+}
+.reg-panel-box-header {
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #0d1b2a, #1e3a5f);
+  display: flex; align-items: center; gap: 10px;
+}
+.reg-panel-box-title {
+  font-family: var(--font-display);
+  font-size: .95rem; font-weight: 600; color: white;
+}
+.reg-panel-box-body { padding: 20px; }
+
+/* Gauge circular mini */
+.reg-gauge {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px;
+}
+.reg-gauge-value {
+  font-family: var(--font-display);
+  font-size: 1.5rem; font-weight: 700; color: var(--navy-900);
+  line-height: 1;
+}
+.reg-gauge-label {
+  font-size: .68rem; color: var(--slate-500);
+  text-transform: uppercase; letter-spacing: .05em;
+  text-align: center; font-family: var(--font-mono);
+}
+
+/* Tabela regulatória no documento */
+.doc-reg-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; margin: 10px 0; }
+.doc-reg-table th {
+  padding: 7px 10px; font-size: 8.5pt; font-weight: 600;
+  letter-spacing: .03em; text-align: left;
+}
+.doc-reg-table td { padding: 7px 10px; vertical-align: middle; }
+.doc-reg-table tr:nth-child(even) td { background: #f8f9fa; }
+.doc-reg-table tr:last-child td { border-bottom: none; }
+
+.doc-status-ok    { color: #065f46; font-weight: 700; }
+.doc-status-warn  { color: #92400e; font-weight: 700; }
+.doc-status-error { color: #991b1b; font-weight: 700; }
+
 @media print {
   #app-header,
   #app-sidebar,
@@ -1685,6 +1824,14 @@ table.curriculum-table {
       <div class="compliance-item">
         <div class="compliance-dot idle" id="comp-comp"></div>
         <span>Ativ. Complementares</span>
+      </div>
+    </div>
+
+    <!-- PAINEL REGULATÓRIO Dec. 12.456/2025 -->
+    <div class="reg-panel" id="reg-sidebar-panel">
+      <div class="reg-panel-title">⚖ Marco Regulatório 2025</div>
+      <div id="reg-sidebar-content">
+        <div style="font-size:.72rem;color:rgba(255,255,255,.3);font-style:italic;">Cadastre disciplinas para ver os percentuais.</div>
       </div>
     </div>
 
@@ -1898,6 +2045,7 @@ table.curriculum-table {
                   <th style="width:80px">CH (h)</th>
                   <th style="width:70px">Créditos</th>
                   <th style="width:120px">Tipo</th>
+                  <th style="width:140px">Modalidade</th>
                   <th style="width:150px">Pré-requisito</th>
                   <th style="width:80px">Ações</th>
                 </tr>
@@ -2639,6 +2787,35 @@ table.curriculum-table {
           <label class="form-label">Ementa resumida</label>
           <textarea class="form-textarea" id="modal-disc-ementa" rows="3" placeholder="Breve descrição dos conteúdos abordados..."></textarea>
         </div>
+        <!-- ── MÓDULO REGULATÓRIO: campos de modalidade ── -->
+        <div class="form-group form-grid-full" style="border-top:1.5px dashed var(--slate-300);padding-top:16px;margin-top:4px;">
+          <div style="font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--navy-500);margin-bottom:12px;">⚖ Adequação Regulatória — Dec. 12.456/2025</div>
+        </div>
+        <div class="form-group form-grid-full">
+          <label class="form-label">Modalidade de Oferta <span class="required">*</span></label>
+          <select class="form-select" id="modal-disc-modalidade" onchange="syncPercFields()">
+            <option value="presencial">Presencial</option>
+            <option value="presencial-remota">Presencial com carga remota permitida</option>
+            <option value="semipresencial">Semipresencial</option>
+            <option value="ead">EAD (Assíncrono)</option>
+            <option value="extensao-r">Extensão</option>
+            <option value="estagio-r">Estágio</option>
+            <option value="sincrono">Atividade Síncrona Mediada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">% Presencial <span class="hint" id="hint-perc-pres">0–100</span></label>
+          <input class="form-input" id="modal-disc-perc-pres" type="number" min="0" max="100" placeholder="100" oninput="autoBalancePerc('pres')">
+        </div>
+        <div class="form-group">
+          <label class="form-label">% Remoto/EAD <span class="hint" id="hint-perc-ead">0–100</span></label>
+          <input class="form-input" id="modal-disc-perc-ead" type="number" min="0" max="100" placeholder="0" oninput="autoBalancePerc('ead')">
+        </div>
+        <div class="form-group form-grid-full">
+          <label class="form-label">% Síncrono Mediado <span class="hint">ex: videoaula ao vivo, tutoria síncrona</span></label>
+          <input class="form-input" id="modal-disc-perc-sinc" type="number" min="0" max="100" placeholder="0">
+          <span class="form-help" id="perc-sum-hint" style="color:var(--slate-500)">Presencial + Remoto deve somar 100%</span>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -3322,7 +3499,7 @@ function renderDisciplinesTable() {
   document.getElementById('disc-count').textContent = AppState.disciplines.length;
 
   if (AppState.disciplines.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8">
+    tbody.innerHTML = `<tr><td colspan="9">
       <div class="empty-state">
         <div class="empty-state-icon">📋</div>
         <div class="empty-state-title">Nenhuma disciplina ainda</div>
@@ -3340,18 +3517,29 @@ function renderDisciplinesTable() {
     complementar:'<span class="type-badge type-comp">Complementar</span>',
   };
 
+  const modBadges = {
+    'presencial':       '<span class="mod-badge mod-presencial">Presencial</span>',
+    'presencial-remota':'<span class="mod-badge mod-presencial-rem">Pres.+Remoto</span>',
+    'semipresencial':   '<span class="mod-badge mod-semipresencial">Semipres.</span>',
+    'ead':              '<span class="mod-badge mod-ead">EAD</span>',
+    'extensao-r':       '<span class="mod-badge mod-extensao-r">Extensão</span>',
+    'estagio-r':        '<span class="mod-badge mod-estagio-r">Estágio</span>',
+    'sincrono':         '<span class="mod-badge mod-sincrono">Síncrono</span>',
+  };
+
   tbody.innerHTML = AppState.disciplines.map((d, i) => `
     <tr>
       <td style="font-family:var(--font-mono);font-size:.75rem;color:var(--slate-500)">${i+1}</td>
-      <td style="font-weight:600;color:var(--navy-900);max-width:260px">
+      <td style="font-weight:600;color:var(--navy-900);max-width:240px">
         <span contenteditable="true" class="inline-edit"
-          onblur="AppState.disciplines[${i}].nome=this.textContent.trim();updateExtractionStats()"
+          onblur="AppState.disciplines[${i}].nome=this.textContent.trim();updateExtractionStats();RegModule.updateSidebarPanel()"
           >${escHtml(d.nome)}</span>
       </td>
       <td><div class="period-badge">${d.periodo || '?'}</div></td>
       <td style="font-family:var(--font-mono);font-weight:600">${d.ch || '—'}</td>
       <td style="font-family:var(--font-mono)">${d.creditos || '—'}</td>
       <td>${typeBadges[d.tipo] || typeBadges.obrigatoria}</td>
+      <td>${modBadges[d.modalidade || 'presencial'] || modBadges['presencial']}</td>
       <td style="font-size:.8rem;color:var(--slate-500)">${escHtml(d.prereq||'—')}</td>
       <td>
         <div style="display:flex;gap:4px">
@@ -3363,6 +3551,7 @@ function renderDisciplinesTable() {
   `).join('');
 
   updateExtractionStats();
+  RegModule.updateSidebarPanel();
 }
 
 function updateExtractionStats() {
@@ -3427,6 +3616,12 @@ function addDiscipline() {
   document.getElementById('modal-disc-natureza').value = 'teorica';
   document.getElementById('modal-disc-prereq').value = '';
   document.getElementById('modal-disc-ementa').value = '';
+  // Regulatório
+  document.getElementById('modal-disc-modalidade').value = 'presencial';
+  document.getElementById('modal-disc-perc-pres').value = '100';
+  document.getElementById('modal-disc-perc-ead').value = '0';
+  document.getElementById('modal-disc-perc-sinc').value = '0';
+  syncPercFields();
   openModal('modal-discipline');
 }
 
@@ -3442,12 +3637,29 @@ function editDiscipline(idx) {
   document.getElementById('modal-disc-natureza').value = d.natureza || 'teorica';
   document.getElementById('modal-disc-prereq').value = d.prereq || '';
   document.getElementById('modal-disc-ementa').value = d.ementa || '';
+  // Regulatório
+  document.getElementById('modal-disc-modalidade').value = d.modalidade || 'presencial';
+  document.getElementById('modal-disc-perc-pres').value = d.percPres ?? 100;
+  document.getElementById('modal-disc-perc-ead').value  = d.percEad  ?? 0;
+  document.getElementById('modal-disc-perc-sinc').value = d.percSinc ?? 0;
+  syncPercFields();
   openModal('modal-discipline');
 }
 
 function saveDiscipline() {
   const nome = document.getElementById('modal-disc-nome').value.trim();
   if (!nome) { showToast('Informe o nome da disciplina.', 'error'); return; }
+
+  const percPres = parseInt(document.getElementById('modal-disc-perc-pres').value) || 0;
+  const percEad  = parseInt(document.getElementById('modal-disc-perc-ead').value)  || 0;
+  const percSinc = parseInt(document.getElementById('modal-disc-perc-sinc').value) || 0;
+
+  if (percPres + percEad !== 100) {
+    showToast('% Presencial + % Remoto deve somar 100%.', 'warn');
+    document.getElementById('perc-sum-hint').style.color = 'var(--danger)';
+    return;
+  }
+  document.getElementById('perc-sum-hint').style.color = 'var(--slate-500)';
 
   const disc = {
     id: Date.now() + Math.random(),
@@ -3459,6 +3671,9 @@ function saveDiscipline() {
     natureza: document.getElementById('modal-disc-natureza').value,
     prereq: document.getElementById('modal-disc-prereq').value.trim(),
     ementa: document.getElementById('modal-disc-ementa').value.trim(),
+    // Campos regulatórios
+    modalidade: document.getElementById('modal-disc-modalidade').value,
+    percPres, percEad, percSinc,
   };
 
   if (AppState.editingDisciplineIndex >= 0) {
@@ -3472,6 +3687,7 @@ function saveDiscipline() {
   closeModal('modal-discipline');
   renderDisciplinesTable();
   updateCompliance();
+  RegModule.updateSidebarPanel(); // atualiza painel regulatório
 }
 
 function removeDiscipline(idx) {
@@ -3993,6 +4209,11 @@ function generateDocument() {
       </div>
     `;
     preview.appendChild(pageSig);
+
+    // ── PÁGINA REGULATÓRIA — Dec. 12.456/2025 ──
+    const pageReg = createPage(primary, accent, instNome, cabecalho, rodape, 8);
+    pageReg.querySelector('.doc-page-body').innerHTML = RegModule.buildDocPage(primary, accent);
+    preview.appendChild(pageReg);
 
     // Verificar conformidade
     renderConformidadeChecks();
@@ -4678,6 +4899,319 @@ function syncCargoLabels() {
   const d3 = document.getElementById('resp-proreitor');
   if (d2) d2.placeholder = 'Prof. Dr. Nome Sobrenome — ' + cargos.cargo2;
   if (d3) d3.placeholder = 'Prof. Dr. Nome Sobrenome — ' + cargos.cargo3;
+}
+
+// ═══════════════════════════════════════════════════════════
+// MÓDULO REGULATÓRIO — Dec. 12.456/2025 + Portarias MEC
+// Implementação aditiva — não altera funções existentes
+// ═══════════════════════════════════════════════════════════
+const RegModule = (() => {
+
+  // Cursos com restrição regulatória de modalidade (exigem presencialidade mínima)
+  const CURSOS_RESTRITOS = [
+    'medicina','direito','odontologia','enfermagem','psicologia',
+    'farmácia','fisioterapia','fonoaudiologia','terapia ocupacional',
+    'nutrição','educação física','engenharia civil','arquitetura',
+    'licenciatura','pedagogia','letras','história','geografia',
+    'biologia','química','física','matemática','ciências sociais',
+  ];
+
+  const MOD_LABELS = {
+    'presencial':        'Presencial',
+    'presencial-remota': 'Presencial c/ Remoto',
+    'semipresencial':    'Semipresencial',
+    'ead':               'EAD Assíncrono',
+    'extensao-r':        'Extensão',
+    'estagio-r':         'Estágio',
+    'sincrono':          'Síncrono Mediado',
+  };
+
+  // ─── Calcular proporções regulatórias a partir das disciplinas ───
+  function calcProportions() {
+    const discs = AppState.disciplines;
+    const cursoCH = AppState.curso.ch || AppState.totalCH || 1;
+
+    let chPres = 0, chEad = 0, chSinc = 0, chExt = 0, chEst = 0;
+
+    discs.forEach(d => {
+      const ch   = parseInt(d.ch) || 0;
+      const mod  = d.modalidade || 'presencial';
+      const pPres = (d.percPres ?? 100) / 100;
+      const pEad  = (d.percEad  ?? 0)   / 100;
+      const pSinc = (d.percSinc ?? 0)   / 100;
+
+      if (mod === 'extensao-r') { chExt += ch; return; }
+      if (mod === 'estagio-r')  { chEst += ch; return; }
+      if (mod === 'sincrono')   { chSinc += ch; chPres += ch; return; }
+
+      chPres += ch * pPres;
+      chEad  += ch * pEad;
+      chSinc += ch * pSinc;
+    });
+
+    const total = chPres + chEad + chExt + chEst || 1;
+    return {
+      cursoCH,
+      chPres: Math.round(chPres),
+      chEad:  Math.round(chEad),
+      chSinc: Math.round(chSinc),
+      chExt:  Math.round(chExt),
+      chEst:  Math.round(chEst),
+      pctPres: ((chPres / cursoCH) * 100).toFixed(1),
+      pctEad:  ((chEad  / cursoCH) * 100).toFixed(1),
+      pctSinc: ((chSinc / cursoCH) * 100).toFixed(1),
+      pctExt:  ((chExt  / cursoCH) * 100).toFixed(1),
+      pctEst:  ((chEst  / cursoCH) * 100).toFixed(1),
+    };
+  }
+
+  // ─── Validar conformidade por modalidade do curso ───
+  function validate(props) {
+    const modalidade = (AppState.curso.modalidade || '').toLowerCase();
+    const cursoNome  = (AppState.curso.nome || '').toLowerCase();
+    const alerts = [];
+    let status = 'ok'; // ok | warn | error
+
+    const pctPres = parseFloat(props.pctPres);
+    const pctEad  = parseFloat(props.pctEad);
+    const pctSinc = parseFloat(props.pctSinc);
+
+    // ── Validações por modalidade ──
+    if (modalidade.includes('presencial') && !modalidade.includes('semi')) {
+      if (pctEad > 40) {
+        alerts.push({ level:'error', msg: `EAD representa ${pctEad}% da CH — excede 40% permitido para cursos presenciais (Dec. 12.456/2025, Art. 8º).` });
+        status = 'error';
+      } else if (pctEad > 20) {
+        alerts.push({ level:'warn', msg: `EAD representa ${pctEad}% da CH — atenção ao limite de 40% para cursos presenciais.` });
+        if (status === 'ok') status = 'warn';
+      }
+    }
+
+    if (modalidade.includes('semipresencial') || modalidade.includes('híbrido')) {
+      if (pctPres < 30) {
+        alerts.push({ level:'error', msg: `Presencialidade de ${pctPres}% é inferior ao mínimo de 30% exigido para cursos semipresenciais.` });
+        status = 'error';
+      }
+      if (pctSinc < 20) {
+        alerts.push({ level:'warn', msg: `Atividades síncronas representam ${pctSinc}% — recomenda-se mínimo de 20% para semipresencial.` });
+        if (status === 'ok') status = 'warn';
+      }
+    }
+
+    if (modalidade.includes('ead') && !modalidade.includes('semi')) {
+      if (pctPres + pctSinc < 20) {
+        alerts.push({ level:'warn', msg: `Presencial + Síncrono: ${(pctPres + pctSinc).toFixed(1)}% — cursos EAD devem prever ao menos 20% de interação direta (Art. 10º).` });
+        if (status === 'ok') status = 'warn';
+      }
+    }
+
+    // ── Cursos restritos ──
+    const isRestrito = CURSOS_RESTRITOS.some(c => cursoNome.includes(c));
+    if (isRestrito && pctEad > 20) {
+      alerts.push({ level:'error', msg: `Curso de "${AppState.curso.nome}" possui restrição regulatória — EAD não pode exceder 20% da CH total (Portarias MEC vigentes).` });
+      status = 'error';
+    }
+
+    // ── Extensão ──
+    if (parseFloat(props.pctExt) < 10 && AppState.curso.ch > 0) {
+      alerts.push({ level:'warn', msg: `Extensão curricularizada: ${props.pctExt}% — mínimo exigido é 10% da CH total (Res. CNE/CES 7/2018).` });
+      if (status === 'ok') status = 'warn';
+    }
+
+    // ── Sem dados suficientes ──
+    if (AppState.disciplines.length === 0) {
+      alerts.push({ level:'info', msg: 'Cadastre as disciplinas para calcular os percentuais regulatórios.' });
+      status = 'warn';
+    }
+
+    // ── Sugestões ──
+    const sugestoes = [];
+    if (status !== 'ok') {
+      if (pctEad > 40) sugestoes.push('Reclassifique parte das disciplinas EAD como "Presencial com carga remota".');
+      if (pctPres < 30 && modalidade.includes('semi')) sugestoes.push('Aumente a proporção presencial em disciplinas do ciclo básico.');
+      if (pctSinc < 20) sugestoes.push('Inclua atividades síncronas mediadas (videoconferência, tutoria ao vivo).');
+      if (parseFloat(props.pctExt) < 10) sugestoes.push('Adicione ou reclassifique disciplinas de extensão para atingir 10% da CH.');
+    }
+
+    return { status, alerts, sugestoes };
+  }
+
+  // ─── Painel do Sidebar ───
+  function updateSidebarPanel() {
+    const el = document.getElementById('reg-sidebar-content');
+    if (!el) return;
+    if (AppState.disciplines.length === 0) {
+      el.innerHTML = `<div style="font-size:.72rem;color:rgba(255,255,255,.3);font-style:italic;">Cadastre disciplinas para ver os percentuais.</div>`;
+      return;
+    }
+
+    const p = calcProportions();
+    const v = validate(p);
+
+    const statusLabel = { ok: '✓ Conforme', warn: '⚠ Atenção', error: '✕ Inconformidade' };
+    const statusCls   = { ok: 'reg-status-ok', warn: 'reg-status-warn', error: 'reg-status-error' };
+
+    const bars = [
+      { label: 'Presencial', pct: p.pctPres, cls: parseFloat(p.pctPres) >= 60 ? 'reg-bar-ok' : parseFloat(p.pctPres) >= 30 ? 'reg-bar-warn' : 'reg-bar-error' },
+      { label: 'EAD',        pct: p.pctEad,  cls: parseFloat(p.pctEad) <= 20 ? 'reg-bar-ok' : parseFloat(p.pctEad) <= 40 ? 'reg-bar-warn' : 'reg-bar-error' },
+      { label: 'Síncrono',   pct: p.pctSinc, cls: 'reg-bar-ok' },
+      { label: 'Extensão',   pct: p.pctExt,  cls: parseFloat(p.pctExt) >= 10 ? 'reg-bar-ok' : 'reg-bar-warn' },
+    ];
+
+    el.innerHTML = `
+      <div style="margin-bottom:10px;">
+        <span class="reg-status ${statusCls[v.status]}">${statusLabel[v.status]}</span>
+      </div>
+      ${bars.map(b => `
+        <div class="reg-bar-row">
+          <div class="reg-bar-label"><span>${b.label}</span><span>${b.pct}%</span></div>
+          <div class="reg-bar-track"><div class="reg-bar-fill ${b.cls}" style="width:${Math.min(b.pct,100)}%"></div></div>
+        </div>
+      `).join('')}
+      ${v.alerts.length ? `<div style="margin-top:8px;font-size:.7rem;color:rgba(255,200,50,.85)">⚠ ${v.alerts.length} alerta${v.alerts.length>1?'s':''} — veja o Painel Regulatório</div>` : ''}
+    `;
+  }
+
+  // ─── Painel da Etapa 5 (dentro do documento) ───
+  function buildDocPage(primary, accent) {
+    const p = calcProportions();
+    const v = validate(p);
+
+    const statusLabel = { ok: 'CONFORME', warn: 'EM AJUSTE', error: 'NÃO CONFORME' };
+    const statusColor = { ok: '#065f46', warn: '#92400e', error: '#991b1b' };
+    const statusBg    = { ok: '#d1fae5', warn: '#fef3c7', error: '#fee2e2' };
+
+    const legalRefs = [
+      'Decreto nº 12.456/2025 — Marco Regulatório da Educação Superior',
+      'Portaria MEC nº 2.117/2019 — EAD em cursos presenciais',
+      'Resolução CNE/CES nº 7/2018 — Curricularização da Extensão',
+      'Lei nº 9.394/1996 — LDB (Art. 80)',
+      'Lei nº 13.005/2014 — PNE (Meta 12)',
+    ];
+
+    const alertsHTML = v.alerts.map(a => {
+      const colors = { error:'#fef2f2|#b91c1c', warn:'#fffbeb|#92400e', info:'#eff6ff|#1e40af' };
+      const [bg, col] = (colors[a.level] || colors.info).split('|');
+      const icon = a.level === 'error' ? '✕' : a.level === 'warn' ? '⚠' : 'ℹ';
+      return `<tr><td style="background:${bg};color:${col};padding:7px 10px;font-size:9pt;">${icon} ${a.msg}</td></tr>`;
+    }).join('');
+
+    const sugestoesHTML = v.sugestoes.length
+      ? v.sugestoes.map(s => `<li style="font-size:9.5pt;color:#374151;padding:4px 0;border-bottom:1px dotted #e5e7eb;">${s}</li>`).join('')
+      : '<li style="font-size:9.5pt;color:#6b7280;">Nenhuma inconsistência detectada. Ementário em conformidade regulatória.</li>';
+
+    return `
+      <div class="doc-section">
+        <div class="doc-section-title" style="color:${primary}; border-color:${accent};">
+          <div class="doc-section-number" style="background:${primary}">R</div>
+          Quadro de Adequação ao Marco Regulatório da Educação Superior
+        </div>
+
+        <!-- Status geral -->
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:8px;margin-bottom:16px;
+          background:${statusBg[v.status]};border:1.5px solid ${statusColor[v.status]};">
+          <div style="font-size:26pt;">⚖</div>
+          <div>
+            <div style="font-size:11pt;font-weight:700;color:${statusColor[v.status]};">
+              ${statusLabel[v.status]}
+            </div>
+            <div style="font-size:9pt;color:#555;margin-top:2px;">
+              Decreto nº 12.456/2025 · Modalidade do curso: ${AppState.curso.modalidade || 'Não informada'}
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela de percentuais -->
+        <p style="font-size:10pt;font-weight:700;color:${primary};margin:14px 0 8px;">Distribuição de Carga Horária por Modalidade</p>
+        <table class="doc-reg-table" style="border:1px solid #e5e7eb;">
+          <thead>
+            <tr style="background:${primary};">
+              <th style="color:white;width:38%">Modalidade</th>
+              <th style="color:white;text-align:center;width:18%">CH (h)</th>
+              <th style="color:white;text-align:center;width:18%">% da CH Total</th>
+              <th style="color:white;text-align:center;width:26%">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${[
+              ['Presencial Físico',        p.chPres, p.pctPres, parseFloat(p.pctPres)>=60?'ok':parseFloat(p.pctPres)>=30?'warn':'error'],
+              ['EAD Assíncrono',           p.chEad,  p.pctEad,  parseFloat(p.pctEad)<=20?'ok':parseFloat(p.pctEad)<=40?'warn':'error'],
+              ['Síncrono Mediado',         p.chSinc, p.pctSinc, 'ok'],
+              ['Extensão Curricularizada', p.chExt,  p.pctExt,  parseFloat(p.pctExt)>=10?'ok':'warn'],
+              ['Estágio Supervisionado',   p.chEst,  p.pctEst,  p.chEst>0?'ok':'warn'],
+            ].map(([label, ch, pct, st]) => {
+              const icons = { ok:'✓ Conforme', warn:'⚠ Verificar', error:'✕ Inconformidade' };
+              const cls   = { ok:'doc-status-ok', warn:'doc-status-warn', error:'doc-status-error' };
+              return `<tr>
+                <td style="font-weight:500">${label}</td>
+                <td style="text-align:center;font-family:monospace;font-weight:700">${ch}</td>
+                <td style="text-align:center;font-family:monospace;font-weight:700">${pct}%</td>
+                <td style="text-align:center;" class="${cls[st]}">${icons[st]}</td>
+              </tr>`;
+            }).join('')}
+            <tr style="background:${primary};">
+              <td style="color:white;font-weight:700">TOTAL GERAL</td>
+              <td style="color:white;font-weight:700;text-align:center;font-family:monospace">${p.cursoCH}</td>
+              <td style="color:white;font-weight:700;text-align:center">100%</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Alertas -->
+        ${v.alerts.length ? `
+        <p style="font-size:10pt;font-weight:700;color:${primary};margin:16px 0 8px;">Alertas Regulatórios</p>
+        <table style="width:100%;border-collapse:collapse;">${alertsHTML}</table>` : ''}
+
+        <!-- Sugestões -->
+        <p style="font-size:10pt;font-weight:700;color:${primary};margin:16px 0 8px;">Recomendações de Adequação</p>
+        <ul style="list-style:none;padding:0;margin:0;">${sugestoesHTML}</ul>
+
+        <!-- Base legal -->
+        <p style="font-size:10pt;font-weight:700;color:${primary};margin:16px 0 8px;">Referências Normativas Aplicadas</p>
+        <ul style="list-style:none;padding:0;margin:0;">
+          ${legalRefs.map(l => `<li style="font-size:9pt;color:#374151;padding:4px 0;border-bottom:1px dotted #e5e7eb;display:flex;gap:8px;align-items:center;"><span style="color:${accent};font-weight:700">▸</span>${l}</li>`).join('')}
+        </ul>
+
+        <p style="margin-top:18px;font-size:8.5pt;color:#999;font-style:italic;">
+          Análise gerada automaticamente pelo EmentaPro com base nas normativas vigentes.
+          Consulte a assessoria jurídica institucional para validação final.
+        </p>
+      </div>
+    `;
+  }
+
+  return { calcProportions, validate, updateSidebarPanel, buildDocPage };
+})();
+
+// ─── Helpers do modal de disciplina ───
+function syncPercFields() {
+  const mod = document.getElementById('modal-disc-modalidade')?.value || 'presencial';
+  const presets = {
+    'presencial':        [100, 0, 0],
+    'presencial-remota': [70,  30, 10],
+    'semipresencial':    [50,  50, 20],
+    'ead':               [0,   100, 0],
+    'extensao-r':        [80,  20, 0],
+    'estagio-r':         [100, 0,  0],
+    'sincrono':          [0,   0,  100],
+  };
+  const [pres, ead, sinc] = presets[mod] || [100, 0, 0];
+  document.getElementById('modal-disc-perc-pres').value = pres;
+  document.getElementById('modal-disc-perc-ead').value  = ead;
+  document.getElementById('modal-disc-perc-sinc').value = sinc;
+  document.getElementById('perc-sum-hint').style.color  = 'var(--slate-500)';
+}
+
+function autoBalancePerc(changed) {
+  const pres = parseInt(document.getElementById('modal-disc-perc-pres').value) || 0;
+  const ead  = parseInt(document.getElementById('modal-disc-perc-ead').value)  || 0;
+  if (changed === 'pres') document.getElementById('modal-disc-perc-ead').value = Math.max(0, 100 - pres);
+  if (changed === 'ead')  document.getElementById('modal-disc-perc-pres').value = Math.max(0, 100 - ead);
+  const hint = document.getElementById('perc-sum-hint');
+  const sum = parseInt(document.getElementById('modal-disc-perc-pres').value) + parseInt(document.getElementById('modal-disc-perc-ead').value);
+  hint.style.color = sum === 100 ? 'var(--success)' : 'var(--danger)';
+  hint.textContent = sum === 100 ? 'Presencial + Remoto = 100% ✓' : `Presencial + Remoto = ${sum}% (deve ser 100%)`;
 }
 
 // ─── INICIALIZAÇÃO LIMPA (sem localStorage) ───

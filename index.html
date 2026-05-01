@@ -4178,7 +4178,7 @@ function generateDocument() {
           Este ementário foi elaborado em conformidade com as Diretrizes Curriculares Nacionais vigentes e aprovado pelos órgãos colegiados competentes da ${instNome}.
         </p>
 
-        <!-- Linha superior: Coordenador + Cargo 2 -->
+        <!-- Linha superior: Coordenador + Cargo 3 (Pró-Reitor) -->
         <div style="display:flex;justify-content:space-between;gap:40px;margin-top:20px;">
           <div style="flex:1;">
             <div class="doc-signature-line" style="width:100%;max-width:220px;">
@@ -4188,17 +4188,17 @@ function generateDocument() {
           </div>
           <div style="flex:1;display:flex;justify-content:flex-end;">
             <div class="doc-signature-line" style="width:100%;max-width:220px;">
-              ${AppState.resp.diretor || '_______________________________'}<br>
-              <span style="font-size:8pt;color:#666;">${cargos.cargo2}</span>
+              ${AppState.resp.proreitor || '_______________________________'}<br>
+              <span style="font-size:8pt;color:#666;">${cargos.cargo3}</span>
             </div>
           </div>
         </div>
 
-        <!-- Linha inferior: Cargo 3 centralizado -->
+        <!-- Linha inferior: Cargo 2 (Reitor) centralizado -->
         <div style="display:flex;justify-content:center;margin-top:50px;">
           <div class="doc-signature-line" style="width:100%;max-width:240px;text-align:center;">
-            ${AppState.resp.proreitor || '_______________________________'}<br>
-            <span style="font-size:8pt;color:#666;">${cargos.cargo3}</span>
+            ${AppState.resp.diretor || '_______________________________'}<br>
+            <span style="font-size:8pt;color:#666;">${cargos.cargo2}</span>
           </div>
         </div>
 

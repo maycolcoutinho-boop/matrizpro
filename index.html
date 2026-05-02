@@ -1924,44 +1924,104 @@ table.curriculum-table {
         <div style="padding:14px 20px;background:var(--navy-900);display:flex;align-items:center;gap:10px;">
           <span style="font-size:18px;">📊</span>
           <span style="font-family:var(--font-display);font-size:.95rem;font-weight:600;color:white;">Formato recomendado para planilhas Excel / CSV</span>
-          <button onclick="this.closest('div').nextElementSibling.classList.toggle('hidden')" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:white;border-radius:4px;padding:4px 10px;cursor:pointer;font-size:.78rem;">mostrar / ocultar</button>
+          <button onclick="this.closest('.excel-guide-wrapper').querySelector('.excel-guide-body').classList.toggle('hidden')"
+            style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.8);border-radius:4px;padding:4px 12px;cursor:pointer;font-size:.78rem;letter-spacing:.03em;">
+            mostrar / ocultar
+          </button>
         </div>
-        <div style="padding:18px 22px;">
-          <p style="font-size:.85rem;color:var(--slate-600);margin-bottom:14px;">
-            A planilha pode ter qualquer estrutura — o sistema detecta as colunas automaticamente. Para melhores resultados, utilize os nomes de coluna abaixo:
+        <div class="excel-guide-body excel-guide-wrapper" style="padding:22px 24px;">
+
+          <p style="font-size:.86rem;color:var(--slate-600);margin-bottom:18px;line-height:1.6;">
+            A planilha pode ter <strong>qualquer estrutura</strong> — o sistema detecta as colunas automaticamente.
+            Para melhores resultados, use os nomes de coluna indicados abaixo.
           </p>
-          <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:.82rem;">
+
+          <!-- Tabela de colunas -->
+          <div style="overflow-x:auto;border-radius:var(--radius-md);border:1px solid var(--slate-300);margin-bottom:16px;">
+            <table style="width:100%;border-collapse:collapse;font-size:.83rem;">
               <thead>
                 <tr style="background:var(--navy-800);">
-                  <th style="padding:8px 12px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;">COLUNA</th>
-                  <th style="padding:8px 12px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;">EXEMPLOS DE NOME</th>
-                  <th style="padding:8px 12px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;">EXEMPLO DE VALOR</th>
-                  <th style="padding:8px 12px;color:rgba(255,255,255,.9);text-align:center;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;">OBRIG.</th>
+                  <th style="padding:10px 14px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;white-space:nowrap;">COLUNA</th>
+                  <th style="padding:10px 14px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;">NOMES ACEITOS PELO SISTEMA</th>
+                  <th style="padding:10px 14px;color:rgba(255,255,255,.9);text-align:left;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;">EXEMPLO DE VALOR</th>
+                  <th style="padding:10px 14px;color:rgba(255,255,255,.9);text-align:center;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;white-space:nowrap;">OBRIG.</th>
                 </tr>
               </thead>
               <tbody>
-                ${[
-                  ['Disciplina',  '"Disciplina", "Componente", "Nome"',     'Cálculo Diferencial e Integral I', '✅'],
-                  ['CH',          '"CH", "Carga Horária", "Horas"',         '60',  '✅'],
-                  ['Créditos',    '"Créditos", "Créd."',                    '4',   '—'],
-                  ['Período',     '"Período", "Semestre", "Módulo"',        '2',   '—'],
-                  ['Tipo',        '"Tipo", "Natureza", "Obrig./Opt."',      'Obrigatória / Optativa', '—'],
-                  ['Pré-requisito','"Pré-requisito", "Prereq"',             'Cálculo I', '—'],
-                ].map(([col, nomes, ex, obr]) => `
-                  <tr style="border-bottom:1px solid var(--slate-100);">
-                    <td style="padding:8px 12px;font-weight:700;color:var(--navy-800)">${col}</td>
-                    <td style="padding:8px 12px;font-family:var(--font-mono);font-size:.75rem;color:var(--slate-600)">${nomes}</td>
-                    <td style="padding:8px 12px;color:var(--slate-700)">${ex}</td>
-                    <td style="padding:8px 12px;text-align:center">${obr}</td>
-                  </tr>
-                `).join('')}
+                <tr style="border-bottom:1px solid var(--slate-100);">
+                  <td style="padding:10px 14px;font-weight:700;color:var(--navy-800);white-space:nowrap;">Disciplina</td>
+                  <td style="padding:10px 14px;">
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Disciplina</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Componente</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;">Nome</span>
+                  </td>
+                  <td style="padding:10px 14px;color:var(--slate-600);font-size:.82rem;">Cálculo Diferencial e Integral I</td>
+                  <td style="padding:10px 14px;text-align:center;font-size:1rem;">✅</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--slate-100);background:var(--slate-50);">
+                  <td style="padding:10px 14px;font-weight:700;color:var(--navy-800);">CH</td>
+                  <td style="padding:10px 14px;">
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">CH</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Carga Horária</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;">Horas</span>
+                  </td>
+                  <td style="padding:10px 14px;color:var(--slate-600);font-size:.82rem;">60</td>
+                  <td style="padding:10px 14px;text-align:center;font-size:1rem;">✅</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--slate-100);">
+                  <td style="padding:10px 14px;font-weight:700;color:var(--navy-800);">Créditos</td>
+                  <td style="padding:10px 14px;">
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Créditos</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;">Créd.</span>
+                  </td>
+                  <td style="padding:10px 14px;color:var(--slate-600);font-size:.82rem;">4</td>
+                  <td style="padding:10px 14px;text-align:center;color:var(--slate-400);">—</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--slate-100);background:var(--slate-50);">
+                  <td style="padding:10px 14px;font-weight:700;color:var(--navy-800);">Período</td>
+                  <td style="padding:10px 14px;">
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Período</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Semestre</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;">Módulo</span>
+                  </td>
+                  <td style="padding:10px 14px;color:var(--slate-600);font-size:.82rem;">2</td>
+                  <td style="padding:10px 14px;text-align:center;color:var(--slate-400);">—</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--slate-100);">
+                  <td style="padding:10px 14px;font-weight:700;color:var(--navy-800);">Tipo</td>
+                  <td style="padding:10px 14px;">
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Tipo</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Natureza</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;">Obrig./Opt.</span>
+                  </td>
+                  <td style="padding:10px 14px;color:var(--slate-600);font-size:.82rem;">Obrigatória / Optativa</td>
+                  <td style="padding:10px 14px;text-align:center;color:var(--slate-400);">—</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 14px;font-weight:700;color:var(--navy-800);white-space:nowrap;">Pré-requisito</td>
+                  <td style="padding:10px 14px;">
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;margin-right:4px;">Pré-requisito</span>
+                    <span style="background:var(--slate-100);border:1px solid var(--slate-300);border-radius:4px;padding:1px 7px;font-family:var(--font-mono);font-size:.74rem;">Prereq</span>
+                  </td>
+                  <td style="padding:10px 14px;color:var(--slate-600);font-size:.82rem;">Cálculo I</td>
+                  <td style="padding:10px 14px;text-align:center;color:var(--slate-400);">—</td>
+                </tr>
               </tbody>
             </table>
           </div>
-          <div style="margin-top:14px;padding:10px 14px;background:var(--gold-100);border:1px solid var(--gold-300);border-radius:var(--radius-sm);font-size:.8rem;color:var(--gold-700);">
-            💡 <strong>Dica:</strong> Se a planilha usar linhas de cabeçalho de período (ex: "1º Semestre", "2º Período"), o sistema as reconhece automaticamente e agrupa as disciplinas por período.
+
+          <!-- Dicas rápidas -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="padding:10px 14px;background:var(--gold-100);border:1px solid var(--gold-300);border-radius:var(--radius-sm);font-size:.8rem;color:var(--gold-700);display:flex;gap:8px;align-items:flex-start;">
+              <span style="flex-shrink:0;font-size:14px;">💡</span>
+              <span><strong>Linhas de período:</strong> Se a planilha usar linhas como "1º Semestre" ou "2º Período", o sistema as reconhece e agrupa as disciplinas automaticamente.</span>
+            </div>
+            <div style="padding:10px 14px;background:var(--navy-50);border:1px solid var(--navy-100);border-radius:var(--radius-sm);font-size:.8rem;color:var(--navy-700);display:flex;gap:8px;align-items:flex-start;">
+              <span style="flex-shrink:0;font-size:14px;">📋</span>
+              <span><strong>Múltiplas abas:</strong> Em planilhas com várias abas, o sistema escolhe automaticamente a que contiver mais linhas de dados.</span>
+            </div>
           </div>
+
         </div>
       </div>
 

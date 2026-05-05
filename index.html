@@ -4447,40 +4447,72 @@ function _printDocumentWindow() {
 <title>${AppState.curso.nome || 'Ementário do Curso'} — ${AppState.inst.nome || 'Documento'}</title>
 ${fontsHref}
 <style>
-/* Reset para impressão limpa */
+/* ── Reset base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: white; font-family: 'Crimson Pro', Georgia, serif; }
 
 ${styles}
 
-/* Sobrescrever para impressão */
+/* ── Sobrescrever preview para impressão limpa ── */
 body { background: white !important; padding: 0 !important; margin: 0 !important; }
 
+/*
+  CORREÇÃO DE PÁGINAS EM BRANCO:
+  - Removido min-height: 297mm (causa principal das páginas em branco)
+  - Cada .doc-page ocupa apenas o espaço do seu conteúdo
+  - break-after: page força nova página SEM duplicar quebras
+  - @page com margens reais substitui padding excessivo
+*/
+@page {
+  size: A4 portrait;
+  margin: 16mm 18mm 18mm 18mm;
+}
+
 .doc-page {
-  width: 210mm !important;
-  min-height: 297mm !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
   background: white !important;
   box-shadow: none !important;
-  margin: 0 auto !important;
-  padding: 18mm 22mm 22mm !important;
-  page-break-after: always !important;
+  margin: 0 !important;
+  padding: 0 0 12mm 0 !important;
   break-after: page !important;
+  page-break-after: always !important;
   position: relative !important;
+  /* Evitar quebra de página no meio de blocos internos */
+  orphans: 3;
+  widows: 3;
 }
 
 .doc-page:last-child {
-  page-break-after: avoid !important;
   break-after: avoid !important;
+  page-break-after: avoid !important;
+  padding-bottom: 0 !important;
 }
 
-@page {
-  size: A4 portrait;
-  margin: 0;
+/* Evitar quebra dentro de tabelas e seções */
+.doc-section { break-inside: avoid; page-break-inside: avoid; }
+.doc-curriculum-table tr { break-inside: avoid; page-break-inside: avoid; }
+.doc-reg-table tr { break-inside: avoid; page-break-inside: avoid; }
+.doc-signature-line { break-inside: avoid; page-break-inside: avoid; }
+
+/* Rodapé fixo no final de cada página */
+.doc-footer {
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  margin-top: 16mm;
+  border-top: 1px solid #ddd;
+  padding-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 8pt;
+  color: #999;
 }
 
 @media print {
   html, body { background: white !important; }
-  .doc-page { box-shadow: none !important; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 }
 </style>
@@ -4488,11 +4520,7 @@ body { background: white !important; padding: 0 !important; margin: 0 !important
 <body>
 ${Array.from(pages).map(p => p.outerHTML).join('\n')}
 <script>
-  // Abrir diálogo de impressão/salvar PDF automaticamente
-  window.onload = function() {
-    setTimeout(function() { window.print(); }, 500);
-  };
-  // Fechar janela após imprimir (opcional)
+  window.onload = function() { setTimeout(function() { window.print(); }, 600); };
   window.onafterprint = function() { window.close(); };
 <\/script>
 </body>

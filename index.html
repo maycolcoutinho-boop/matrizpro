@@ -1838,7 +1838,7 @@ table.curriculum-table {
     <!-- Versão -->
     <div style="margin-top:auto; padding:16px 20px; border-top:1px solid rgba(255,255,255,.06);">
       <div style="font-size:.7rem; color:rgba(255,255,255,.25); font-family:var(--font-mono);">
-        EmentaPro v1.0.0 · 2025<br>
+        EmentaPro v1.2.0 · 2026<br>
         Conforme DCNs / MEC
       </div>
     </div>
@@ -2892,6 +2892,34 @@ table.curriculum-table {
    ═══════════════════════════════════════════════════════════ */
 
 // ─── ESTADO GLOBAL DA APLICAÇÃO ───
+/* ═══════════════════════════════════════════════════════════
+   EMENTAPRO — CHANGELOG DE VERSÕES
+   ═══════════════════════════════════════════════════════════
+   v1.2.0 (2026-05-05)
+   - Créditos calculados como CH÷20 em todos os contextos
+   - Correção do classificador regulatório: 'produção' genérico
+     não captura mais cursos de Design/Tecnologia
+   - Fallback de créditos no modal agora usa CH÷20
+   - Correção de páginas em branco no PDF (margin:0, sem min-height)
+   - Validação regulatória cruzada (categoria × modalidade)
+   - Regimes Dec. 12.456/2025 + Portarias 378/379/381/2025
+
+   v1.1.0 (2026-05-04)
+   - Módulo regulatório conforme Dec. 12.456/2025
+   - Painel lateral com barras de conformidade
+   - Página regulatória no documento gerado
+   - Assinaturas dinâmicas por tipo de IES
+
+   v1.0.0 (2026-04-28)
+   - Versão inicial: upload Excel/CSV/HTML
+   - Geração de ementário por etapas
+   - Exportação PDF, HTML, JSON
+   - Sistema de save/restore .ementapro
+   ═══════════════════════════════════════════════════════════ */
+
+const APP_VERSION = '1.2.0';
+const APP_DATE    = '2026-05-05';
+
 const AppState = {
   currentStep: 1,
   maxUnlockedStep: 1,
@@ -3508,7 +3536,7 @@ function parseHTMLCurriculum(html) {
         disciplines.push({
           id: Date.now() + Math.random(),
           nome: formatDisciplineName(text),
-          periodo, ch: 60, creditos: 4,
+          periodo, ch: 60, creditos: Math.round(60 / 20),
           tipo: 'obrigatoria', prereq: '', ementa: '', natureza: 'teorica'
         });
       }
@@ -3726,7 +3754,8 @@ function saveDiscipline() {
     nome,
     periodo: parseInt(document.getElementById('modal-disc-periodo').value) || 1,
     ch: parseInt(document.getElementById('modal-disc-ch').value) || 60,
-    creditos: parseFloat(document.getElementById('modal-disc-creditos').value) || 4,
+    creditos: parseFloat(document.getElementById('modal-disc-creditos').value) ||
+              Math.round((parseInt(document.getElementById('modal-disc-ch').value) || 60) / 20),
     tipo: document.getElementById('modal-disc-tipo').value,
     natureza: document.getElementById('modal-disc-natureza').value,
     prereq: document.getElementById('modal-disc-prereq').value.trim(),
@@ -4600,7 +4629,7 @@ function exportJSON() {
 
   const data = {
     meta: {
-      geradoPor: 'EmentaPro v1.0',
+      geradoPor: 'EmentaPro v1.2.0',
       data: new Date().toISOString(),
       versao: '1.0.0'
     },
@@ -4814,7 +4843,7 @@ function saveProgress() {
 
   const saveData = {
     _app: 'EmentaPro',
-    _version: '1.0',
+    _version: '1.2.0',
     _savedAt: new Date().toISOString(),
     currentStep: AppState.currentStep,
     maxUnlockedStep: AppState.maxUnlockedStep,
@@ -5040,7 +5069,8 @@ const RegModule = (() => {
     'farmácia','fisioterapia','fonoaudiologia','terapia ocupacional',
     'nutrição','educação física','saúde','bem-estar','medicina veterinária',
     'veterinária','agronomia','zootecnia','silvicultura','pesca',
-    'engenharia','arquitetura','produção','construção','geologia',
+    'engenharia','arquitetura','produção animal','produção agrícola',
+    'produção vegetal','produção industrial','construção','geologia',
   ];
 
   function getCat(cursoNome) {

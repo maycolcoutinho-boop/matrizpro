@@ -4995,43 +4995,95 @@ function syncCargoLabels() {
 // ═══════════════════════════════════════════════════════════
 const RegModule = (() => {
 
-  // ─── Classificação regulatória por curso — Dec. 12.456/2025 + Port. MEC 378/379/381/2025 ───
-  // Regime A: Medicina → 100% presencial, EaD = 0%
-  // Regime B: Direito, Enfermagem, Odontologia, Psicologia → presencial, máx 30% EaD (sinc+assinc)
-  // Regime C: Licenciaturas, Ciências Naturais, Matemática → semipresencial: pres≥50%, sinc≥20%, ass≤30%
-  // Regime D: Saúde/Bem-Estar, Engenharia, Agro/Vet → semipresencial: pres≥40%, sinc≥20%, ass≤40%
-  // Regime E: Demais cursos EaD → pres≥10%, sinc≥10%, ass≤80%
+  // ─── Classificação regulatória — Dec. 12.456/2025 + Port. MEC 378/379/381/2025 ───
+  //
+  // A validação cruza DOIS eixos:
+  //   1. Categoria do curso (pelo nome) → determina restrições específicas
+  //   2. Modalidade declarada (campo curso-modalidade) → determina os limites gerais
+  //
+  // Categorias de curso:
+  //   CAT_A → Medicina                            (sempre 100% presencial)
+  //   CAT_B → Direito, Enfermagem, Odonto, Psico  (presencial c/ EaD máx. 30%)
+  //   CAT_C → Licenciaturas, CN, Matemática        (semipresencial C ou presencial B)
+  //   CAT_D → Saúde, Engenharia, Agro, Vet         (semipresencial D ou presencial B)
+  //   CAT_E → Demais cursos                        (qualquer modalidade)
 
-  const REGIME_A = ['medicina'];
-  const REGIME_B = ['direito','enfermagem','odontologia','psicologia'];
-  const REGIME_C = [
+  const CAT_A = ['medicina'];
+  const CAT_B = ['direito','enfermagem','odontologia','psicologia'];
+  const CAT_C = [
     'licenciatura','pedagogia','letras','história','geografia',
     'biologia','química','física','matemática','ciências naturais',
-    'ciências sociais','filosofia','artes','educação',
+    'ciências sociais','filosofia','artes',
   ];
-  const REGIME_D = [
-    'enfermagem','farmácia','fisioterapia','fonoaudiologia','terapia ocupacional',
+  const CAT_D = [
+    'farmácia','fisioterapia','fonoaudiologia','terapia ocupacional',
     'nutrição','educação física','saúde','bem-estar','medicina veterinária',
     'veterinária','agronomia','zootecnia','silvicultura','pesca',
     'engenharia','arquitetura','produção','construção','geologia',
   ];
 
-  function getRegime(cursoNome) {
+  function getCat(cursoNome) {
     const n = (cursoNome || '').toLowerCase();
-    if (REGIME_A.some(c => n.includes(c))) return 'A';
-    if (REGIME_B.some(c => n.includes(c))) return 'B';
-    if (REGIME_C.some(c => n.includes(c))) return 'C';
-    if (REGIME_D.some(c => n.includes(c))) return 'D';
-    return 'E'; // demais cursos
+    if (CAT_A.some(c => n.includes(c))) return 'A';
+    if (CAT_B.some(c => n.includes(c))) return 'B';
+    if (CAT_C.some(c => n.includes(c))) return 'C';
+    if (CAT_D.some(c => n.includes(c))) return 'D';
+    return 'E';
   }
 
-  const LIMITES = {
-    A: { label: 'Medicina (100% Presencial)',                         presMin:100, presMax:100, eadMax:0,  sincMin:0,  sincMax:0,  assMax:0,  portaria:'Port. MEC 378/2025' },
-    B: { label: 'Presencial — Direito/Enfermagem/Odontologia/Psic.',  presMin:70,  presMax:100, eadMax:30, sincMin:0,  sincMax:30, assMax:30, portaria:'Port. MEC 379/2025' },
-    C: { label: 'Semipresencial — Licenciaturas/Ciências/Matemática', presMin:50,  presMax:70,  eadMax:50, sincMin:20, sincMax:30, assMax:30, portaria:'Port. MEC 381/2025' },
-    D: { label: 'Semipresencial — Saúde/Engenharia/Agro/Vet.',        presMin:40,  presMax:60,  eadMax:60, sincMin:20, sincMax:40, assMax:40, portaria:'Port. MEC 381/2025' },
-    E: { label: 'EaD — Demais Cursos',                                presMin:10,  presMax:10,  eadMax:90, sincMin:10, sincMax:10, assMax:80, portaria:'Dec. 12.456/2025' },
+  // Tabela de limites indexada por [categoria][modalidade]
+  // presMin  = percentual mínimo obrigatório de carga presencial
+  // eadMax   = percentual máximo permitido de EaD (assíncrono + síncrono remoto)
+  // sincMin  = mínimo indicativo de síncrono (legislação não fixa valor exato)
+  // portaria = base legal aplicável
+  const LIMITES_TABLE = {
+    //        Presencial                            Semipresencial                         EaD
+    A: {
+      presencial:     { presMin:100, eadMax:0,  sincMin:0,  label:'Medicina — Presencial',          portaria:'Port. MEC 378/2025' },
+      semipresencial: { presMin:100, eadMax:0,  sincMin:0,  label:'Medicina — Presencial obrigatório', portaria:'Port. MEC 378/2025' },
+      ead:            { presMin:100, eadMax:0,  sincMin:0,  label:'Medicina — EaD não permitido',   portaria:'Port. MEC 378/2025' },
+    },
+    B: {
+      presencial:     { presMin:70,  eadMax:30, sincMin:0,  label:'Presencial — Direito/Enferm./Odonto/Psico', portaria:'Port. MEC 379/2025' },
+      semipresencial: { presMin:70,  eadMax:30, sincMin:0,  label:'Presencial — Direito/Enferm./Odonto/Psico', portaria:'Port. MEC 379/2025' },
+      ead:            { presMin:70,  eadMax:30, sincMin:0,  label:'EaD restrito — Direito/Enferm./Odonto/Psico',portaria:'Port. MEC 379/2025' },
+    },
+    C: {
+      presencial:     { presMin:70,  eadMax:30, sincMin:0,  label:'Presencial — Licenciaturas/CN/Matemática',    portaria:'Port. MEC 381/2025' },
+      semipresencial: { presMin:50,  eadMax:50, sincMin:20, label:'Semipresencial — Licenciaturas/CN/Matemática', portaria:'Port. MEC 381/2025' },
+      ead:            { presMin:10,  eadMax:90, sincMin:10, label:'EaD — Licenciaturas/CN/Matemática',            portaria:'Port. MEC 381/2025' },
+    },
+    D: {
+      presencial:     { presMin:70,  eadMax:30, sincMin:0,  label:'Presencial — Saúde/Engenharia/Agro/Vet.',    portaria:'Port. MEC 381/2025' },
+      semipresencial: { presMin:40,  eadMax:60, sincMin:20, label:'Semipresencial — Saúde/Engenharia/Agro/Vet.', portaria:'Port. MEC 381/2025' },
+      ead:            { presMin:10,  eadMax:90, sincMin:10, label:'EaD — Saúde/Engenharia/Agro/Vet.',            portaria:'Port. MEC 381/2025' },
+    },
+    E: {
+      presencial:     { presMin:60,  eadMax:40, sincMin:0,  label:'Presencial — Demais Cursos',    portaria:'Dec. 12.456/2025' },
+      semipresencial: { presMin:30,  eadMax:70, sincMin:0,  label:'Semipresencial — Demais Cursos', portaria:'Dec. 12.456/2025' },
+      ead:            { presMin:10,  eadMax:90, sincMin:10, label:'EaD — Demais Cursos',            portaria:'Dec. 12.456/2025' },
+    },
   };
+
+  // Normaliza o valor do campo modalidade para chave da tabela
+  function getModalidadeKey(modalidade) {
+    const m = (modalidade || '').toLowerCase();
+    if (m.includes('semi') || m.includes('híbrido') || m.includes('hibrido')) return 'semipresencial';
+    if (m.includes('ead') || m.includes('distância') || m.includes('distancia') || m.includes('a distância')) return 'ead';
+    return 'presencial';
+  }
+
+  // Mantém retrocompatibilidade: getRegime retorna categoria + limites
+  function getRegime(cursoNome) {
+    return getCat(cursoNome); // agora é só a categoria
+  }
+
+  // getLimites: resolve os limites reais cruzando categoria x modalidade
+  function getLimites(cursoNome, modalidade) {
+    const cat = getCat(cursoNome);
+    const modKey = getModalidadeKey(modalidade);
+    return { ...LIMITES_TABLE[cat][modKey], cat, modKey };
+  }
 
   const MOD_LABELS = {
     'presencial':        'Presencial',
@@ -5045,21 +5097,32 @@ const RegModule = (() => {
 
   // ─── Calcular proporções regulatórias a partir das disciplinas ───
   function calcProportions() {
-    const discs = AppState.disciplines;
+    const discs   = AppState.disciplines;
     const cursoCH = AppState.curso.ch || AppState.totalCH || 1;
+    const modCurso = getModalidadeKey(AppState.curso.modalidade);
 
     let chPres = 0, chEad = 0, chSinc = 0, chExt = 0, chEst = 0;
 
     discs.forEach(d => {
       const ch    = parseInt(d.ch) || 0;
       const mod   = d.modalidade || 'presencial';
-      const pPres = (d.percPres ?? 100) / 100;
-      const pEad  = (d.percEad  ?? 0)   / 100;
-      const pSinc = (d.percSinc ?? 0)   / 100;
 
       if (mod === 'extensao-r') { chExt += ch; return; }
       if (mod === 'estagio-r')  { chEst += ch; return; }
       if (mod === 'sincrono')   { chSinc += ch; return; }
+
+      // Se a disciplina não tem percPres definido, inferir pela modalidade do CURSO
+      let pPres, pEad, pSinc;
+      if (d.percPres == null && d.percEad == null) {
+        // Disciplina sem percentuais explícitos → herda da modalidade do curso
+        if (modCurso === 'ead')            { pPres = 0.0; pEad = 1.0; pSinc = 0.1; }
+        else if (modCurso === 'semipresencial') { pPres = 0.5; pEad = 0.5; pSinc = 0.2; }
+        else                               { pPres = 1.0; pEad = 0.0; pSinc = 0.0; }
+      } else {
+        pPres = (d.percPres ?? 100) / 100;
+        pEad  = (d.percEad  ?? 0)   / 100;
+        pSinc = (d.percSinc ?? 0)   / 100;
+      }
 
       chPres += ch * pPres;
       chEad  += ch * pEad;
@@ -5083,15 +5146,22 @@ const RegModule = (() => {
 
   // ─── Validar conformidade — Dec. 12.456/2025 + Portarias 378/379/381/2025 ───
   function validate(props) {
-    const cursoNome = AppState.curso.nome || '';
-    const regime    = getRegime(cursoNome);
-    const lim       = LIMITES[regime];
-    const alerts    = [];
-    let status      = 'ok';
+    const cursoNome  = AppState.curso.nome       || '';
+    const modalidade = AppState.curso.modalidade || 'Presencial';
+    const lim        = getLimites(cursoNome, modalidade);
+    const alerts     = [];
+    let status       = 'ok';
 
     const pctPres = parseFloat(props.pctPres);
     const pctEad  = parseFloat(props.pctEad);
     const pctSinc = parseFloat(props.pctSinc);
+
+    // ── Medicina: EaD absolutamente proibido ──
+    if (lim.cat === 'A' && pctEad > 0) {
+      alerts.push({ level:'error',
+        msg: `Medicina exige 100% de carga presencial. Qualquer percentual de EaD é vedado (Port. MEC 378/2025).` });
+      status = 'error';
+    }
 
     // ── Validar presencialidade mínima ──
     if (pctPres < lim.presMin) {
@@ -5102,51 +5172,46 @@ const RegModule = (() => {
 
     // ── Validar EaD máximo ──
     if (pctEad > lim.eadMax) {
-      const lvl = regime === 'A' ? 'error' : pctEad > lim.eadMax + 10 ? 'error' : 'warn';
+      const lvl = pctEad > lim.eadMax + 10 ? 'error' : 'warn';
       alerts.push({ level: lvl,
         msg: `EaD representa ${pctEad}% da CH — excede o máximo de ${lim.eadMax}% para ${lim.label} (${lim.portaria}).` });
       if (status === 'ok') status = lvl;
     }
 
-    // ── Validar síncrono mínimo (regimes C, D, E) ──
+    // ── Validar síncrono mínimo (apenas semipresencial e EaD) ──
     if (lim.sincMin > 0 && pctSinc < lim.sincMin) {
       alerts.push({ level:'warn',
-        msg: `Atividades síncronas mediadas: ${pctSinc}% — mínimo indicativo de ${lim.sincMin}% para ${lim.label} (${lim.portaria}). A legislação exige parte significativa de síncronas.` });
+        msg: `Atividades síncronas mediadas: ${pctSinc}% — mínimo indicativo de ${lim.sincMin}% para ${lim.label} (${lim.portaria}). A legislação exige "parte significativa" de síncronas, sem fixar percentual exato.` });
       if (status === 'ok') status = 'warn';
     }
 
-    // ── Regime A: nenhum EaD permitido ──
-    if (regime === 'A' && pctEad > 0) {
-      alerts.push({ level:'error',
-        msg: `Medicina exige 100% de carga presencial. EaD não é permitido (Port. MEC 378/2025).` });
-      status = 'error';
-    }
-
     // ── Extensão mínima 10% ──
-    if (parseFloat(props.pctExt) < 10 && AppState.curso.ch > 0) {
+    if (parseFloat(props.pctExt) < 10 && AppState.curso.ch > 0 && AppState.disciplines.length > 0) {
       alerts.push({ level:'warn',
         msg: `Extensão curricularizada: ${props.pctExt}% — mínimo exigido é 10% da CH total (Res. CNE/CES 7/2018).` });
       if (status === 'ok') status = 'warn';
     }
 
-    // ── Sem dados ──
+    // ── Sem dados suficientes ──
     if (AppState.disciplines.length === 0) {
       alerts.push({ level:'info', msg: 'Cadastre as disciplinas para calcular os percentuais regulatórios.' });
       status = 'warn';
     }
 
-    // ── Sugestões automáticas ──
+    // ── Sugestões automáticas de adequação ──
     const sugestoes = [];
+    if (lim.cat === 'A' && pctEad > 0)
+      sugestoes.push('Reclassifique todas as disciplinas como "Presencial" (100% presencial, 0% EaD).');
     if (pctEad > lim.eadMax)
-      sugestoes.push(`Reclassifique disciplinas EaD para "Presencial com carga remota" até o EaD atingir no máximo ${lim.eadMax}% (${lim.portaria}).`);
+      sugestoes.push(`Reclassifique disciplinas EaD para "Presencial" ou "Presencial com carga remota" até o EaD atingir no máximo ${lim.eadMax}% (${lim.portaria}).`);
     if (pctPres < lim.presMin)
-      sugestoes.push(`Aumente a presencialidade para pelo menos ${lim.presMin}% da CH total — altere a modalidade de disciplinas do ciclo básico.`);
+      sugestoes.push(`Aumente a presencialidade das disciplinas para pelo menos ${lim.presMin}% da CH total.`);
     if (lim.sincMin > 0 && pctSinc < lim.sincMin)
-      sugestoes.push(`Inclua atividades síncronas mediadas (videoconferências, tutoria ao vivo) para atingir ao menos ${lim.sincMin}% da CH.`);
-    if (parseFloat(props.pctExt) < 10)
+      sugestoes.push(`Inclua atividades síncronas mediadas (videoaulas ao vivo, tutoria síncrona) para atingir ao menos ${lim.sincMin}% da CH.`);
+    if (parseFloat(props.pctExt) < 10 && AppState.curso.ch > 0)
       sugestoes.push('Adicione ou reclassifique disciplinas de extensão para atingir 10% da CH total (Res. CNE/CES 7/2018).');
 
-    return { status, alerts, sugestoes, regime, lim };
+    return { status, alerts, sugestoes, regime: lim.cat, lim };
   }
 
   // ─── Painel do Sidebar ───
@@ -5160,17 +5225,18 @@ const RegModule = (() => {
 
     const p = calcProportions();
     const v = validate(p);
+    const lim = v.lim;
 
     const statusLabel = { ok: '✓ Conforme', warn: '⚠ Atenção', error: '✕ Inconformidade' };
     const statusCls   = { ok: 'reg-status-ok', warn: 'reg-status-warn', error: 'reg-status-error' };
 
     const bars = [
-      { label: `Presencial (mín. ${v.lim.presMin}%)`, pct: p.pctPres,
-        cls: parseFloat(p.pctPres) >= v.lim.presMin ? 'reg-bar-ok' : 'reg-bar-error' },
-      { label: `EaD (máx. ${v.lim.eadMax}%)`, pct: p.pctEad,
-        cls: parseFloat(p.pctEad) <= v.lim.eadMax ? 'reg-bar-ok' : 'reg-bar-error' },
-      { label: `Síncrono${v.lim.sincMin > 0 ? ' (mín. ' + v.lim.sincMin + '%)' : ''}`, pct: p.pctSinc,
-        cls: v.lim.sincMin === 0 || parseFloat(p.pctSinc) >= v.lim.sincMin ? 'reg-bar-ok' : 'reg-bar-warn' },
+      { label: `Presencial (mín. ${lim.presMin}%)`, pct: p.pctPres,
+        cls: parseFloat(p.pctPres) >= lim.presMin ? 'reg-bar-ok' : 'reg-bar-error' },
+      { label: `EaD (máx. ${lim.eadMax}%)`, pct: p.pctEad,
+        cls: parseFloat(p.pctEad) <= lim.eadMax ? 'reg-bar-ok' : 'reg-bar-error' },
+      { label: `Síncrono${lim.sincMin > 0 ? ' (mín. ' + lim.sincMin + '%)' : ''}`, pct: p.pctSinc,
+        cls: lim.sincMin === 0 || parseFloat(p.pctSinc) >= lim.sincMin ? 'reg-bar-ok' : 'reg-bar-warn' },
       { label: 'Extensão (mín. 10%)', pct: p.pctExt,
         cls: parseFloat(p.pctExt) >= 10 ? 'reg-bar-ok' : 'reg-bar-warn' },
     ];
@@ -5180,7 +5246,7 @@ const RegModule = (() => {
         <span class="reg-status ${statusCls[v.status]}">${statusLabel[v.status]}</span>
       </div>
       <div style="font-size:.66rem;color:rgba(255,255,255,.4);margin-bottom:8px;line-height:1.4;">
-        Regime ${v.regime} · ${v.lim.portaria}
+        ${lim.label}<br>${lim.portaria}
       </div>
       ${bars.map(b => `
         <div class="reg-bar-row">

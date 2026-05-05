@@ -3302,7 +3302,7 @@ function parseRowsArray(rows) {
     // Extrair créditos
     let creditos = 0;
     if (colMap.creditos >= 0) creditos = parseFloat(String(row[colMap.creditos]).replace(/[^0-9.]/g, '')) || 0;
-    if (!creditos && ch) creditos = Math.round(ch / 15);
+    if (!creditos && ch) creditos = Math.round(ch / 20);
 
     // Extrair período da própria linha (se tiver coluna)
     let periodo = periodoAtual;
@@ -3465,7 +3465,7 @@ function parseHTMLCurriculum(html) {
       let creditos = 0;
       const credMatch = cells.join('|').match(/\b([2-8])\b/);
       if (credMatch) creditos = parseInt(credMatch[1]);
-      if (ch > 0 && creditos === 0) creditos = Math.round(ch / 15);
+      if (ch > 0 && creditos === 0) creditos = Math.round(ch / 20);
 
       // Detectar tipo
       let tipo = 'obrigatoria';
@@ -4447,39 +4447,51 @@ function _printDocumentWindow() {
 <title>${AppState.curso.nome || 'Ementário do Curso'} — ${AppState.inst.nome || 'Documento'}</title>
 ${fontsHref}
 <style>
-/* ── Reset base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: white; font-family: 'Crimson Pro', Georgia, serif; }
+html, body {
+  background: white;
+  font-family: 'Crimson Pro', Georgia, serif;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
 
 ${styles}
 
-/* ── Sobrescrever preview para impressão limpa ── */
+/* ─── RESET COMPLETO PARA IMPRESSÃO ─── */
 body { background: white !important; padding: 0 !important; margin: 0 !important; }
 
 /*
-  CORREÇÃO DE PÁGINAS EM BRANCO:
-  - Removido min-height: 297mm (causa principal das páginas em branco)
-  - Cada .doc-page ocupa apenas o espaço do seu conteúdo
-  - break-after: page força nova página SEM duplicar quebras
-  - @page com margens reais substitui padding excessivo
+  SOLUÇÃO DEFINITIVA PARA PÁGINAS EM BRANCO:
+  • @page margin 0 — evita que o browser adicione espaço extra
+  • Cada .doc-page tem padding interno próprio simulando as margens
+  • min-height: 0 — elimina espaço vazio forçado
+  • break-after: page — quebra apenas quando necessário
+  • Rodapé position:relative, não absolute
 */
 @page {
   size: A4 portrait;
-  margin: 16mm 18mm 18mm 18mm;
+  margin: 0mm;
+  /* Ocultar cabeçalho e rodapé do navegador */
+  margin-header: 0mm;
+  margin-footer: 0mm;
 }
 
+/* Ocultar URL e paginação do navegador no Chrome/Edge/Firefox */
+@page { margin: 0; }
+
 .doc-page {
-  width: 100% !important;
+  width: 210mm !important;
   min-height: 0 !important;
   height: auto !important;
   background: white !important;
   box-shadow: none !important;
-  margin: 0 !important;
-  padding: 0 0 12mm 0 !important;
+  margin: 0 auto !important;
+  /* Margens internas simulando A4 real */
+  padding: 16mm 18mm 14mm 18mm !important;
   break-after: page !important;
   page-break-after: always !important;
+  overflow: hidden;
   position: relative !important;
-  /* Evitar quebra de página no meio de blocos internos */
   orphans: 3;
   widows: 3;
 }
@@ -4487,29 +4499,29 @@ body { background: white !important; padding: 0 !important; margin: 0 !important
 .doc-page:last-child {
   break-after: avoid !important;
   page-break-after: avoid !important;
-  padding-bottom: 0 !important;
 }
 
-/* Evitar quebra dentro de tabelas e seções */
-.doc-section { break-inside: avoid; page-break-inside: avoid; }
-.doc-curriculum-table tr { break-inside: avoid; page-break-inside: avoid; }
-.doc-reg-table tr { break-inside: avoid; page-break-inside: avoid; }
-.doc-signature-line { break-inside: avoid; page-break-inside: avoid; }
-
-/* Rodapé fixo no final de cada página */
+/* Rodapé como parte do fluxo normal — NÃO absolute */
 .doc-footer {
   position: relative !important;
   bottom: auto !important;
   left: auto !important;
   right: auto !important;
-  margin-top: 16mm;
+  margin-top: 14mm !important;
   border-top: 1px solid #ddd;
-  padding-top: 6px;
-  display: flex;
+  padding-top: 5px;
+  display: flex !important;
   justify-content: space-between;
   font-size: 8pt;
   color: #999;
 }
+
+/* Evitar quebra interna em elementos */
+.doc-section        { break-inside: avoid; page-break-inside: avoid; }
+.doc-curriculum-table tr { break-inside: avoid; page-break-inside: avoid; }
+.doc-reg-table tr   { break-inside: avoid; page-break-inside: avoid; }
+.doc-signature-line { break-inside: avoid; page-break-inside: avoid; }
+.doc-header         { break-inside: avoid; page-break-inside: avoid; }
 
 @media print {
   html, body { background: white !important; }
@@ -4520,7 +4532,16 @@ body { background: white !important; padding: 0 !important; margin: 0 !important
 <body>
 ${Array.from(pages).map(p => p.outerHTML).join('\n')}
 <script>
-  window.onload = function() { setTimeout(function() { window.print(); }, 600); };
+  window.onload = function() {
+    // Aguardar fontes carregarem antes de imprimir
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function() {
+        setTimeout(function() { window.print(); }, 400);
+      });
+    } else {
+      setTimeout(function() { window.print(); }, 800);
+    }
+  };
   window.onafterprint = function() { window.close(); };
 <\/script>
 </body>
@@ -4534,7 +4555,7 @@ ${Array.from(pages).map(p => p.outerHTML).join('\n')}
   win.document.open();
   win.document.write(html);
   win.document.close();
-  showToast('Janela de impressão aberta. Use "Salvar como PDF" no diálogo.', 'info');
+  showToast('Janela aberta. No diálogo de impressão: desative "Cabeçalhos e rodapés" e defina margens como "Nenhuma" para PDF limpo.', 'info');
 }
 
 function exportHTML() {
